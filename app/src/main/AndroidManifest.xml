@@ -16,16 +16,16 @@
             android:name=".presentation.screens.splash.SplashScreen"
             android:exported="true"
             android:theme="@style/Theme.Medscape20" >
+
+        </activity>
+        <activity
+            android:name=".presentation.screens.auth.AuthActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".presentation.screens.auth.AuthActivity"
-            android:exported="false">
-
         </activity>
     </application>
 
