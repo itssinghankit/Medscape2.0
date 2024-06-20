@@ -9,4 +9,5 @@
     <color name="txt_purple">#DFC6FD</color>
     <color name="btn_purple">#B987F6</color>
     <color name="btn_purple_drk">#5E24A3</color>
+    <color name="err_col">#F86B6B</color>
 </resources>

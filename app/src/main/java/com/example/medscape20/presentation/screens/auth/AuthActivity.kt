@@ -6,12 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.medscape20.R
 import com.example.medscape20.presentation.screens.auth.login.LoginFragment
 import com.example.medscape20.presentation.screens.auth.signup.SignupFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_auth)
+
 
         //as we passed nav graph in nav host so there is no need for this
 

@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Medscape2.0"
 include(":app")
- 

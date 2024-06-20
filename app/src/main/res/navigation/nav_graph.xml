@@ -19,7 +19,42 @@
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
-            android:id="@+id/action_signupFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_signupFragment_to_signupDetailsFragment"
+            app:destination="@id/signupDetailsFragment" />
+       <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="password"
+            app:argType="string"
+            android:defaultValue="null" />
     </fragment>
+    <fragment
+        android:id="@+id/signupDetailsFragment"
+        android:name="com.example.medscape20.presentation.screens.auth.signup_details.SignupDetailsFragment"
+        android:label="fragment_signup_details"
+        tools:layout="@layout/fragment_signup_details" >
+        <action
+            android:id="@+id/action_signupDetailsFragment_to_avatarFragment"
+            app:destination="@id/avatarFragment" />
+        <argument
+            android:name="password"
+            app:argType="string"
+            android:defaultValue="null" />
+    </fragment>
+    <fragment
+        android:id="@+id/avatarFragment"
+        android:name="com.example.medscape20.presentation.screens.auth.avatar.AvatarFragment"
+        android:label="fragment_avatar"
+        tools:layout="@layout/fragment_avatar" >
+        <action
+            android:id="@+id/action_avatarFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.medscape20.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

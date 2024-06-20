@@ -1,62 +1,96 @@
 package com.example.medscape20.presentation.screens.auth.signup
 
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.databinding.FragmentSignupBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import timber.log.Timber
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class SignupFragment : Fragment() {
 
     private var _binding: FragmentSignupBinding? = null
-    private lateinit var auth: FirebaseAuth
+    private val viewModel: SignupViewModel by viewModels()
     private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = FragmentSignupBinding.inflate(layoutInflater)
-        auth = FirebaseAuth.getInstance()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentSignupBinding.inflate(layoutInflater)
+        _binding!!.lifecycleOwner = this
+        _binding!!.viewModel = viewModel
 
-        binding.back.setOnClickListener {
-            findNavController().popBackStack()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //sending email and password to next page
+        binding.nxtBtn.setOnClickListener {
+            viewModel.event(SignupEvents.OnNextClick)
         }
 
-        binding.nxtBtn.setOnClickListener {
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {task->
-                if (task.isSuccessful) {
-                    Toast.makeText(context, "Signed up success", Toast.LENGTH_SHORT).show()
-                } else {
-                    if(task.exception is FirebaseAuthUserCollisionException){
-                        Toast.makeText(context, "Already registered", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show()
+        binding.email.doOnTextChanged { text, start, before, count ->
+            viewModel.event(SignupEvents.OnEmailChanged(text.toString()))
+        }
+
+        binding.password.doOnTextChanged { text, start, before, count ->
+            viewModel.event(SignupEvents.OnPasswordChanged(text.toString()))
+        }
+
+        //observing events for actions
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect {
+
+                    if (it.navigateToNextScreen) {
+                        navigateToSignupDetailsScreen()
+                    }
+
+                    //email validation
+                    if (!it.isEmailValid) {
+                        binding.emailCont.error = it.emailError?.let { resId -> getString(resId) }
+                    } else {
+                        binding.emailCont.error = null
+                        binding.emailCont.isErrorEnabled = false
+                    }
+
+                    //password validation
+                    if (!it.isPasswordValid) {
+                        binding.passCont.error = it.passError?.let{resId->getString(resId)}
+                    } else {
+                        binding.passCont.error = null
+                        binding.passCont.isErrorEnabled = false
                     }
 
                 }
             }
         }
 
-        return binding.root
+    }
+
+    fun navigateToSignupDetailsScreen() {
+        //change navigateToNextScreen variable false for back stack
+        viewModel.event(SignupEvents.OnNavigationDone)
+
+        val action = SignupFragmentDirections.actionSignupFragmentToSignupDetailsFragment()
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

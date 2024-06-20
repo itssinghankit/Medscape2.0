@@ -1,132 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/screen_bg"
-    tools:context=".presentation.screens.auth.signup.SignupFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.medscape20.presentation.screens.auth.signup.SignupViewModel" />
+
+        <variable
+            name="SignupEvents"
+            type="com.example.medscape20.presentation.screens.auth.signup.SignupEvents" />
+
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/screen_bg"
+        tools:context=".presentation.screens.auth.signup.SignupFragment">
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="48dp"
-            android:src="@drawable/baseline_arrow_back_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/top_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="120dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/sign_up"
-            android:textColor="@color/txt_purple"
-            android:textSize="32sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/email_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="54dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/email"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_txt" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_cont"
-            style="?attr/textInputFilledStyle"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            app:boxStrokeColor="@color/txt_purple"
-            app:boxStrokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email_txt">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="64dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/top_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="120dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/sign_up"
+                android:textColor="@color/txt_purple"
+                android:textSize="32sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/email_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="54dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/email"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/top_txt" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_cont"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/txt_fld_bg"
-                android:fontFamily="@font/lato_regular" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                app:boxStrokeColor="@color/txt_purple"
+                app:boxStrokeErrorColor="@color/err_col"
+                app:boxStrokeWidth="0dp"
+                app:cursorErrorColor="@color/err_col"
+                app:errorIconTint="@color/err_col"
+                app:errorTextColor="@color/err_col"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_txt">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/txt_fld_bg"
+                    android:fontFamily="@font/lato_regular"
+                    android:maxLines="1"
+                    android:text="@={viewModel.email}" />
 
-        <TextView
-            android:id="@+id/pass_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/password"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email_cont" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pass_cont"
-            style="?attr/textInputFilledStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            app:boxStrokeColor="@color/txt_purple"
-            app:boxStrokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pass_txt"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/txt_purple">
+            <TextView
+                android:id="@+id/pass_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/password"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_cont" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pass_cont"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/txt_fld_bg"
-                android:fontFamily="@font/lato_regular" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                app:boxStrokeColor="@color/txt_purple"
+                app:boxStrokeErrorColor="@color/err_col"
+                app:boxStrokeWidth="0dp"
+                app:cursorErrorColor="@color/err_col"
+                app:errorIconTint="@color/err_col"
+                app:errorTextColor="@color/err_col"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pass_txt"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/txt_purple">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/txt_fld_bg"
+                    android:fontFamily="@font/lato_regular"
+                    android:maxLines="1"
+                    android:text="@={viewModel.password}" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/nxt_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="32dp"
-            android:backgroundTint="@color/btn_purple"
-            android:fontFamily="@font/lato_bold"
-            android:padding="14dp"
-            android:text="@string/next"
-            android:textColor="@color/dark_purple"
-            android:textSize="16sp"
-            app:cornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pass_cont" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nxt_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="32dp"
+                android:backgroundTint="@color/btn_purple"
+                android:fontFamily="@font/lato_bold"
+                android:padding="14dp"
+                android:text="@string/next"
+                android:textColor="@color/dark_purple"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pass_cont" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    </ScrollView>
+</layout>
