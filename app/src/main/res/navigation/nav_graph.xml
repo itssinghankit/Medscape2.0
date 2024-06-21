@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.medscape20.presentation.screens.auth.login.LoginFragment"
@@ -12,23 +13,25 @@
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupDetailsFragment"
+            app:destination="@id/signupDetailsFragment" />
     </fragment>
+    <activity
+        android:id="@+id/splashScreen"
+        android:name="com.example.medscape20.presentation.screens.splash.SplashScreen"
+        android:label="activity_splash_screen"
+        tools:layout="@layout/activity_splash_screen" />
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.example.medscape20.presentation.screens.auth.signup.SignupFragment"
-        android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" >
+        android:label="SignupFragment" >
         <action
             android:id="@+id/action_signupFragment_to_signupDetailsFragment"
             app:destination="@id/signupDetailsFragment" />
-       <argument
-            android:name="email"
-            app:argType="string"
-            android:defaultValue="null" />
-        <argument
-            android:name="password"
-            app:argType="string"
-            android:defaultValue="null" />
     </fragment>
     <fragment
         android:id="@+id/signupDetailsFragment"
@@ -38,10 +41,17 @@
         <action
             android:id="@+id/action_signupDetailsFragment_to_avatarFragment"
             app:destination="@id/avatarFragment" />
+        <action
+            android:id="@+id/action_signupDetailsFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="ankit" />
         <argument
             android:name="password"
             app:argType="string"
-            android:defaultValue="null" />
+            android:defaultValue="ankit" />
     </fragment>
     <fragment
         android:id="@+id/avatarFragment"
@@ -49,12 +59,35 @@
         android:label="fragment_avatar"
         tools:layout="@layout/fragment_avatar" >
         <action
-            android:id="@+id/action_avatarFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            android:id="@+id/action_avatarFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="password"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="mobile"
+            app:argType="string" />
+        <argument
+            android:name="gender"
+            app:argType="string" />
+        <argument
+            android:name="address"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.medscape20.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.example.medscape20.presentation.screens.user.home.HomeActivity"
+        android:label="activity_home"
+        tools:layout="@layout/activity_home" />
 </navigation>

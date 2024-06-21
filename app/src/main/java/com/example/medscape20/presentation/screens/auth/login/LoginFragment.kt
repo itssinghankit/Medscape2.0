@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding.sgnUpBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_signupDetailsFragment)
         }
         return binding.root
     }

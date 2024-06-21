@@ -17,5 +17,20 @@ sealed interface DataError: Error {
 }
 
 enum class EmailError: Error{
+    EMPTY,
     EMAIL_ERROR
+}
+enum class PassError: Error{
+    EMPTY,
+    PASS_ERROR
+}
+enum class NameError:Error{
+    EMPTY,
+    TOO_SHORT,
+    ONLY_ALPHABETS
+}
+enum class MobileError:Error{
+    EMPTY,
+    TOO_SHORT,
+    INVALID
 }

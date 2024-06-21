@@ -9,10 +9,6 @@
             name="viewModel"
             type="com.example.medscape20.presentation.screens.auth.signup.SignupViewModel" />
 
-        <variable
-            name="SignupEvents"
-            type="com.example.medscape20.presentation.screens.auth.signup.SignupEvents" />
-
     </data>
 
     <ScrollView
@@ -44,7 +40,7 @@
                 android:layout_marginTop="120dp"
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/sign_up"
-                android:textColor="@color/txt_purple"
+                android:textColor="@color/primary_green_txt_btn"
                 android:textSize="32sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -70,19 +66,21 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                app:boxStrokeColor="@color/txt_purple"
+                app:boxStrokeColor="@color/primary_green_txt_btn"
                 app:boxStrokeErrorColor="@color/err_col"
                 app:boxStrokeWidth="0dp"
                 app:cursorErrorColor="@color/err_col"
                 app:errorIconTint="@color/err_col"
                 app:errorTextColor="@color/err_col"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:cursorColor="@color/black_txt_bg_btn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/email_txt">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
+                    android:textColor="@color/black_txt_bg_btn"
                     android:layout_height="match_parent"
                     android:background="@drawable/txt_fld_bg"
                     android:fontFamily="@font/lato_regular"
@@ -112,7 +110,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                app:boxStrokeColor="@color/txt_purple"
+                app:boxStrokeColor="@color/primary_green_txt_btn"
                 app:boxStrokeErrorColor="@color/err_col"
                 app:boxStrokeWidth="0dp"
                 app:cursorErrorColor="@color/err_col"
@@ -122,12 +120,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/pass_txt"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/txt_purple">
+                app:cursorColor="@color/black_txt_bg_btn"
+                app:passwordToggleTint="@color/black_txt_bg_btn">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textColor="@color/black_txt_bg_btn"
                     android:background="@drawable/txt_fld_bg"
                     android:fontFamily="@font/lato_regular"
                     android:maxLines="1"
@@ -142,11 +142,11 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
-                android:backgroundTint="@color/btn_purple"
+                android:backgroundTint="@color/black_txt_bg_btn"
                 android:fontFamily="@font/lato_bold"
                 android:padding="14dp"
                 android:text="@string/next"
-                android:textColor="@color/dark_purple"
+                android:textColor="@color/green_bg"
                 android:textSize="16sp"
                 app:cornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"

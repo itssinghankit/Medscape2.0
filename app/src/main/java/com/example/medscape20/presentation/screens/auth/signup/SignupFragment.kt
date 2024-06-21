@@ -42,6 +42,10 @@ class SignupFragment : Fragment() {
             viewModel.event(SignupEvents.OnNextClick)
         }
 
+        binding.back.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.email.doOnTextChanged { text, start, before, count ->
             viewModel.event(SignupEvents.OnEmailChanged(text.toString()))
         }
@@ -61,7 +65,7 @@ class SignupFragment : Fragment() {
 
                     //email validation
                     if (!it.isEmailValid) {
-                        binding.emailCont.error = it.emailError?.let { resId -> getString(resId) }
+                        binding.emailCont.error = getString(it.emailError!!)
                     } else {
                         binding.emailCont.error = null
                         binding.emailCont.isErrorEnabled = false
@@ -69,7 +73,7 @@ class SignupFragment : Fragment() {
 
                     //password validation
                     if (!it.isPasswordValid) {
-                        binding.passCont.error = it.passError?.let{resId->getString(resId)}
+                        binding.passCont.error = getString(it.passError!!)
                     } else {
                         binding.passCont.error = null
                         binding.passCont.isErrorEnabled = false
@@ -85,7 +89,10 @@ class SignupFragment : Fragment() {
         //change navigateToNextScreen variable false for back stack
         viewModel.event(SignupEvents.OnNavigationDone)
 
-        val action = SignupFragmentDirections.actionSignupFragmentToSignupDetailsFragment()
+        val action = SignupFragmentDirections.actionSignupFragmentToSignupDetailsFragment(
+            email = binding.email.text.toString(),
+            password = binding.password.text.toString()
+        )
         findNavController().navigate(action)
     }
 

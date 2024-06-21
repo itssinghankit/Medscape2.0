@@ -2,9 +2,10 @@ package com.example.medscape20.presentation.screens.auth.signup
 
 import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
-import com.example.medscape20.domain.usecase.signup_details.ValidateEmailUseCase
-import com.example.medscape20.domain.usecase.signup_details.ValidatePasswordUseCase
+import com.example.medscape20.domain.usecase.signup.ValidateEmailUseCase
+import com.example.medscape20.domain.usecase.signup.ValidatePasswordUseCase
 import com.example.medscape20.util.EmailError
+import com.example.medscape20.util.PassError
 import com.example.medscape20.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,6 +57,12 @@ class SignupViewModel @Inject constructor(
                                     it.copy(isEmailValid = false, emailError = R.string.email_error)
                                 }
                             }
+
+                            EmailError.EMPTY -> {
+                                _state.update {
+                                    it.copy(isEmailValid = false, emailError = R.string.empty_error)
+                                }
+                            }
                         }
                     }
 
@@ -69,10 +76,38 @@ class SignupViewModel @Inject constructor(
             }
 
             is SignupEvents.OnPasswordChanged -> {
-                val isValid = validatePasswordUseCase(action.password)
-                _state.update {
-                    it.copy(isPasswordValid = isValid, passError = R.string.email_error)
+
+                when (val isValid = validatePasswordUseCase(action.password)) {
+                    is Result.Error -> {
+                        when (isValid.error) {
+                            PassError.EMPTY -> {
+                                _state.update {
+                                    it.copy(
+                                        isPasswordValid = false,
+                                        passError = R.string.empty_error
+                                    )
+                                }
+                            }
+
+                            PassError.PASS_ERROR -> {
+                                _state.update {
+                                    it.copy(
+                                        isPasswordValid = false,
+                                        passError = R.string.pass_error
+                                    )
+                                }
+                            }
+                        }
+
+                    }
+
+                    else -> {
+                        _state.update {
+                            it.copy(isPasswordValid = true, passError = null)
+                        }
+                    }
                 }
+
             }
 
             SignupEvents.OnNavigationDone -> {

@@ -31,7 +31,7 @@ class AvatarFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.signupBtn.setOnClickListener{
-            findNavController().navigate(R.id.action_avatarFragment_to_mapsFragment)
+            findNavController().navigate(R.id.homeActivity)
         }
 
         return binding.root
