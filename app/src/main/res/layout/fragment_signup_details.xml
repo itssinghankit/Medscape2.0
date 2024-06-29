@@ -78,6 +78,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:inputType="textCapWords"
                     android:background="@drawable/txt_fld_bg"
                     android:fontFamily="@font/lato_regular"
                     android:maxLines="1"
@@ -208,10 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:clickable="true"
-                android:enabled="false"
-                android:focusable="true"
+                android:layout_marginEnd="94dp"
                 app:boxStrokeColor="@color/primary_green_txt_btn"
                 app:boxStrokeErrorColor="@color/err_col"
                 app:boxStrokeWidth="0dp"
@@ -219,6 +217,8 @@
                 app:cursorErrorColor="@color/err_col"
                 app:errorTextColor="@color/err_col"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textColorHint="@color/grey_hint"
+                android:hint="click on location icon..."
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_txt"
                 app:passwordToggleTint="@color/primary_green_txt_btn">
@@ -230,84 +230,22 @@
                     android:background="@drawable/txt_fld_bg"
                     android:fontFamily="@font/lato_regular"
                     android:maxLines="3"
+                    android:enabled="false"
                     android:text="@{viewModel.address}"
                     android:textColor="@color/black_txt_bg_btn" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--        <TextView-->
-            <!--            android:id="@+id/state_txt"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginStart="32dp"-->
-            <!--            android:layout_marginTop="24dp"-->
-            <!--            android:fontFamily="@font/lato_bold"-->
-            <!--            android:text="State"-->
-            <!--            android:textColor="@color/white"-->
-            <!--            android:textSize="16sp"-->
-            <!--            app:layout_constraintStart_toStartOf="parent"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/add_cont" />-->
-
-            <!--        <com.google.android.material.textfield.TextInputLayout-->
-            <!--            android:id="@+id/state_cont"-->
-            <!--            style="?attr/textInputFilledStyle"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginStart="32dp"-->
-            <!--            android:layout_marginTop="16dp"-->
-            <!--            android:layout_marginEnd="32dp"-->
-            <!--            app:boxStrokeColor="@color/txt_purple"-->
-            <!--            app:boxStrokeWidth="0dp"-->
-            <!--            app:layout_constraintEnd_toEndOf="parent"-->
-            <!--            app:layout_constraintStart_toStartOf="parent"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/state_txt"-->
-            <!--            app:passwordToggleTint="@color/txt_purple">-->
-
-            <!--            <com.google.android.material.textfield.TextInputEditText-->
-            <!--                android:id="@+id/state"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:background="@drawable/txt_fld_bg"-->
-            <!--                android:fontFamily="@font/lato_regular" />-->
-
-            <!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-            <!--        <TextView-->
-            <!--            android:id="@+id/city_txt"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginStart="32dp"-->
-            <!--            android:layout_marginTop="24dp"-->
-            <!--            android:fontFamily="@font/lato_bold"-->
-            <!--            android:text="City"-->
-            <!--            android:textColor="@color/white"-->
-            <!--            android:textSize="16sp"-->
-            <!--            app:layout_constraintStart_toStartOf="parent"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/state_cont" />-->
-
-            <!--        <com.google.android.material.textfield.TextInputLayout-->
-            <!--            android:id="@+id/city_cont"-->
-            <!--            style="?attr/textInputFilledStyle"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginStart="32dp"-->
-            <!--            android:layout_marginTop="16dp"-->
-            <!--            android:layout_marginEnd="32dp"-->
-            <!--            app:boxStrokeColor="@color/txt_purple"-->
-            <!--            app:boxStrokeWidth="0dp"-->
-            <!--            app:layout_constraintEnd_toEndOf="parent"-->
-            <!--            app:layout_constraintStart_toStartOf="parent"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/city_txt"-->
-            <!--            app:passwordToggleTint="@color/txt_purple">-->
-
-            <!--            <com.google.android.material.textfield.TextInputEditText-->
-            <!--                android:id="@+id/city"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:background="@drawable/txt_fld_bg"-->
-            <!--                android:fontFamily="@font/lato_regular" />-->
-
-            <!--        </com.google.android.material.textfield.TextInputLayout>-->
+            <ImageButton
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:id="@+id/add_loc_btn"
+                android:background="@drawable/txt_fld_bg"
+                android:backgroundTint="@color/black"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/baseline_add_location_24"
+                app:layout_constraintStart_toEndOf="@id/add_cont"
+                app:layout_constraintTop_toTopOf="@id/add_cont"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/nxt_btn"
@@ -321,7 +259,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:padding="14dp"
                 android:text="@string/next"
-                android:textColor="@color/green_bg"
+                android:textColor="@color/primary_green_txt_btn"
                 android:textSize="16sp"
                 app:cornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"

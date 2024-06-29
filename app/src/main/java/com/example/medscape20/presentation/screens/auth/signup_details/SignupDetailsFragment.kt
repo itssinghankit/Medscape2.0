@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -39,7 +40,7 @@ class SignupDetailsFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//
+
 //        Toast.makeText(context,args.email, Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context,args.password, Toast.LENGTH_SHORT).show()
 
@@ -59,7 +60,13 @@ class SignupDetailsFragment() : Fragment() {
             viewModel.event(SignupDetailsEvents.OnMobileChanged(text.toString()))
         }
 
+        //for moving to map screen
+        binding.addLocBtn.setOnClickListener {
+            viewModel.event(SignupDetailsEvents.OnLocBtnClicked)
+        }
+
         //gender radio button
+        binding.gender.check(Gender.MALE.id) //default
         binding.gender.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 Gender.MALE.id -> viewModel.event(SignupDetailsEvents.OnGenderChanged(Gender.MALE.value))
@@ -67,8 +74,6 @@ class SignupDetailsFragment() : Fragment() {
                 Gender.OTHER.id -> viewModel.event(SignupDetailsEvents.OnGenderChanged(Gender.OTHER.value))
             }
         }
-
-//        binding.gender.check(R.id.male)
 
         //observing events for actions
         lifecycleScope.launch {
@@ -96,6 +101,10 @@ class SignupDetailsFragment() : Fragment() {
                         binding.nameCont.isErrorEnabled = false
                     }
 
+                    if (it.navigateToMapFragment) {
+                        navigateToMapFragment()
+                    }
+
                 }
             }
 
@@ -118,15 +127,20 @@ class SignupDetailsFragment() : Fragment() {
         findNavController().navigate(action)
     }
 
-    private enum class Gender(val value: String, @IdRes val id: Int) {
-        MALE("male", R.id.male),
-        FEMALE("female", R.id.female),
-        OTHER("other", R.id.other)
+    fun navigateToMapFragment() {
+        viewModel.event(SignupDetailsEvents.OnNavigationDone)
+        findNavController().navigate(R.id.action_signupDetailsFragment_to_mapsFragment)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private enum class Gender(val value: String, @IdRes val id: Int) {
+        MALE("male", R.id.male),
+        FEMALE("female", R.id.female),
+        OTHER("other", R.id.other)
     }
 }
 

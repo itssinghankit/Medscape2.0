@@ -7,5 +7,5 @@ sealed class SignupDetailsEvents {
     data class OnMobileChanged(val mobile: String) : SignupDetailsEvents()
     data class OnAddressChanged(val address: String) : SignupDetailsEvents()
     data class OnGenderChanged(val gender: String) : SignupDetailsEvents()
-    object OnMapBtnClicked : SignupDetailsEvents()
+    object OnLocBtnClicked : SignupDetailsEvents()
 }

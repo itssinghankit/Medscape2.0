@@ -29,5 +29,7 @@
     <string name="female">Female</string>
     <string name="other">Other</string>
     <string name="mobile">Mobile</string>
+    <string name="permission_request_deny_message">This app needs the Location permission to show your current location on the map. \n\nNOTE: If after clicking OK, this message shows again, grant the location permission from App settings of Medscape.</string>
+    <string name="location_permission_dialog_title">Location Permission Needed</string>
 
 </resources>

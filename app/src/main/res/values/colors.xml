@@ -8,4 +8,5 @@
     <color name="light_green_txt_bg">#B8F8BE</color>
     <color name="black_txt_bg_btn">#000</color>
     <color name="err_col">#FB9393</color>
+    <color name="grey_hint">#586155</color>
 </resources>

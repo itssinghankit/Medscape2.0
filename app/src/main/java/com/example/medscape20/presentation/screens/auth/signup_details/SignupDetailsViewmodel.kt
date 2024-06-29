@@ -1,8 +1,6 @@
 package com.example.medscape20.presentation.screens.auth.signup_details
 
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.signup_details.MobileValidationUseCase
 import com.example.medscape20.domain.usecase.signup_details.NameValidationUseCase
@@ -14,9 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 data class SignupDetailsState(
     val navigateToNextScreen: Boolean = false,
@@ -26,7 +23,8 @@ data class SignupDetailsState(
     val mobileError: Int? = null,
     val isAddressValid: Boolean = true,
     val addressError: Int? = null,
-    val gender: String = "male"
+    val gender: String = "male",
+    val navigateToMapFragment: Boolean = false
 )
 
 @HiltViewModel
@@ -44,6 +42,12 @@ class SignupDetailsViewmodel @Inject constructor(
 
     fun event(action: SignupDetailsEvents) {
         when (action) {
+            SignupDetailsEvents.OnLocBtnClicked -> {
+                _state.update {
+                    it.copy(navigateToMapFragment = true)
+                }
+            }
+
             is SignupDetailsEvents.OnAddressChanged -> TODO()
 
             is SignupDetailsEvents.OnGenderChanged -> {
@@ -52,7 +56,6 @@ class SignupDetailsViewmodel @Inject constructor(
                 }
             }
 
-            SignupDetailsEvents.OnMapBtnClicked -> TODO()
             is SignupDetailsEvents.OnMobileChanged -> {
                 when (val result = validateMobileValidationUseCase(action.mobile)) {
                     is Result.Error -> {
@@ -137,8 +140,19 @@ class SignupDetailsViewmodel @Inject constructor(
                 }
             }
 
-            SignupDetailsEvents.OnNavigationDone -> TODO()
-            SignupDetailsEvents.OnNextClick -> TODO()
+            SignupDetailsEvents.OnNavigationDone -> {
+                _state.update {
+                    it.copy(navigateToNextScreen = false, navigateToMapFragment = false)
+                }
+            }
+
+            SignupDetailsEvents.OnNextClick -> {
+                if (_state.value.isNameValid && _state.value.isMobileValid && _state.value.isAddressValid && mobile.value.isNotEmpty() && name.value.isNotEmpty() && address.value.isNotEmpty()) {
+                    _state.update {
+                        it.copy(navigateToNextScreen = true)
+                    }
+                }
+            }
         }
     }
 
