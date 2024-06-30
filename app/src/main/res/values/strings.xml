@@ -36,5 +36,10 @@
     <string name="done_button">done_button</string>
     <string name="this_app_need_camera_permission_for_capturing_photos_from_camera">This app need camera permission for capturing photos from camera. \n\nNOTE: If after clicking OK, this message shows again, grant the location permission from App settings of Medscape.</string>
     <string name="camera_permission_needed">Camera permission needed</string>
+    <string name="profile_photo">Profile photo</string>
+    <string name="camera_button">camera button</string>
+    <string name="camera">Camera</string>
+    <string name="gallery_button">gallery button</string>
+    <string name="gallery">Gallery</string>
 
 </resources>

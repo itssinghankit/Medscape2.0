@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -65,16 +66,16 @@ class ImagePickerBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(
-            R.layout.bottom_sheet_image_picker,
+            R.layout.bottom_sheet_image_picker_layout,
             container,
             false
         ) // Inflate your layout
 
-        view.findViewById<MaterialButton>(R.id.take_photo).setOnClickListener {
+        view.findViewById<LinearLayout>(R.id.take_photo).setOnClickListener {
             takeCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        view.findViewById<MaterialButton>(R.id.choose_from_gallery).setOnClickListener {
+        view.findViewById<LinearLayout>(R.id.choose_from_gallery).setOnClickListener {
             openGallery()
         }
 

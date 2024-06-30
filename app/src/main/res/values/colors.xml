@@ -9,4 +9,5 @@
     <color name="black_txt_bg_btn">#000</color>
     <color name="err_col">#FF6B6B</color>
     <color name="grey_hint">#586155</color>
+    <color name="grey_txt">#BDBDBD</color>
 </resources>

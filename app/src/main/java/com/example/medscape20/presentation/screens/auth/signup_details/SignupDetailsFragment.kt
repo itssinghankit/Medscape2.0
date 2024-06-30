@@ -48,7 +48,7 @@ class SignupDetailsFragment() : Fragment() {
             result?.let {
                 if (result.isNotEmpty()) {
                     //remove hint from textField
-                    binding.addCont.hint=null
+                    binding.addCont.hint = null
                     viewModel.event(SignupDetailsEvents.OnAddressChanged(result))
                 }
             }
@@ -153,8 +153,8 @@ class SignupDetailsFragment() : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(!binding.address.text.isNullOrEmpty()){
-            binding.addCont.hint=null
+        if (!binding.address.text.isNullOrEmpty()) {
+            binding.addCont.hint = null
         }
     }
 

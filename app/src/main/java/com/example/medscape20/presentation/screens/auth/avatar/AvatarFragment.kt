@@ -24,15 +24,6 @@ class AvatarFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewmodel: AvatarViewModel by viewModels()
 
-//    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//        if (uri != null) {
-//            // Handle the selected image URI
-//            avatarUri=uri
-//            binding.avatarImg.setImageURI(uri) // Set the image to an ImageView (example)
-//        }
-//    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,12 +40,10 @@ class AvatarFragment : Fragment() {
         //from bottom sheet
         setFragmentResultListener("avatar") { requestKey, bundle ->
             val uri = bundle.getString("avatar_uri")
-
             uri?.let {
                 val imageUri = Uri.parse(uri)
                 viewmodel.event(AvatarEvents.OnAvatarSelected(imageUri))
             }
-
         }
 
         binding.back.setOnClickListener {
@@ -71,15 +60,12 @@ class AvatarFragment : Fragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 viewmodel.avatarUri.collect {
                     binding.avatarImg.setImageURI(it)
                 }
-
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
