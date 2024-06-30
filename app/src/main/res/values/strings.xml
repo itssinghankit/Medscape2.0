@@ -31,5 +31,10 @@
     <string name="mobile">Mobile</string>
     <string name="permission_request_deny_message">This app needs the Location permission to show your current location on the map. \n\nNOTE: If after clicking OK, this message shows again, grant the location permission from App settings of Medscape.</string>
     <string name="location_permission_dialog_title">Location Permission Needed</string>
+    <string name="center_marker">center marker</string>
+    <string name="direction">direction</string>
+    <string name="done_button">done_button</string>
+    <string name="this_app_need_camera_permission_for_capturing_photos_from_camera">This app need camera permission for capturing photos from camera. \n\nNOTE: If after clicking OK, this message shows again, grant the location permission from App settings of Medscape.</string>
+    <string name="camera_permission_needed">Camera permission needed</string>
 
 </resources>

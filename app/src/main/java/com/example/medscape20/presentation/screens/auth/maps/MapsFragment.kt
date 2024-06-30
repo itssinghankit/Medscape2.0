@@ -1,4 +1,4 @@
-package com.example.medscape20
+package com.example.medscape20.presentation.screens.auth.maps
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -7,6 +7,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
@@ -23,7 +25,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.medscape20.R
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -38,14 +43,25 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
 import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
+import kotlin.apply
+import kotlin.collections.isNotEmpty
 
 class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationClickListener,
     OnMapReadyCallback {
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var addTxtFld: EditText
+    private lateinit var myLocBtn: FloatingActionButton
+    private lateinit var doneBtn: FloatingActionButton
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -102,6 +118,9 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_maps, container, false)
         progressBar = layout.findViewById<ProgressBar>(R.id.progress_circular)
+        addTxtFld = layout.findViewById<EditText>(R.id.add_txt_fld)
+        myLocBtn = layout.findViewById<FloatingActionButton>(R.id.my_loc_btn)
+        doneBtn = layout.findViewById<FloatingActionButton>(R.id.done_btn)
         return layout
     }
 
@@ -117,16 +136,12 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
     // 1
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.setOnMapClickListener {
-            changeMarkerPosition(it)
-        }
-
-        googleMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-        val leftPadding = 0 // Padding from the left edge
-        val topPadding = 100 // Padding from the top edge
-        val rightPadding = 32 // Padding from the right edge (shifts button to the left)
-        val bottomPadding = 0 // Padding from the bottom edge (shifts button upwards)
-        googleMap.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
+//
+//        val leftPadding = 0 // Padding from the left edge
+//        val topPadding = 100 // Padding from the top edge
+//        val rightPadding = 32 // Padding from the right edge (shifts button to the left)
+//        val bottomPadding = 0 // Padding from the bottom edge (shifts button upwards)
+//        googleMap.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
 
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
@@ -151,9 +166,9 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            //enable my location layer
-            map.isMyLocationEnabled = true
-            map.uiSettings.isMyLocationButtonEnabled = true
+//            //enable my location layer
+//            map.isMyLocationEnabled = true
+//            map.uiSettings.isMyLocationButtonEnabled = true
             //turn on location toggle
             turnOnLocationToggle()
 
@@ -290,8 +305,44 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
                     progressBar.visibility = View.GONE
 
                     val currentLoc = LatLng(location.latitude, location.longitude)
-                    map.addMarker(MarkerOptions().position(currentLoc).title("My Location"))
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
+
+                    myLocBtn.setOnClickListener {
+                        getCurrentLocation()
+                    }
+
+                    doneBtn.setOnClickListener {
+//                      send address back to signup details page
+                        val resultKey = "maps"
+                        val resultBundle = Bundle().apply {
+                            putString("address", addTxtFld.text.toString())
+                        }
+                        setFragmentResult(resultKey, resultBundle)
+
+                        findNavController().navigateUp()
+                    }
+
+                    // Set up camera move listener
+                    map.setOnCameraIdleListener {
+                        val center = map.cameraPosition.target
+                        getAddressFromLocation(center)
+                    }
+//                    val markerOptions = MarkerOptions().position(currentLoc).title("My Location")
+//                    map.addMarker(markerOptions)!!
+//                        .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_icon))
+//                    map.setOnMapClickListener {
+//                        changeMarkerPosition(it)
+//                    }
+
+//                    val centerMarker = map.addMarker(MarkerOptions().position(map.cameraPosition.target))
+
+                    // Set up camera move listener
+//                    map.setOnCameraIdleListener {
+//                        map.clear()
+//                        map.addMarker(MarkerOptions().position(map.cameraPosition.target))
+//                        val center = map.cameraPosition.target
+////                        getAddressFromLocation(center)
+//                    }
 
                 } else if (attempts > 0) {
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -309,10 +360,34 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
 
     }
 
+    private fun getAddressFromLocation(latLng: LatLng) {
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                if (addresses?.isNotEmpty() == true) {
+                    val address = addresses[0]
+                    val addressText = address.getAddressLine(0) ?: "Address not found"
+
+                    withContext(Dispatchers.Main) {
+                        addTxtFld.setText(addressText)
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    addTxtFld.setText("Could not get address")
+                }
+            }
+        }
+    }
+
+
     fun changeMarkerPosition(it: LatLng) {
         map.clear()
         val markerOptions = MarkerOptions().position(it).title("New Location")
-        map.addMarker(markerOptions)
+        map.addMarker(markerOptions)!!
+            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_icon))
     }
 
     companion object {

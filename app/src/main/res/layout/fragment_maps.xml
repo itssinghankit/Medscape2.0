@@ -4,23 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsFragment">
+    tools:context=".presentation.screens.auth.maps.MapsFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@null"
+            app:boxStrokeWidth="0dp"
+            app:cursorColor="@color/green_bg"
+            app:endIconDrawable="@drawable/baseline_my_location_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_txt_fld"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/lato_regular"
+                android:paddingStart="16dp"
+                android:maxLines="3"
+                android:paddingTop="8dp"
+                android:enabled="false"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:textColor="@color/dark_green_splash_txt_bg" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/centerMarker"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/center_marker"
+        android:src="@drawable/map_pin_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/my_loc_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/primary_green_txt_btn"
+        android:contentDescription="@string/done_button"
+        app:layout_constraintBottom_toTopOf="@id/done_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/dark_green_splash_txt_bg"
+        app:srcCompat="@drawable/baseline_my_location_24"
+        app:tint="@color/black" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/done_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/black"
+        android:contentDescription="@string/done_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/grey_hint"
+        app:srcCompat="@drawable/baseline_done_24"
+        app:tint="@color/primary_green_txt_btn" />
 
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/dark_green_splash_txt_bg"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

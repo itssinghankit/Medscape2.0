@@ -1,5 +1,6 @@
 package com.example.medscape20.presentation.screens.auth.signup_details
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.signup_details.MobileValidationUseCase
@@ -12,17 +13,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 data class SignupDetailsState(
     val navigateToNextScreen: Boolean = false,
     val isNameValid: Boolean = true,
-    val nameError: Int? = null,
+    @StringRes val nameError: Int? = null,
     val isMobileValid: Boolean = true,
-    val mobileError: Int? = null,
+    @StringRes val mobileError: Int? = null,
     val isAddressValid: Boolean = true,
-    val addressError: Int? = null,
+    @StringRes val addressError: Int? = null,
     val gender: String = "male",
     val navigateToMapFragment: Boolean = false
 )
@@ -48,7 +48,9 @@ class SignupDetailsViewmodel @Inject constructor(
                 }
             }
 
-            is SignupDetailsEvents.OnAddressChanged -> TODO()
+            is SignupDetailsEvents.OnAddressChanged -> {
+                address.value = action.address
+            }
 
             is SignupDetailsEvents.OnGenderChanged -> {
                 _state.update {
@@ -147,6 +149,11 @@ class SignupDetailsViewmodel @Inject constructor(
             }
 
             SignupDetailsEvents.OnNextClick -> {
+                if (address.value.isNullOrEmpty()) {
+                    _state.update {
+                        it.copy(isAddressValid = false, addressError = R.string.empty_error)
+                    }
+                }
                 if (_state.value.isNameValid && _state.value.isMobileValid && _state.value.isAddressValid && mobile.value.isNotEmpty() && name.value.isNotEmpty() && address.value.isNotEmpty()) {
                     _state.update {
                         it.copy(navigateToNextScreen = true)

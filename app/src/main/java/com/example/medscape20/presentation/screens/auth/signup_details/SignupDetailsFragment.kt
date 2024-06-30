@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -43,6 +43,16 @@ class SignupDetailsFragment() : Fragment() {
 
 //        Toast.makeText(context,args.email, Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context,args.password, Toast.LENGTH_SHORT).show()
+        setFragmentResultListener("maps") { key, bundle ->
+            val result = bundle.getString("address")
+            result?.let {
+                if (result.isNotEmpty()) {
+                    //remove hint from textField
+                    binding.addCont.hint=null
+                    viewModel.event(SignupDetailsEvents.OnAddressChanged(result))
+                }
+            }
+        }
 
         binding.back.setOnClickListener {
             findNavController().navigateUp()
@@ -101,6 +111,15 @@ class SignupDetailsFragment() : Fragment() {
                         binding.nameCont.isErrorEnabled = false
                     }
 
+                    //address validation
+                    if (!it.isAddressValid) {
+                        binding.addCont.error = getString(it.addressError!!)
+
+                    } else {
+                        binding.addCont.error = null
+                        binding.addCont.isErrorEnabled = false
+                    }
+
                     if (it.navigateToMapFragment) {
                         navigateToMapFragment()
                     }
@@ -130,6 +149,13 @@ class SignupDetailsFragment() : Fragment() {
     fun navigateToMapFragment() {
         viewModel.event(SignupDetailsEvents.OnNavigationDone)
         findNavController().navigate(R.id.action_signupDetailsFragment_to_mapsFragment)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!binding.address.text.isNullOrEmpty()){
+            binding.addCont.hint=null
+        }
     }
 
     override fun onDestroy() {

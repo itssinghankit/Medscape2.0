@@ -69,6 +69,7 @@
                 app:boxStrokeWidth="0dp"
                 app:cursorColor="@color/black_txt_bg_btn"
                 app:cursorErrorColor="@color/err_col"
+                app:errorIconTint="@color/err_col"
                 app:errorTextColor="@color/err_col"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +116,7 @@
                 app:cursorErrorColor="@color/err_col"
                 app:errorTextColor="@color/err_col"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:errorIconTint="@color/err_col"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mobile_txt"
                 app:passwordToggleTint="@color/primary_green_txt_btn">
@@ -216,6 +218,7 @@
                 app:cursorColor="@color/black_txt_bg_btn"
                 app:cursorErrorColor="@color/err_col"
                 app:errorTextColor="@color/err_col"
+                app:errorIconTint="@color/err_col"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textColorHint="@color/grey_hint"
                 android:hint="click on location icon..."

@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.example.medscape20.MapsFragment"
+        android:name="com.example.medscape20.presentation.screens.auth.maps.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
     <activity
