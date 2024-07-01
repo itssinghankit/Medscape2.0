@@ -41,5 +41,10 @@
     <string name="camera">Camera</string>
     <string name="gallery_button">gallery button</string>
     <string name="gallery">Gallery</string>
+    <string name="set_avater_button">set avater button</string>
+    <string name="your_avatar">your avatar</string>
+    <string name="back_button">back button</string>
+    <string name="choose_your_profile_pic">Choose your profile pic</string>
+    <string name="your_photo_is_used_to_identify_you_nduring_garbage_collection">Your photo is used to identify you \nduring garbage collection</string>
 
 </resources>

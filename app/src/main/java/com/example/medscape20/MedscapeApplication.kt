@@ -1,9 +1,9 @@
 package com.example.medscape20
 
+import android.annotation.SuppressLint
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
-
 
 @HiltAndroidApp
 class MedscapeApplication:Application() {

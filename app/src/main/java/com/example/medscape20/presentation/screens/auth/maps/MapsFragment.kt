@@ -11,7 +11,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -31,7 +29,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
@@ -39,24 +39,22 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Locale
 import kotlin.apply
 import kotlin.collections.isNotEmpty
 
-class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationClickListener,
-    OnMapReadyCallback {
+class MapsFragment : Fragment(), OnMapReadyCallback {
+
+    private lateinit var locationCallback: LocationCallback
 
     private lateinit var progressBar: ProgressBar
     private lateinit var addTxtFld: EditText
@@ -100,10 +98,9 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             when (result.resultCode) {
                 Activity.RESULT_OK -> {
-
                     // User agreed to enable location
                     //but it will take a small time to find actual location using GPS
-                    getCurrentLocation()
+                    startLocationUpdates()
                 }
 
                 Activity.RESULT_CANCELED -> {
@@ -116,6 +113,7 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+
         val layout = inflater.inflate(R.layout.fragment_maps, container, false)
         progressBar = layout.findViewById<ProgressBar>(R.id.progress_circular)
         addTxtFld = layout.findViewById<EditText>(R.id.add_txt_fld)
@@ -131,23 +129,24 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+                    // Update UI with location data
+                    animateCameraToCurrLoc(location)
+                }
+            }
+        }
+
     }
 
     // 1
     override fun onMapReady(googleMap: GoogleMap) {
+
         map = googleMap
-//
-//        val leftPadding = 0 // Padding from the left edge
-//        val topPadding = 100 // Padding from the top edge
-//        val rightPadding = 32 // Padding from the right edge (shifts button to the left)
-//        val bottomPadding = 0 // Padding from the bottom edge (shifts button upwards)
-//        googleMap.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
-
         fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireContext())
-
-        googleMap.setOnMyLocationButtonClickListener(this)
-        googleMap.setOnMyLocationClickListener(this)
+            LocationServices.getFusedLocationProviderClient(requireActivity())
         enableMyLocation()
 
     }
@@ -158,6 +157,7 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
      * if permission granted location layer will be turned on by map.isMyLocationEnabled = true **/
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
+        Timber.d("enableMyLocation")
 
         //Check if permissions are granted, if so, enable the my location layer
         if (ContextCompat.checkSelfPermission(
@@ -166,12 +166,9 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-//            //enable my location layer
-//            map.isMyLocationEnabled = true
-//            map.uiSettings.isMyLocationButtonEnabled = true
+
             //turn on location toggle
             turnOnLocationToggle()
-
             return
         }
 
@@ -185,6 +182,7 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
         super.onResume()
 
         if (permissionDenied) {
+
             // Permission was not granted, display error dialog.
             showPermissionRationaleDialog()
             permissionDenied = false
@@ -193,6 +191,7 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
 
     // 5
     private fun showPermissionRationaleDialog() {
+
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.location_permission_dialog_title))
             .setMessage(
@@ -218,151 +217,44 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
             }.create().show()
     }
 
-    override fun onMyLocationButtonClick(): Boolean {
-//        Toast.makeText(context, "MyLocation button clicked", Toast.LENGTH_SHORT)
-//            .show()
-//        // Return false so that we don't consume the event and the default behavior still occurs
-//        // (the camera animates to the user's current position).
-//        if (ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            //request permission
-//            ActivityCompat.requestPermissions(
-//                requireActivity(),
-//                arrayOf(
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION
-//                ),
-//                LOCATION_PERMISSION_REQUEST_CODE
-//            )
-//        }
-//        map.setMyLocationEnabled(true)
-
-        return false
-    }
-
-    override fun onMyLocationClick(location: Location) {
-        Toast.makeText(context, "Current location:\n$location", Toast.LENGTH_LONG).show()
-    }
-
     //turn on location toggle
     private fun turnOnLocationToggle() {
+
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
-            .setWaitForAccurateLocation(false)
-            .setMinUpdateIntervalMillis(5000)
+            .setWaitForAccurateLocation(true)
+            .setMinUpdateIntervalMillis(500)
             .build()
 
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
-
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
         val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
 
         task.addOnSuccessListener {
             // Location is already on
-            getCurrentLocation()
+            startLocationUpdates()
         }
 
         task.addOnFailureListener { exception ->
             if (exception is ResolvableApiException) {
                 // Location is not on, but this can be fixed by showing the user a dialog
                 try {
+                    Timber.d("turnOnLocationToggle-faillure-try")
                     // Create an IntentSenderRequest
                     val intentSenderRequest =
                         IntentSenderRequest.Builder(exception.resolution).build()
                     // Launch the resolution with our ActivityResultLauncher
                     resolutionForLocationToggleResult.launch(intentSenderRequest)
                 } catch (sendEx: IntentSender.SendIntentException) {
+                    Timber.d("turnOnLocationToggle-faillure-catch")
                     // Ignore the error
                 }
             }
         }
     }
 
-    // 6-b
-    fun getCurrentLocation(attempts: Int = 30) {
-        progressBar.visibility = View.VISIBLE
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissionLauncher.launch(PERMISSIONS_ARRAY)
-        }
-
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    progressBar.visibility = View.GONE
-
-                    val currentLoc = LatLng(location.latitude, location.longitude)
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
-
-                    myLocBtn.setOnClickListener {
-                        getCurrentLocation()
-                    }
-
-                    doneBtn.setOnClickListener {
-//                      send address back to signup details page
-                        val resultKey = "maps"
-                        val resultBundle = Bundle().apply {
-                            putString("address", addTxtFld.text.toString())
-                        }
-                        setFragmentResult(resultKey, resultBundle)
-
-                        findNavController().navigateUp()
-                    }
-
-                    // Set up camera move listener
-                    map.setOnCameraIdleListener {
-                        val center = map.cameraPosition.target
-                        getAddressFromLocation(center)
-                    }
-//                    val markerOptions = MarkerOptions().position(currentLoc).title("My Location")
-//                    map.addMarker(markerOptions)!!
-//                        .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_icon))
-//                    map.setOnMapClickListener {
-//                        changeMarkerPosition(it)
-//                    }
-
-//                    val centerMarker = map.addMarker(MarkerOptions().position(map.cameraPosition.target))
-
-                    // Set up camera move listener
-//                    map.setOnCameraIdleListener {
-//                        map.clear()
-//                        map.addMarker(MarkerOptions().position(map.cameraPosition.target))
-//                        val center = map.cameraPosition.target
-////                        getAddressFromLocation(center)
-//                    }
-
-                } else if (attempts > 0) {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        getCurrentLocation(attempts - 1)
-                    }, 1000)
-
-                } else {
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(context, "Turn on your location", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Failed to get location", Toast.LENGTH_SHORT).show()
-            }
-
-    }
-
     private fun getAddressFromLocation(latLng: LatLng) {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
 
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
@@ -382,14 +274,6 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
         }
     }
 
-
-    fun changeMarkerPosition(it: LatLng) {
-        map.clear()
-        val markerOptions = MarkerOptions().position(it).title("New Location")
-        map.addMarker(markerOptions)!!
-            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_icon))
-    }
-
     companion object {
         val PERMISSIONS_ARRAY = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -397,5 +281,62 @@ class MapsFragment : Fragment(), OnMyLocationButtonClickListener, OnMyLocationCl
         )
     }
 
-}
+    fun animateCameraToCurrLoc(location: Location) {
+        //for removing again and again location updates
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        progressBar.visibility = View.GONE
 
+        val currentLoc = LatLng(location.latitude, location.longitude)
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
+
+        myLocBtn.setOnClickListener {
+            //setting the camera again to live location but there is a problem if we move
+            //the location will get same as previous one also the last location is not updated
+            //until another app or this app update its location manually
+            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
+            startLocationUpdates()
+        }
+
+        // Set up camera move listener
+        map.setOnCameraIdleListener {
+            //until we haven't found live location map remain in this state that is the reason
+            //we need not to call getAddressFromLocation(center) for fetching address in text field.
+            val center = map.cameraPosition.target
+            getAddressFromLocation(center)
+        }
+
+        doneBtn.setOnClickListener {
+
+            //send address back to signup details page
+            val resultKey = "maps"
+            val resultBundle = Bundle().apply {
+                putString("address", addTxtFld.text.toString())
+            }
+            setFragmentResult(resultKey, resultBundle)
+
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun startLocationUpdates() {
+
+        progressBar.visibility = View.VISIBLE
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            return
+        }
+
+    }
+}
