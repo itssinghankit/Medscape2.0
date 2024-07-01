@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.signup_details.MobileValidationUseCase
 import com.example.medscape20.domain.usecase.signup_details.NameValidationUseCase
+import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.MobileError
 import com.example.medscape20.util.NameError
-import com.example.medscape20.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +24,9 @@ data class SignupDetailsState(
     val isAddressValid: Boolean = true,
     @StringRes val addressError: Int? = null,
     val gender: String = "male",
-    val navigateToMapFragment: Boolean = false
+    val navigateToMapFragment: Boolean = false,
+    val lat: Double = 0.0,
+    val lng: Double = 0.0
 )
 
 @HiltViewModel
@@ -50,6 +52,9 @@ class SignupDetailsViewmodel @Inject constructor(
 
             is SignupDetailsEvents.OnAddressChanged -> {
                 address.value = action.address
+                _state.update {
+                    it.copy(lat = action.lat, lng = action.lng)
+                }
             }
 
             is SignupDetailsEvents.OnGenderChanged -> {
@@ -60,7 +65,7 @@ class SignupDetailsViewmodel @Inject constructor(
 
             is SignupDetailsEvents.OnMobileChanged -> {
                 when (val result = validateMobileValidationUseCase(action.mobile)) {
-                    is Result.Error -> {
+                    is ApiResult.Error -> {
                         when (result.error) {
                             MobileError.EMPTY -> {
                                 _state.update {
@@ -101,7 +106,7 @@ class SignupDetailsViewmodel @Inject constructor(
 
             is SignupDetailsEvents.OnNameChanged -> {
                 when (val result = validateNameValidationUseCase(action.name)) {
-                    is Result.Error -> {
+                    is ApiResult.Error -> {
 
                         when (result.error) {
                             NameError.EMPTY -> {

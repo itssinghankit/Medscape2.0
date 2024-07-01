@@ -46,5 +46,8 @@
     <string name="back_button">back button</string>
     <string name="choose_your_profile_pic">Choose your profile pic</string>
     <string name="your_photo_is_used_to_identify_you_nduring_garbage_collection">Your photo is used to identify you \nduring garbage collection</string>
+    <string name="user_already_registered">You are already registered, kindly Sign in.</string>
+    <string name="internal_server_error">Something went wrong</string>
+    <string name="empty_avatar_error">Select a profile photo to continue</string>
 
 </resources>

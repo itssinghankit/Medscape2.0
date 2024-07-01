@@ -6,7 +6,7 @@ import com.example.medscape20.domain.usecase.signup.ValidateEmailUseCase
 import com.example.medscape20.domain.usecase.signup.ValidatePasswordUseCase
 import com.example.medscape20.util.EmailError
 import com.example.medscape20.util.PassError
-import com.example.medscape20.util.Result
+import com.example.medscape20.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +50,7 @@ class SignupViewModel @Inject constructor(
             is SignupEvents.OnEmailChanged -> {
 
                 when (val result = validateEmailUseCase(action.email)) {
-                    is Result.Error -> {
+                    is ApiResult.Error -> {
                         when (result.error) {
                             EmailError.EMAIL_ERROR -> {
                                 _state.update {
@@ -78,7 +78,7 @@ class SignupViewModel @Inject constructor(
             is SignupEvents.OnPasswordChanged -> {
 
                 when (val isValid = validatePasswordUseCase(action.password)) {
-                    is Result.Error -> {
+                    is ApiResult.Error -> {
                         when (isValid.error) {
                             PassError.EMPTY -> {
                                 _state.update {

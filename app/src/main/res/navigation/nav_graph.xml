@@ -79,6 +79,12 @@
         <argument
             android:name="address"
             app:argType="string" />
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="lng"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"

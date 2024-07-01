@@ -68,7 +68,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     //initially permission is not granted
     private var permissionDenied = false
 
-    //3
     //requesting permission using Activity Result API
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -85,7 +84,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-    //6-a
     //start permission activity and then again enable location layer for current location
     private val startActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -93,7 +91,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         enableMyLocation()
     }
 
-    //
     private val resolutionForLocationToggleResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             when (result.resultCode) {
@@ -141,7 +138,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    // 1
     override fun onMapReady(googleMap: GoogleMap) {
 
         map = googleMap
@@ -151,10 +147,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    // 2 4-a
-    /** this function checks if the user has granted the location permission,
-     * if not, it requests the permission
-     * if permission granted location layer will be turned on by map.isMyLocationEnabled = true **/
+    /* this function checks if the user has granted the location permission,
+       if not, it requests the permission
+       if permission granted location layer will be turned on by map.isMyLocationEnabled = true */
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         Timber.d("enableMyLocation")
@@ -176,7 +171,39 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         requestPermissionLauncher.launch(PERMISSIONS_ARRAY)
     }
 
-    //    4-b
+    //turn on location toggle
+    private fun turnOnLocationToggle() {
+
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
+            .setWaitForAccurateLocation(true)
+            .setMinUpdateIntervalMillis(500)
+            .build()
+
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location is already on
+            startLocationUpdates()
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                // Location is not on, but this can be fixed by showing the user a dialog
+                try {
+                    // Create an IntentSenderRequest
+                    val intentSenderRequest =
+                        IntentSenderRequest.Builder(exception.resolution).build()
+                    // Launch the resolution with our ActivityResultLauncher
+                    resolutionForLocationToggleResult.launch(intentSenderRequest)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    // Ignore the error
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         //after result launcher result is processed this callback is invoked and also if it goes to background
         super.onResume()
@@ -189,7 +216,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    // 5
     private fun showPermissionRationaleDialog() {
 
         AlertDialog.Builder(requireContext())
@@ -217,38 +243,70 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }.create().show()
     }
 
-    //turn on location toggle
-    private fun turnOnLocationToggle() {
+    private fun startLocationUpdates() {
 
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
-            .setWaitForAccurateLocation(true)
-            .setMinUpdateIntervalMillis(500)
-            .build()
+        progressBar.visibility = View.VISIBLE
 
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-        val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
-        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            return
+        }
 
-        task.addOnSuccessListener {
-            // Location is already on
+    }
+
+    fun animateCameraToCurrLoc(location: Location) {
+        //for removing again and again location updates
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        progressBar.visibility = View.GONE
+
+        val currentLoc = LatLng(location.latitude, location.longitude)
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
+
+        myLocBtn.setOnClickListener {
+            //setting the camera again to live location but there is a problem if we move
+            //the location will get same as previous one also the last location is not updated
+            //until another app or this app update its location manually
+            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
             startLocationUpdates()
         }
 
-        task.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException) {
-                // Location is not on, but this can be fixed by showing the user a dialog
-                try {
-                    Timber.d("turnOnLocationToggle-faillure-try")
-                    // Create an IntentSenderRequest
-                    val intentSenderRequest =
-                        IntentSenderRequest.Builder(exception.resolution).build()
-                    // Launch the resolution with our ActivityResultLauncher
-                    resolutionForLocationToggleResult.launch(intentSenderRequest)
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    Timber.d("turnOnLocationToggle-faillure-catch")
-                    // Ignore the error
-                }
+        var currentTargetLat = location.latitude
+        var currentTargetLng = location.longitude
+
+        // Set up camera move listener
+        map.setOnCameraIdleListener {
+            //until we haven't found live location map remain in this state that is the reason
+            //we need not to call getAddressFromLocation(center) for fetching address in text field.
+            val center = map.cameraPosition.target
+            currentTargetLat = center.latitude
+            currentTargetLng = center.longitude
+
+            getAddressFromLocation(center)
+        }
+
+        doneBtn.setOnClickListener {
+
+            //send address back to signup details page
+            val resultKey = "maps"
+            val resultBundle = Bundle().apply {
+                putString("address", addTxtFld.text.toString())
+                putDouble("lat", currentTargetLat)
+                putDouble("lng", currentTargetLng)
             }
+            setFragmentResult(resultKey, resultBundle)
+
+            findNavController().navigateUp()
         }
     }
 
@@ -281,62 +339,4 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    fun animateCameraToCurrLoc(location: Location) {
-        //for removing again and again location updates
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-        progressBar.visibility = View.GONE
-
-        val currentLoc = LatLng(location.latitude, location.longitude)
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
-
-        myLocBtn.setOnClickListener {
-            //setting the camera again to live location but there is a problem if we move
-            //the location will get same as previous one also the last location is not updated
-            //until another app or this app update its location manually
-            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
-            startLocationUpdates()
-        }
-
-        // Set up camera move listener
-        map.setOnCameraIdleListener {
-            //until we haven't found live location map remain in this state that is the reason
-            //we need not to call getAddressFromLocation(center) for fetching address in text field.
-            val center = map.cameraPosition.target
-            getAddressFromLocation(center)
-        }
-
-        doneBtn.setOnClickListener {
-
-            //send address back to signup details page
-            val resultKey = "maps"
-            val resultBundle = Bundle().apply {
-                putString("address", addTxtFld.text.toString())
-            }
-            setFragmentResult(resultKey, resultBundle)
-
-            findNavController().navigateUp()
-        }
-    }
-
-    private fun startLocationUpdates() {
-
-        progressBar.visibility = View.VISIBLE
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-            return
-        }
-
-    }
 }

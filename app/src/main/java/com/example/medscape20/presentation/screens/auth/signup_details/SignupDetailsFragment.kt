@@ -44,12 +44,14 @@ class SignupDetailsFragment() : Fragment() {
 //        Toast.makeText(context,args.email, Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context,args.password, Toast.LENGTH_SHORT).show()
         setFragmentResultListener("maps") { key, bundle ->
-            val result = bundle.getString("address")
-            result?.let {
-                if (result.isNotEmpty()) {
+            val address = bundle.getString("address")
+            val lat=bundle.getDouble("lat")
+            val lng=bundle.getDouble("lng")
+            address?.let {
+                if (address.isNotEmpty()) {
                     //remove hint from textField
                     binding.addCont.hint = null
-                    viewModel.event(SignupDetailsEvents.OnAddressChanged(result))
+                    viewModel.event(SignupDetailsEvents.OnAddressChanged(address,lat,lng))
                 }
             }
         }
@@ -141,7 +143,9 @@ class SignupDetailsFragment() : Fragment() {
             name = viewModel.name.value,
             mobile = viewModel.mobile.value,
             gender = viewModel.state.value.gender,
-            address = viewModel.address.value
+            address = viewModel.address.value,
+            lat = viewModel.state.value.lat.toString(),
+            lng = viewModel.state.value.lng.toString()
         )
         findNavController().navigate(action)
     }

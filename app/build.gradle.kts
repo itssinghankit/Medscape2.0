@@ -3,8 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 
     //hilt
-    kotlin("kapt")
+//    id("kotlin-kapt")
+//    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
     alias(libs.plugins.google.gms.google.services)
 
     //maps
@@ -61,6 +64,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,8 +82,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
 
     //hilt
-    implementation(libs.hilt)
-    kapt(libs.hilt.android.compiler)
+//    implementation(libs.hilt)
+//    kapt(libs.hilt.android.compiler)
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //firebase
     implementation(libs.firebase.bom)
@@ -91,8 +98,9 @@ dependencies {
     //maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+
 }
-kapt{
+kapt {
     correctErrorTypes = true
 }
 
