@@ -84,7 +84,7 @@ class AuthRepositoryImplementation @Inject constructor(
             try {
                 emit(ApiResult.Loading)
                 val databaseRef =
-                    firebaseDatabase.getReference(avatarSaveDetailsDto.uid).child("details")
+                    firebaseDatabase.getReference("users").child(avatarSaveDetailsDto.uid)
                 databaseRef.setValue(avatarSaveDetailsDto).await()
                 emit(ApiResult.Success(true))
 

@@ -52,5 +52,4 @@
     <string name="login_invalid_creadential_error">Incorrect email or password</string>
     <string name="could_not_get_address">Could not get address</string>
     <string name="address_not_found">Address not found</string>
-
 </resources>
