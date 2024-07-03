@@ -2,7 +2,7 @@ package com.example.medscape20.presentation.screens.auth.signup
 
 import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
-import com.example.medscape20.domain.usecase.signup.ValidateEmailUseCase
+import com.example.medscape20.domain.usecase.signup.SignupValidateEmailUseCase
 import com.example.medscape20.domain.usecase.signup.ValidatePasswordUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.EmailError
@@ -24,7 +24,7 @@ data class SignupState(
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validateEmailUseCase: SignupValidateEmailUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase
 ) : ViewModel() {
 

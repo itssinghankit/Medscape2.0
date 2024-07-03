@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentLoginBinding
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -61,6 +63,7 @@ class LoginFragment : Fragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 viewModel.state.collect { state ->
 
                     //email validation
@@ -81,8 +84,9 @@ class LoginFragment : Fragment() {
 
                     }
 
-                    //navigation to be done
+                    //navigation
                     if (state.navigateToHome) {
+                        Timber.d("caklled ")
                         navigateToHome()
                     }
 
@@ -112,7 +116,11 @@ class LoginFragment : Fragment() {
 
     private fun navigateToHome() {
         viewModel.event(LoginEvents.OnNavigationDone)
-        findNavController().navigate(R.id.action_loginFragment_to_homeActivity)
+        findNavController().navigate(
+            R.id.action_loginFragment_to_homeFragment,
+            null,
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+        )
     }
 
     override fun onStart() {
@@ -120,7 +128,13 @@ class LoginFragment : Fragment() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            findNavController().navigate(R.id.action_loginFragment_to_homeActivity)
+
+            findNavController().navigate(
+                R.id.action_loginFragment_to_homeFragment,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+            )
+
         }
     }
 

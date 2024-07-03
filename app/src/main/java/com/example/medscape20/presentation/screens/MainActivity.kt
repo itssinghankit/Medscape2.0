@@ -1,20 +1,18 @@
-package com.example.medscape20.presentation.screens.auth
+package com.example.medscape20.presentation.screens
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medscape20.R
-import com.example.medscape20.presentation.screens.auth.login.LoginFragment
-import com.example.medscape20.presentation.screens.auth.signup.SignupFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AuthActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_auth)
+        setContentView(R.layout.activity_main)
 
 
         //as we passed nav graph in nav host so there is no need for this

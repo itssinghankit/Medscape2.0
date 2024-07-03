@@ -123,9 +123,11 @@ class LoginViewModel @Inject constructor(
                 }
             }
             LoginEvents.OnNavigationDone -> {
+
                 _state.update {
                     it.copy(navigateToHome = false)
                 }
+                Timber.d("navigation done ${_state.value.navigateToHome}")
             }
         }
 
@@ -170,8 +172,8 @@ class LoginViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _state.update {
                             it.copy(
-                                isLoading = false,
-                                navigateToHome = true
+                                navigateToHome = true,
+                                isLoading = false
                             )
                         }
                     }

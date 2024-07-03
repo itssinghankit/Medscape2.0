@@ -40,24 +40,13 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".presentation.screens.user.home.HomeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Medscape20" />
-
-        <activity
-            android:name=".presentation.screens.splash.SplashScreen"
-            android:exported="true"
-            android:theme="@style/Theme.Medscape20">
+            android:name=".presentation.screens.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".presentation.screens.auth.AuthActivity"
-            android:exported="false">
         </activity>
     </application>
 

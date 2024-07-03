@@ -84,7 +84,7 @@ class AvatarFragment : Fragment() {
         //change navigateToNextScreen variable false for back stack
         viewmodel.event(AvatarEvents.OnNavigationDone)
         //navigate to home screen
-        findNavController().navigate(R.id.action_avatarFragment_to_homeActivity)
+        findNavController().navigate(R.id.action_avatarFragment_to_homeFragment)
     }
 
     fun showError(errorMessage: Int?) {
