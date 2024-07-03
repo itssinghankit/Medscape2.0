@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +33,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater)
         _binding!!.viewModel = viewModel
         _binding!!.lifecycleOwner = viewLifecycleOwner
@@ -53,11 +52,11 @@ class LoginFragment : Fragment() {
             viewModel.event(LoginEvents.OnLoginClicked)
         }
 
-        binding.email.doOnTextChanged { text, start, before, count ->
+        binding.email.doOnTextChanged { text, _, _, _ ->
             viewModel.event(LoginEvents.OnEmailChanged(text.toString()))
         }
 
-        binding.password.doOnTextChanged { text, start, before, count ->
+        binding.password.doOnTextChanged { text, _, _, _ ->
             viewModel.event(LoginEvents.OnPassChange(text.toString()))
         }
 
@@ -86,7 +85,6 @@ class LoginFragment : Fragment() {
 
                     //navigation
                     if (state.navigateToHome) {
-                        Timber.d("caklled ")
                         navigateToHome()
                     }
 
@@ -139,3 +137,4 @@ class LoginFragment : Fragment() {
     }
 
 }
+//TODO : locality is not showing on firebase

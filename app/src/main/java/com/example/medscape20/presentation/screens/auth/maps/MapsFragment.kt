@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -49,8 +50,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Locale
-import kotlin.apply
-import kotlin.collections.isNotEmpty
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -64,6 +63,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
+
+    private var state: String? = null
+    private var city: String? = null
+    private var locality: String? = null
 
     //initially permission is not granted
     private var permissionDenied = false
@@ -87,7 +90,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     //start permission activity and then again enable location layer for current location
     private val startActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+    ) {
         enableMyLocation()
     }
 
@@ -112,10 +115,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     ): View? {
 
         val layout = inflater.inflate(R.layout.fragment_maps, container, false)
-        progressBar = layout.findViewById<ProgressBar>(R.id.progress_circular)
-        addTxtFld = layout.findViewById<EditText>(R.id.add_txt_fld)
-        myLocBtn = layout.findViewById<FloatingActionButton>(R.id.my_loc_btn)
-        doneBtn = layout.findViewById<FloatingActionButton>(R.id.done_btn)
+        progressBar = layout.findViewById(R.id.progress_circular)
+        addTxtFld = layout.findViewById(R.id.add_txt_fld)
+        myLocBtn = layout.findViewById(R.id.my_loc_btn)
+        doneBtn = layout.findViewById(R.id.done_btn)
         return layout
     }
 
@@ -232,7 +235,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 //navigate back to previous screen as permission is not granted
                 findNavController().navigateUp()
             }
-            .setNeutralButton("App Settings") { dialog, _ ->
+            .setNeutralButton("App Settings") { _, _ ->
                 //navigate to app settings
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     //to tell it that we want details of this package i.e our app
@@ -298,11 +301,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         doneBtn.setOnClickListener {
 
             //send address back to signup details page
-            val resultKey = "maps"
+            val resultKey = MapData.RESULT_KEY.value
             val resultBundle = Bundle().apply {
-                putString("address", addTxtFld.text.toString())
-                putDouble("lat", currentTargetLat)
-                putDouble("lng", currentTargetLng)
+                putString(MapData.ADDRESS.value, addTxtFld.text.toString())
+                putString(MapData.STATE.value, state?.lowercase(Locale.getDefault()))
+                putString(MapData.CITY.value, city?.lowercase(Locale.getDefault()))
+                putString(MapData.LOCALITY.value, locality?.lowercase(Locale.getDefault()))
+                putDouble(MapData.LATITUDE.value, currentTargetLat)
+                putDouble(MapData.LONGITUDE.value, currentTargetLng)
             }
             setFragmentResult(resultKey, resultBundle)
 
@@ -311,22 +317,26 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLocation(latLng: LatLng) {
-
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                 if (addresses?.isNotEmpty() == true) {
                     val address = addresses[0]
-                    val addressText = address.getAddressLine(0) ?: "Address not found"
+                    state = address.adminArea
+                    city = address.locality
+                    locality = address.subLocality
+                    val addressText =
+                        address.getAddressLine(0) ?: getString(R.string.address_not_found)
 
                     withContext(Dispatchers.Main) {
                         addTxtFld.setText(addressText)
                     }
                 }
             } catch (e: Exception) {
+                Timber.d(e.toString())
                 withContext(Dispatchers.Main) {
-                    addTxtFld.setText("Could not get address")
+                    addTxtFld.setText(getString(R.string.could_not_get_address))
                 }
             }
         }
@@ -339,4 +349,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
+}
+
+enum class MapData(val value: String) {
+    RESULT_KEY("maps"),
+    ADDRESS("address"),
+    STATE("state"),
+    CITY("city"),
+    LOCALITY("locality"),
+    LATITUDE("lat"),
+    LONGITUDE("lng")
 }

@@ -159,7 +159,10 @@ class AvatarViewModel @Inject constructor(
             uid = firebaseAuth.currentUser!!.uid,
             isDump = false,
             lat = args.lat.toDouble(),
-            lng=args.lng.toDouble()
+            lng=args.lng.toDouble(),
+            state = args.state,
+            city = args.city,
+            locality = args.locality
         )
         viewModelScope.launch {
             avatarSaveDetailsUseCase(data).collect { result ->

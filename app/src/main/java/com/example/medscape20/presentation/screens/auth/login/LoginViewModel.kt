@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 data class LoginStates(
@@ -123,11 +124,9 @@ class LoginViewModel @Inject constructor(
                 }
             }
             LoginEvents.OnNavigationDone -> {
-
                 _state.update {
                     it.copy(navigateToHome = false)
                 }
-                Timber.d("navigation done ${_state.value.navigateToHome}")
             }
         }
 
@@ -136,7 +135,7 @@ class LoginViewModel @Inject constructor(
     private fun login() {
 
         viewModelScope.launch {
-            val loginReqDto=LoginReqDto(email.value,password.value)
+            val loginReqDto=LoginReqDto(email.value.lowercase().trim(),password.value.trim())
             loginUseCase(loginReqDto).collect{ result->
                 when(result){
                     is ApiResult.Error ->{

@@ -90,8 +90,8 @@ class SignupFragment : Fragment() {
         viewModel.event(SignupEvents.OnNavigationDone)
 
         val action = SignupFragmentDirections.actionSignupFragmentToSignupDetailsFragment(
-            email = binding.email.text.toString(),
-            password = binding.password.text.toString()
+            email = binding.email.text.toString().lowercase().trim(),
+            password = binding.password.text.toString().trim()
         )
         findNavController().navigate(action)
     }

@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentSignupDetailsBinding
+import com.example.medscape20.presentation.screens.auth.maps.MapData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,17 +42,27 @@ class SignupDetailsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        Toast.makeText(context,args.email, Toast.LENGTH_SHORT).show()
-//        Toast.makeText(context,args.password, Toast.LENGTH_SHORT).show()
-        setFragmentResultListener("maps") { key, bundle ->
-            val address = bundle.getString("address")
-            val lat=bundle.getDouble("lat")
-            val lng=bundle.getDouble("lng")
+        setFragmentResultListener(MapData.RESULT_KEY.value) { key, bundle ->
+            val address = bundle.getString(MapData.ADDRESS.value)
+            val lat = bundle.getDouble(MapData.LATITUDE.value)
+            val lng = bundle.getDouble(MapData.LONGITUDE.value)
+            val state = bundle.getString(MapData.STATE.value)
+            val city = bundle.getString(MapData.CITY.value)
+            val locality = bundle.getString(MapData.LATITUDE.value)
             address?.let {
                 if (address.isNotEmpty()) {
                     //remove hint from textField
                     binding.addCont.hint = null
-                    viewModel.event(SignupDetailsEvents.OnAddressChanged(address,lat,lng))
+                    viewModel.event(
+                        SignupDetailsEvents.OnAddressChanged(
+                            address,
+                            lat,
+                            lng,
+                            state,
+                            city,
+                            locality
+                        )
+                    )
                 }
             }
         }
@@ -134,23 +145,26 @@ class SignupDetailsFragment() : Fragment() {
 
     }
 
-    fun navigateToAvatarScreen() {
+    private fun navigateToAvatarScreen() {
         viewModel.event(SignupDetailsEvents.OnNavigationDone)
-
+        val state = viewModel.state.value
         val action = SignupDetailsFragmentDirections.actionSignupDetailsFragmentToAvatarFragment(
             email = args.email,
             password = args.password,
-            name = viewModel.name.value,
-            mobile = viewModel.mobile.value,
+            name = viewModel.name.value.trim(),
+            mobile = viewModel.mobile.value.trim(),
             gender = viewModel.state.value.gender,
             address = viewModel.address.value,
-            lat = viewModel.state.value.lat.toString(),
-            lng = viewModel.state.value.lng.toString()
+            lat = state.lat.toString(),
+            lng = state.lng.toString(),
+            city = state.city,
+            state = state.state,
+            locality = state.locality
         )
         findNavController().navigate(action)
     }
 
-    fun navigateToMapFragment() {
+    private fun navigateToMapFragment() {
         viewModel.event(SignupDetailsEvents.OnNavigationDone)
         findNavController().navigate(R.id.action_signupDetailsFragment_to_mapsFragment)
     }

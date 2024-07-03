@@ -10,5 +10,8 @@ data class AvatarSaveDetailsReqDto(
     val uid:String,
     val isDump:Boolean,
     val lat:Double,
-    val lng:Double
+    val lng:Double,
+    val state:String?,
+    val city:String?,
+    val locality:String?
 )

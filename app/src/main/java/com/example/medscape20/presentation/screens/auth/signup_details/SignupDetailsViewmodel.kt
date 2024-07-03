@@ -26,7 +26,10 @@ data class SignupDetailsState(
     val gender: String = "male",
     val navigateToMapFragment: Boolean = false,
     val lat: Double = 0.0,
-    val lng: Double = 0.0
+    val lng: Double = 0.0,
+    val state: String? = null,
+    val city: String? = null,
+    val locality: String? = null
 )
 
 @HiltViewModel
@@ -53,7 +56,13 @@ class SignupDetailsViewmodel @Inject constructor(
             is SignupDetailsEvents.OnAddressChanged -> {
                 address.value = action.address
                 _state.update {
-                    it.copy(lat = action.lat, lng = action.lng)
+                    it.copy(
+                        lat = action.lat,
+                        lng = action.lng,
+                        state = action.state,
+                        city = action.city,
+                        locality = action.locality
+                    )
                 }
             }
 
@@ -154,7 +163,7 @@ class SignupDetailsViewmodel @Inject constructor(
             }
 
             SignupDetailsEvents.OnNextClick -> {
-                if (address.value.isNullOrEmpty()) {
+                if (address.value.isEmpty()) {
                     _state.update {
                         it.copy(isAddressValid = false, addressError = R.string.empty_error)
                     }
