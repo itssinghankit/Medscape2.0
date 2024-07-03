@@ -1,12 +1,14 @@
 package com.example.medscape20.data.remote.repository
 
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSaveAvatarDto
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSaveDetailsDto
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSignupDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
+import com.example.medscape20.data.remote.dto.login.LoginReqDto
 import com.example.medscape20.domain.repository.AuthRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -25,14 +27,31 @@ class AuthRepositoryImplementation @Inject constructor(
 ) :
     AuthRepository {
 
+    override suspend fun login(loginReqDto: LoginReqDto): Flow<ApiResult<Unit, DataError.Network>> =
+        flow {
+            try {
+                emit(ApiResult.Loading)
+                firebaseAuth.signInWithEmailAndPassword(loginReqDto.email, loginReqDto.password)
+                    .await()
+                emit(ApiResult.Success(Unit))
+            } catch (e: Exception) {
+                when (e) {
+                    is FirebaseAuthInvalidCredentialsException -> emit(ApiResult.Error(DataError.Network.NOT_FOUND))
+                    else -> emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+                }
+
+            }
+        }.flowOn(Dispatchers.IO)
+
+
     override suspend fun signup(
-        avatarSignupDto: AvatarSignupDto
+        avatarSignupReqDto: AvatarSignupReqDto
     ): Flow<ApiResult<FirebaseUser, DataError.Network>> = flow {
         try {
             emit(ApiResult.Loading)
             val authResult = firebaseAuth.createUserWithEmailAndPassword(
-                avatarSignupDto.email,
-                avatarSignupDto.password
+                avatarSignupReqDto.email,
+                avatarSignupReqDto.password
             ).await()
             emit(ApiResult.Success(authResult.user!!))
         } catch (e: Exception) {
@@ -44,8 +63,8 @@ class AuthRepositoryImplementation @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun saveAvatar(avatarSaveAvatarDto: AvatarSaveAvatarDto): Flow<ApiResult<String, DataError.Network>> =
-        flow{
+    override suspend fun saveAvatar(avatarSaveAvatarDto: AvatarSaveAvatarReqDto): Flow<ApiResult<String, DataError.Network>> =
+        flow {
             try {
 
                 emit(ApiResult.Loading)
@@ -60,7 +79,7 @@ class AuthRepositoryImplementation @Inject constructor(
 
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun saveDetails(avatarSaveDetailsDto: AvatarSaveDetailsDto): Flow<ApiResult<Boolean, DataError.Network>> =
+    override suspend fun saveDetails(avatarSaveDetailsDto: AvatarSaveDetailsReqDto): Flow<ApiResult<Boolean, DataError.Network>> =
         flow {
             try {
                 emit(ApiResult.Loading)

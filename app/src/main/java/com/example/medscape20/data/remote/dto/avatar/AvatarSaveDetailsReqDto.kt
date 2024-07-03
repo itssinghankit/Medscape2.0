@@ -1,6 +1,6 @@
-package com.example.medscape20.data.remote.dto.Avatar
+package com.example.medscape20.data.remote.dto.avatar
 
-data class AvatarSaveDetailsDto(
+data class AvatarSaveDetailsReqDto(
     val name: String,
     val email: String,
     val gender: String,

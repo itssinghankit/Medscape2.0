@@ -87,11 +87,6 @@ class AvatarFragment : Fragment() {
         findNavController().navigate(R.id.action_avatarFragment_to_homeActivity)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     fun showError(errorMessage: Int?) {
 
         errorMessage?.let {
@@ -99,4 +94,11 @@ class AvatarFragment : Fragment() {
             viewmodel.event(AvatarEvents.OnErrorShown)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 }

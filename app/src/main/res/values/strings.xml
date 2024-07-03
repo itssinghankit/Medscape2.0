@@ -49,5 +49,6 @@
     <string name="user_already_registered">You are already registered, kindly Sign in.</string>
     <string name="internal_server_error">Something went wrong</string>
     <string name="empty_avatar_error">Select a profile photo to continue</string>
+    <string name="login_invalid_creadential_error">Incorrect email or password</string>
 
 </resources>

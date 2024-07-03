@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.signup.ValidateEmailUseCase
 import com.example.medscape20.domain.usecase.signup.ValidatePasswordUseCase
+import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.EmailError
 import com.example.medscape20.util.PassError
-import com.example.medscape20.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSaveAvatarDto
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSaveDetailsDto
-import com.example.medscape20.data.remote.dto.Avatar.AvatarSignupDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
+import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
 import com.example.medscape20.domain.usecase.avatar.AvatarSaveAvatarUseCase
 import com.example.medscape20.domain.usecase.avatar.AvatarSaveDetailsUseCase
 import com.example.medscape20.domain.usecase.avatar.AvatarSignupUseCase
@@ -75,7 +75,7 @@ class AvatarViewModel @Inject constructor(
 
     private fun signup(args: AvatarFragmentArgs) {
         viewModelScope.launch {
-            val signupDto = AvatarSignupDto(args.email, args.password)
+            val signupDto = AvatarSignupReqDto(args.email, args.password)
             avatarSignupUseCase(signupDto).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {
@@ -109,7 +109,7 @@ class AvatarViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        val avatarSaveAvatarDto = AvatarSaveAvatarDto(
+                        val avatarSaveAvatarDto = AvatarSaveAvatarReqDto(
                             _state.value.avatarUri!!,
                             firebaseAuth.currentUser!!.uid
                         )
@@ -121,7 +121,7 @@ class AvatarViewModel @Inject constructor(
         }
     }
 
-    private fun saveAvatar(avatarSaveAvatarDto: AvatarSaveAvatarDto, args: AvatarFragmentArgs) {
+    private fun saveAvatar(avatarSaveAvatarDto: AvatarSaveAvatarReqDto, args: AvatarFragmentArgs) {
         viewModelScope.launch {
             avatarSaveAvatarUseCase(avatarSaveAvatarDto).collect { result ->
                 when (result) {
@@ -149,7 +149,7 @@ class AvatarViewModel @Inject constructor(
     }
 
     private fun saveDetails(imgUrl: String, args: AvatarFragmentArgs) {
-        val data = AvatarSaveDetailsDto(
+        val data = AvatarSaveDetailsReqDto(
             name = args.name,
             email = args.email,
             gender = args.gender,
