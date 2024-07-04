@@ -4,7 +4,10 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
+import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
 import com.example.medscape20.data.remote.dto.login.LoginReqDto
+import com.example.medscape20.domain.usecase.login.LoginGetUserDataUseCase
+import com.example.medscape20.domain.usecase.login.LoginSaveDataUseCase
 import com.example.medscape20.domain.usecase.login.LoginUseCase
 import com.example.medscape20.domain.usecase.login.LoginValidateEmailUseCase
 import com.example.medscape20.domain.usecase.login.LoginValidatePasswordUseCase
@@ -12,6 +15,7 @@ import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.example.medscape20.util.EmailError
 import com.example.medscape20.util.PassError
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +39,10 @@ data class LoginStates(
 class LoginViewModel @Inject constructor(
     private val loginValidateEmailUseCase: LoginValidateEmailUseCase,
     private val loginValidatePasswordUseCase: LoginValidatePasswordUseCase,
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val loginGetUserDataUseCase: LoginGetUserDataUseCase,
+    private val firebaseAuth: FirebaseAuth,
+    private val loginSaveDataUseCase: LoginSaveDataUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginStates())
@@ -167,15 +174,57 @@ class LoginViewModel @Inject constructor(
                         }
                     }
                     is ApiResult.Success -> {
+                        getUserData()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getUserData() {
+        val uid = firebaseAuth.currentUser!!.uid
+        viewModelScope.launch {
+            loginGetUserDataUseCase(uid).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> {
+                        when (result.error) {
+                            //can add more error types in future
+                            else -> {
+                                _state.update {
+                                    it.copy(
+                                        isError = true,
+                                        errMessage = R.string.internal_server_error,
+                                        isLoading = false
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    ApiResult.Loading -> {
+                        _state.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+
+                    is ApiResult.Success -> {
+                        //save data using datastore
+                        saveUserData(result.data)
                         _state.update {
                             it.copy(
-                                navigateToUserScreen = true,
-                                isLoading = false
+                                isLoading = false,
+                                navigateToUserScreen = true
                             )
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun saveUserData(data: LoginGetUserDataResDto) {
+        viewModelScope.launch {
+            loginSaveDataUseCase(data)
         }
     }
 

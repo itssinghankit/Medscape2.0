@@ -3,7 +3,9 @@ package com.example.medscape20.data.remote.repository
 import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
 import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
 import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
+import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
 import com.example.medscape20.data.remote.dto.login.LoginReqDto
+import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
 import com.example.medscape20.domain.repository.AuthRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
@@ -41,6 +43,21 @@ class AuthRepositoryImplementation @Inject constructor(
                 }
 
             }
+        }.flowOn(Dispatchers.IO)
+
+    override suspend fun getUserData(uid: String): Flow<ApiResult<LoginGetUserDataResDto, DataError.Network>> =
+        flow {
+            try {
+                emit(ApiResult.Loading)
+                val dataRef = firebaseDatabase.getReference("/users/$uid")
+                val data = dataRef.get().await()
+                val user = data.getValue(LoginGetUserDataResDto::class.java)!!
+
+                emit(ApiResult.Success(user))
+            } catch (e: Exception) {
+                emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+            }
+
         }.flowOn(Dispatchers.IO)
 
 

@@ -34,6 +34,7 @@
 
                 <ImageView
                     android:id="@+id/avatar"
+                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/splash_bg" />
@@ -45,11 +46,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/lato_bold"
-                android:text="Hi Ankit Singh"
+                android:text="Hi "
                 android:textColor="@color/white"
                 android:layout_marginBottom="20dp"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/avatar_cont"
+                app:layout_constraintTop_toTopOf="@id/avatar_cont"
+                app:layout_constraintBottom_toBottomOf="@id/avatar_cont"/>
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text="@{viewModel.state.name}"
+                android:textColor="@color/white"
+                android:layout_marginBottom="20dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/name_txt"
                 app:layout_constraintTop_toTopOf="@id/avatar_cont"
                 app:layout_constraintBottom_toBottomOf="@id/avatar_cont"/>
 
