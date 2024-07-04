@@ -26,7 +26,7 @@ data class AvatarState(
     val errorMessage: Int? = null,
     val avatarUri: Uri? = null,
     val isLoading: Boolean = false,
-    val navigateToHome: Boolean = false
+    val navigateToUserScreen: Boolean = false
 )
 
 @HiltViewModel
@@ -66,7 +66,7 @@ class AvatarViewModel @Inject constructor(
 
             AvatarEvents.OnNavigationDone -> {
                 _state.update {
-                    it.copy(navigateToHome = false)
+                    it.copy(navigateToUserScreen = false)
                 }
             }
         }
@@ -183,7 +183,7 @@ class AvatarViewModel @Inject constructor(
 
                     is ApiResult.Success -> {
                         _state.update {
-                            it.copy(isLoading = false, navigateToHome = true)
+                            it.copy(isLoading = false, navigateToUserScreen = true)
                         }
                     }
                 }

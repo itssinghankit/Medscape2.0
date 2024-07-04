@@ -84,8 +84,8 @@ class LoginFragment : Fragment() {
                     }
 
                     //navigation
-                    if (state.navigateToHome) {
-                        navigateToHome()
+                    if (state.navigateToUserScreen) {
+                        navigateToUserScreen()
                     }
 
                     //for showing error
@@ -112,29 +112,29 @@ class LoginFragment : Fragment() {
         viewModel.event(LoginEvents.OnErrorShown)
     }
 
-    private fun navigateToHome() {
+    private fun navigateToUserScreen() {
         viewModel.event(LoginEvents.OnNavigationDone)
         findNavController().navigate(
-            R.id.action_loginFragment_to_homeFragment,
+            R.id.action_loginFragment_to_userFragment,
             null,
             NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
         )
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//
-//            findNavController().navigate(
-//                R.id.action_loginFragment_to_homeFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-//            )
-//
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+
+            findNavController().navigate(
+                R.id.action_loginFragment_to_userFragment,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+            )
+
+        }
+    }
 
 }
 //TODO : locality is not showing on firebase

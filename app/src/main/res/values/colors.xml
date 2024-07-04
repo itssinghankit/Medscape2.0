@@ -6,8 +6,10 @@
     <color name="green_bg">#74BA7A</color>
     <color name="primary_green_txt_btn">#8EF497</color>
     <color name="light_green_txt_bg">#B8F8BE</color>
+    <color name="lightest_green_ripple">#E3FBE5</color>
     <color name="black_txt_bg_btn">#000</color>
     <color name="err_col">#FF6B6B</color>
     <color name="grey_hint">#586155</color>
-    <color name="grey_txt">#BDBDBD</color>
+    <color name="grey_txt">#B8B8B8</color>
+    <color name="bg_colors">#121212</color>
 </resources>

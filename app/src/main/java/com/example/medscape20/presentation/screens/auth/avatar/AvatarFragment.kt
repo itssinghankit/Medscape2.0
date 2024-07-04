@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -18,7 +17,6 @@ import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAvatarBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -65,7 +63,7 @@ class AvatarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewmodel.state.collect {
                     if(it.isError) showError(it.errorMessage)
-                    if(it.navigateToHome) navigateToHomeScreen()
+                    if(it.navigateToUserScreen) navigateToUserScreen()
                     if(it.avatarUri != null) binding.avatarImg.setImageURI(it.avatarUri)
                     if(it.isLoading){
                         binding.progressCircular.visibility=View.VISIBLE
@@ -80,11 +78,11 @@ class AvatarFragment : Fragment() {
         }
     }
 
-    private fun navigateToHomeScreen() {
+    private fun navigateToUserScreen() {
         //change navigateToNextScreen variable false for back stack
         viewmodel.event(AvatarEvents.OnNavigationDone)
         //navigate to home screen
-        findNavController().navigate(R.id.action_avatarFragment_to_homeFragment)
+        findNavController().navigate(R.id.action_avatarFragment_to_userFragment)
     }
 
     fun showError(errorMessage: Int?) {

@@ -18,15 +18,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.Locale
 import javax.inject.Inject
 
 data class LoginStates(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
-    val navigateToHome: Boolean = false,
+    val navigateToUserScreen: Boolean = false,
     val isEmailValid: Boolean = true,
     @StringRes val emailError: Int? = null,
     val isPassValid: Boolean = true,
@@ -125,7 +123,7 @@ class LoginViewModel @Inject constructor(
             }
             LoginEvents.OnNavigationDone -> {
                 _state.update {
-                    it.copy(navigateToHome = false)
+                    it.copy(navigateToUserScreen = false)
                 }
             }
         }
@@ -171,7 +169,7 @@ class LoginViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _state.update {
                             it.copy(
-                                navigateToHome = true,
+                                navigateToUserScreen = true,
                                 isLoading = false
                             )
                         }

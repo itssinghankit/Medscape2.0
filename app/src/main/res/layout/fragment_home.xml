@@ -1,14 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.screens.user.home.HomeFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.medscape20.presentation.screens.user.home.HomeViewModel" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="home"
-        android:gravity="center"/>
+        android:layout_marginTop="32dp"
+        android:background="@color/bg_colors"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:scrollbars="none"
+        tools:context=".presentation.screens.user.home.HomeFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/avatar_cont"
+                android:layout_marginTop="40dp"
+                app:cardCornerRadius="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/splash_bg" />
+
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/name_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="Hi Ankit Singh"
+                android:textColor="@color/white"
+                android:layout_marginBottom="20dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/avatar_cont"
+                app:layout_constraintTop_toTopOf="@id/avatar_cont"
+                app:layout_constraintBottom_toBottomOf="@id/avatar_cont"/>
+
+            <TextView
+                android:id="@+id/head_subtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Level up your waste management!"
+                android:textColor="@color/grey_txt"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/avatar_cont"
+                app:layout_constraintTop_toBottomOf="@id/name_txt" />
+
+            <EditText
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="150dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/white"
+                android:fontFamily="@font/montserrat_regular"
+                android:hint="Search..."
+                android:textColor="@color/grey_txt"
+                android:textColorHighlight="@color/grey_txt"
+                android:textColorHint="@color/grey_txt"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/head_subtxt" />
+
+            <TextView
+                android:id="@+id/category_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Category"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_bar" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/biodegradable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/bg_colors"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/category_title">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="66dp"
+                        android:layout_height="66dp"
+                        app:cardBackgroundColor="@color/primary_green_txt_btn"
+                        app:cardCornerRadius="33dp">
+
+                        <ImageView
+                            android:padding="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_biodegradable" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="Biodegrable\nwaste"
+                        android:textAlignment="center"
+                        android:textColor="@color/grey_txt"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/nonbiodegradable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:backgroundTint="@color/bg_colors"
+                app:layout_constraintStart_toEndOf="@id/biodegradable"
+                app:layout_constraintTop_toTopOf="@id/biodegradable">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="66dp"
+                        android:layout_height="66dp"
+                        app:cardBackgroundColor="@color/primary_green_txt_btn"
+                        app:cardCornerRadius="33dp">
+
+                        <ImageView
+                            android:padding="11dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_non_biodegradable" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="Non-Biodegrable\nwaste"
+                        android:textAlignment="center"
+                        android:textColor="@color/grey_txt"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/sources_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Sources of waste"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/biodegradable" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/continue_learning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="#2d2d2d"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sources_txt">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/continue_learning_image"
+                        android:layout_width="95dp"
+                        android:layout_height="95dp"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_sources"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/sources_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Common sources"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@id/continue_learning_image"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/sources_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:maxLines="3"
+                        android:text="There are many sources of waste, some of them are Medical waste, Household waste, Commercial waste, Industrial waste, etc. To know more, click on explore button."
+                        android:textColor="@color/grey_txt"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/continue_learning_image"
+                        app:layout_constraintTop_toBottomOf="@id/sources_title" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/dashboard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/primary_green_txt_btn"
+                        android:text="Go to Dashboard"
+                        android:textColor="@color/black"
+                        app:cornerRadius="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sources_des" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--&lt;!&ndash;AppBarLayout helps the toolbar and other components to react on-->
+        <!--    scroll changes. I am using Dark theme for AppBarLayout.-->
+        <!--    Inside this AppBarLayout i-->
+        <!--    have used CollapsingToolbarLayout. &ndash;&gt;-->
+        <!--<com.google.android.material.appbar.AppBarLayout-->
+        <!--    android:id="@+id/appBarLayout"-->
+        <!--    android:layout_width="match_parent"-->
+        <!--    android:layout_height="wrap_content"-->
+        <!--    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+
+        <!--    &lt;!&ndash; In CollapsingToolbarLayout some important attributes are:-->
+        <!--    i) app:layout_scrollFlags which is used to specify how collapsing-->
+        <!--        layout behaves when content is scrolled.I have used-->
+        <!--        app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"-->
+        <!--        so it will scroll until it's is completely collapsed.-->
+        <!--    ii) app:contentScrim="@color/green" that specifies the color-->
+        <!--        of the collapsed toolbar &ndash;&gt;-->
+        <!--    <com.google.android.material.appbar.CollapsingToolbarLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        app:contentScrim="@color/green_bg"-->
+        <!--        app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"-->
+        <!--        app:title="@string/app_name">-->
+
+        <!--        &lt;!&ndash;We are adding the image that we have added earlier-->
+        <!--            in the drawable folder.The attribute app:layout_collapseMode="parallax"-->
+        <!--            causes the image to move when user scrolls at a specific ratio. &ndash;&gt;-->
+        <!--        <ImageView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="250dp"-->
+        <!--            android:scaleType="centerCrop"-->
+        <!--            android:src="@drawable/splash_vector"-->
+        <!--            app:layout_collapseMode="parallax" />-->
+
+        <!--        &lt;!&ndash; The attribute app:layout_collapseMode="pin" is set so that-->
+        <!--            sticks to the top when the user scrolls the view up&ndash;&gt;-->
+        <!--        <androidx.appcompat.widget.Toolbar-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="?attr/actionBarSize"-->
+        <!--            app:layout_collapseMode="pin"-->
+        <!--            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />-->
+
+        <!--    </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+
+        <!--</com.google.android.material.appbar.AppBarLayout>-->
+
+        <!--&lt;!&ndash;Now add the NestedScollView&ndash;&gt;-->
+        <!--<androidx.core.widget.NestedScrollView-->
+        <!--    android:layout_width="match_parent"-->
+        <!--    android:layout_height="wrap_content"-->
+        <!--    app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+        <!--    &lt;!&ndash;In textview we will be adding the text that i have-->
+        <!--        added earlier in strings.xml file.This is simply the-->
+        <!--        the content to be scrolled &ndash;&gt;-->
+        <!--    <TextView-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:lineSpacingExtra="8sp"-->
+        <!--        android:padding="16dp"-->
+        <!--        android:fontFamily="@font/montserrat_regular"-->
+        <!--        android:text="@string/content"-->
+        <!--        android:textSize="20sp" />-->
+        <!--</androidx.core.widget.NestedScrollView>-->
+
+    </ScrollView>
+</layout>
+
