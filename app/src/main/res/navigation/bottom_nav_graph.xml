@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.medscape20.presentation.screens.user.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.example.medscape20.presentation.screens.user.account.AccountFragment"
@@ -30,4 +34,13 @@
         android:name="com.example.medscape20.presentation.screens.user.trash.TrashFragment"
         android:label="fragment_trash"
         tools:layout="@layout/fragment_trash" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.medscape20.presentation.screens.user.home.category.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" >
+        <argument
+            android:name="category"
+            app:argType="string" />
+    </fragment>
 </navigation>

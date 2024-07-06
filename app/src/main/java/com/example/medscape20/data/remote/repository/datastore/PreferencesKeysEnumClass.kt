@@ -1,4 +1,4 @@
-package com.example.medscape20.data.repository.datastore
+package com.example.medscape20.data.remote.repository.datastore
 
 enum class PreferencesKeys(val key: String) {
     NAME("name"),

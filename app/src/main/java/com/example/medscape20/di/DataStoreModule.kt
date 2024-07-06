@@ -1,8 +1,8 @@
 package com.example.medscape20.di
 
 import android.content.Context
+import com.example.medscape20.data.remote.repository.datastore.DataStoreRepositoryImplementation
 import com.example.medscape20.domain.repository.DataStoreRepository
-import com.example.medscape.data.repository.datastore.DataStoreRepositoryImplementation
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

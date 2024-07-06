@@ -119,22 +119,23 @@ class LoginFragment : Fragment() {
         )
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//
-//            findNavController().navigate(
-//                R.id.action_loginFragment_to_userFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-//            )
-//
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+
+            findNavController().navigate(
+                R.id.action_loginFragment_to_userFragment,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+            )
+
+        }
+    }
 
 }
 //TODO : locality is not showing on firebase
 //TODO: change dispatchers for viewmodelscope
 //TODO: save data in avatar screen
+//TODO:datastore not working

@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Medscape20"
         android:windowSoftInputMode="adjustResize"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="tiramisu">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

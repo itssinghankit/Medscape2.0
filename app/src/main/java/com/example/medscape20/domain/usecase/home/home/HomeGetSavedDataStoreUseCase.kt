@@ -1,6 +1,6 @@
 package com.example.medscape20.domain.usecase.home.home
 
-import com.example.medscape20.data.repository.datastore.PreferencesKeys
+import com.example.medscape20.data.remote.repository.datastore.PreferencesKeys
 import com.example.medscape20.domain.repository.DataStoreRepository
 import kotlinx.coroutines.flow.first
 import timber.log.Timber

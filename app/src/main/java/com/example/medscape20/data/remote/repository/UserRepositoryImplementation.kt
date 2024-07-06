@@ -1,6 +1,7 @@
 package com.example.medscape20.data.remote.repository
 
 import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
+import com.example.medscape20.data.remote.dto.user.home.category.CategoryResDto
 import com.example.medscape20.domain.repository.UserRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImplementation @Inject constructor(
@@ -26,9 +28,25 @@ class UserRepositoryImplementation @Inject constructor(
                 emit(ApiResult.Loading)
                 val dataRef = firebaseDatabase.getReference("/users/$uid")
                 val data = dataRef.get().await()
+                Timber.d("data $data")
                 val user = data.getValue(HomeGetUserDataResDto::class.java)!!
 
                 emit(ApiResult.Success(user))
+            } catch (e: Exception) {
+                emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+            }
+
+        }.flowOn(Dispatchers.IO)
+
+    override suspend fun getCategoryData(): Flow<ApiResult<ArrayList<CategoryResDto>, DataError.Network>> =
+        flow {
+            try {
+                emit(ApiResult.Loading)
+                val dataRef = firebaseDatabase.getReference("/types")
+                val data = dataRef.get().await()
+                val ourList =
+                    data.children.mapNotNull { it.getValue(CategoryResDto::class.java) } as ArrayList
+                emit(ApiResult.Success(ourList))
             } catch (e: Exception) {
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
             }

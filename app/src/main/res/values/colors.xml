@@ -12,4 +12,5 @@
     <color name="grey_hint">#586155</color>
     <color name="grey_txt">#B8B8B8</color>
     <color name="bg_colors">#121212</color>
+    <color name="grey_surface">#2d2d2d</color>
 </resources>

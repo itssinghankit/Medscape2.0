@@ -22,7 +22,7 @@ data class HomeStates(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
-    val name: String = "Billa",
+    val name: String = "",
     val avatar: String? = null
 )
 
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
                 getUserData()
             }
 
-            HomeEvents.OnErrorShown -> TODO()
+            HomeEvents.ResetErrorMessage -> TODO()
         }
     }
 
