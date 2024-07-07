@@ -15,10 +15,10 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="32dp"
-            android:id="@+id/main_layout"
             android:background="@color/bg_colors"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
@@ -87,29 +87,30 @@
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
                     app:layout_constraintTop_toBottomOf="@id/name_txt" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/search_bar"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="150dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@color/white"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="64dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:hint="Search..."
-                    android:textColor="@color/grey_txt"
                     android:textColorHighlight="@color/grey_txt"
                     android:textColorHint="@color/grey_txt"
                     android:textSize="11sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/head_subtxt" />
+                    app:layout_constraintTop_toBottomOf="@id/head_subtxt" >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/category_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="64dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Category"
                     android:textColor="@color/white"
@@ -193,7 +194,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:fontFamily="@font/lato_regular"
+                            android:fontFamily="@font/montserrat_regular"
                             android:text="Non-Biodegrable\nwaste"
                             android:textAlignment="center"
                             android:textColor="@color/grey_txt"
@@ -215,7 +216,7 @@
                     app:layout_constraintTop_toBottomOf="@id/biodegradable" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/continue_learning"
+                    android:id="@+id/common_sources"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -288,6 +289,29 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/articles_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Latest articles"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/common_sources" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/articles_recycler_view"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/articles_txt"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="150dp"
+                    tools:listitem="@layout/home_articles_recycler_view_item"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

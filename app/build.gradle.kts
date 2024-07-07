@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -31,6 +33,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //For protecting api keys from version controls systems
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream());
+
+        val baseUrl = properties.getProperty("BASE_URL")
+        val apiKey = properties.getProperty("NEWS_API_KEY")
+
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "NEWS_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -50,7 +62,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-       dataBinding=true
+        dataBinding = true
         viewBinding = true
         buildConfig = true
     }
@@ -71,11 +83,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //coroutines
-    implementation (libs.kotlinx.coroutines.android)
-    implementation (libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 
     //timber
-    implementation (libs.timber)
+    implementation(libs.timber)
 
     //navigation
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -92,18 +104,22 @@ dependencies {
     implementation(libs.google.firebase.auth)
 
     //coroutines
-    implementation (libs.kotlinx.coroutines.android)
-    implementation (libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 
     //maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     //glide
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 
     //datastore
-    implementation ("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
 }
 kapt {

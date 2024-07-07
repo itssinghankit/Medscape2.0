@@ -57,7 +57,7 @@ class CategoryViewModel @Inject constructor(
                                     _state.update {
                                         it.copy(
                                             isError = true,
-                                            errMessage = R.string.internal_server_error,
+                                            errMessage = R.string.error_internal_server,
                                             isLoading = false
                                         )
                                     }

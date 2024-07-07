@@ -150,7 +150,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isError = true,
-                                        errMessage = R.string.login_invalid_creadential_error,
+                                        errMessage = R.string.error_login_invalid_credential_error,
                                         isLoading = false
                                     )
                                 }
@@ -160,7 +160,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isError = true,
-                                        errMessage = R.string.internal_server_error,
+                                        errMessage = R.string.error_internal_server,
                                         isLoading = false
                                     )
                                 }
@@ -193,7 +193,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isError = true,
-                                        errMessage = R.string.internal_server_error,
+                                        errMessage = R.string.error_internal_server,
                                         isLoading = false
                                     )
                                 }

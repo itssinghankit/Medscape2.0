@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
 import com.example.medscape20.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
@@ -69,6 +72,11 @@ class HomeFragment : Fragment() {
                     }else{
                         binding.progressCircular.visibility=View.GONE
                         binding.mainLayout.visibility=View.VISIBLE
+                    }
+                    if(state.newsArticlesList.isNotEmpty()){
+                        //horizontal layout manager
+                        binding.articlesRecyclerView.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        binding.articlesRecyclerView.adapter=HomeNewsArticlesAdapter(state.newsArticlesList,requireContext())
                     }
                 }
             }

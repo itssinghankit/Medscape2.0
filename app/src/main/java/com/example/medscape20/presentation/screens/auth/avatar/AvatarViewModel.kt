@@ -53,7 +53,7 @@ class AvatarViewModel @Inject constructor(
                     signup(action.args)
                 } else {
                     _state.update {
-                        it.copy(isError = true, errorMessage = R.string.empty_avatar_error)
+                        it.copy(isError = true, errorMessage = R.string.error_empty_avatar)
                     }
                 }
             }
@@ -85,7 +85,7 @@ class AvatarViewModel @Inject constructor(
                                     it.copy(
                                         isLoading = false,
                                         isError = true,
-                                        errorMessage = R.string.user_already_registered
+                                        errorMessage = R.string.error_user_already_registered
                                     )
                                 }
                             }
@@ -95,7 +95,7 @@ class AvatarViewModel @Inject constructor(
                                     it.copy(
                                         isLoading = false,
                                         isError = true,
-                                        errorMessage = R.string.internal_server_error
+                                        errorMessage = R.string.error_internal_server
                                     )
                                 }
                             }
@@ -130,7 +130,7 @@ class AvatarViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 isError = true,
-                                errorMessage = R.string.internal_server_error
+                                errorMessage = R.string.error_internal_server
                             )
                         }
                     }
@@ -172,7 +172,7 @@ class AvatarViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 isError = true,
-                                errorMessage = R.string.internal_server_error
+                                errorMessage = R.string.error_internal_server
                             )
                         }
                     }

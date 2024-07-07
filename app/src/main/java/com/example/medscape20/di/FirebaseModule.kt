@@ -1,5 +1,6 @@
 package com.example.medscape20.di
 
+import com.example.medscape20.data.remote.MedscapeNewsApi
 import com.example.medscape20.data.remote.repository.AuthRepositoryImplementation
 import com.example.medscape20.data.remote.repository.UserRepositoryImplementation
 import com.example.medscape20.domain.repository.AuthRepository
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
+class FirebaseModule {
 
     @Provides
     @Singleton
@@ -50,9 +51,10 @@ class NetworkModule {
     fun provideUserRepository(
         firebaseAuth: FirebaseAuth,
         firebaseStorage: FirebaseStorage,
-        firebaseDatabase: FirebaseDatabase
+        firebaseDatabase: FirebaseDatabase,
+        medscapeNewsApi: MedscapeNewsApi
     ):UserRepository{
-        return UserRepositoryImplementation(firebaseAuth,firebaseStorage,firebaseDatabase)
+        return UserRepositoryImplementation(firebaseAuth,firebaseStorage,firebaseDatabase,medscapeNewsApi)
     }
 }
 

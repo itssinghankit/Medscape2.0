@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:paddingEnd="16dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="280dp"
+        android:layout_height="276dp"
+        android:backgroundTint="@color/bg_colors"
+        app:strokeColor="@color/grey_surface"
+        app:strokeWidth="1dp">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+               <ImageView
+                   android:layout_width="match_parent"
+                   android:layout_height="200dp"
+                   android:id="@+id/article_img"
+                   android:scaleType="centerCrop"
+                   android:foreground="@drawable/home_articles_gradient_foreground"
+                   android:src="@color/grey_txt"
+                   app:layout_constraintTop_toTopOf="parent"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginStart="16dp"
+                   android:layout_marginEnd="16dp"
+                   android:id="@+id/article_title"
+                   android:text="Some thing happend in the washingdon dc all are very ready to say tha"
+                   android:textSize="18dp"
+                   android:maxLines="2"
+                   android:layout_marginBottom="8dp"
+                   android:ellipsize="end"
+                   android:fontFamily="@font/montserrat_semibold"
+                   android:textColor="@color/white"
+                   app:layout_constraintBottom_toBottomOf="parent"/>
+           </androidx.constraintlayout.widget.ConstraintLayout>
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:background="@color/grey_surface"
+               />
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_marginStart="16dp"
+               android:id="@+id/article_description"
+               android:layout_marginEnd="16dp"
+               android:text="The happend in the and the and the ajfnkj afjshk afkjs afdkjshdsfakjh jkdafsh fsadkjh fdsajkh fsdjkahkjfsah and the and the  and the dfhd dfjh dfjh dfjh dfjhj fdjjfd hfd washingdon d afh fhs  sjdfhj sjfhj c all are very ready to say tha"
+               android:textSize="11dp"
+               android:layout_marginTop="8dp"
+               android:layout_marginBottom="8dp"
+               android:ellipsize="end"
+               android:justificationMode="inter_word"
+               android:fontFamily="@font/montserrat_regular"
+               android:textColor="@color/grey_txt"
+               android:maxLines="4"
+               app:layout_constraintBottom_toBottomOf="parent"/>
+       </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</LinearLayout>

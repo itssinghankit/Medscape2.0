@@ -4,9 +4,12 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
+import com.example.medscape20.domain.models.HomeArticleModel
+import com.example.medscape20.domain.usecase.home.home.HomeGetNewsArticleUseCase
 import com.example.medscape20.domain.usecase.home.home.HomeGetSavedDataStoreUseCase
 import com.example.medscape20.domain.usecase.home.home.HomeGetUserDataUseCase
 import com.example.medscape20.util.ApiResult
+import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,15 +26,18 @@ data class HomeStates(
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
     val name: String = "",
-    val avatar: String? = null
+    val avatar: String? = null,
+    val newsArticlesList: List<HomeArticleModel> = emptyList()
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val homeGetUserDataUseCase: HomeGetUserDataUseCase,
     private val firebaseAuth: FirebaseAuth,
-    private val homeGetSavedDataStoreUseCase: HomeGetSavedDataStoreUseCase
-) : ViewModel() {
+    private val homeGetSavedDataStoreUseCase: HomeGetSavedDataStoreUseCase,
+    private val homeGetNewsArticleUseCase: HomeGetNewsArticleUseCase,
+
+    ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeStates())
     val state: StateFlow<HomeStates> = _state.asStateFlow()
@@ -39,6 +45,7 @@ class HomeViewModel @Inject constructor(
     init {
         getDataFromDatastore()
         getUserData()
+//        getNewsArticles()
     }
 
     fun event(action: HomeEvents) {
@@ -47,7 +54,11 @@ class HomeViewModel @Inject constructor(
                 getUserData()
             }
 
-            HomeEvents.ResetErrorMessage -> TODO()
+            HomeEvents.ResetErrorMessage -> {
+                _state.update {
+                    it.copy(isError = false, errMessage = null)
+                }
+            }
         }
     }
 
@@ -63,7 +74,7 @@ class HomeViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isError = true,
-                                        errMessage = R.string.internal_server_error,
+                                        errMessage = R.string.error_internal_server,
                                         isLoading = false
                                     )
                                 }
@@ -97,6 +108,75 @@ class HomeViewModel @Inject constructor(
             _state.update {
                 withContext(Dispatchers.Main) {
                     it.copy(name = data.first, avatar = data.second)
+                }
+
+            }
+        }
+    }
+
+    private fun getNewsArticles() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            homeGetNewsArticleUseCase().collect { result ->
+                when (result) {
+                    is ApiResult.Error -> {
+                        when (result.error) {
+                            DataError.Network.NO_INTERNET -> {
+                                _state.update {
+                                    withContext(Dispatchers.Main) {
+                                        it.copy(
+                                            isError = true,
+                                            isLoading = false,
+                                            errMessage = R.string.error_no_internet_connection
+                                        )
+                                    }
+                                }
+                            }
+
+                            DataError.Network.INTERNAL_SERVER_ERROR -> {
+                                _state.update {
+                                    withContext(Dispatchers.Main) {
+                                        it.copy(
+                                            isError = true,
+                                            isLoading = false,
+                                            errMessage = R.string.error_internal_server
+                                        )
+                                    }
+                                }
+                            }
+
+                            else -> {
+                                _state.update {
+                                    withContext(Dispatchers.Main) {
+                                        it.copy(
+                                            isError = true,
+                                            isLoading = false,
+                                            errMessage = R.string.error_unknown
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    ApiResult.Loading -> {
+                        _state.update {
+                            withContext(Dispatchers.Main) {
+                                it.copy(isLoading = true)
+                            }
+                        }
+                    }
+
+                    is ApiResult.Success -> {
+                        _state.update {
+                            withContext(Dispatchers.Main) {
+                                it.copy(
+                                    isLoading = false,
+                                    newsArticlesList = result.data
+                                )
+                            }
+                        }
+                    }
                 }
 
             }

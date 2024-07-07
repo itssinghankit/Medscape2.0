@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -327,7 +326,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     city = address.locality
                     locality = address.subLocality
                     val addressText =
-                        address.getAddressLine(0) ?: getString(R.string.address_not_found)
+                        address.getAddressLine(0) ?: getString(R.string.error_address_not_found)
 
                     withContext(Dispatchers.Main) {
                         addTxtFld.setText(addressText)
@@ -336,7 +335,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             } catch (e: Exception) {
                 Timber.d(e.toString())
                 withContext(Dispatchers.Main) {
-                    addTxtFld.setText(getString(R.string.could_not_get_address))
+                    addTxtFld.setText(getString(R.string.error_could_not_get_address))
                 }
             }
         }
