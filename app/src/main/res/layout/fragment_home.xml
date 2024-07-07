@@ -100,10 +100,11 @@
                     android:textSize="11sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/head_subtxt" >
+                    app:layout_constraintTop_toBottomOf="@id/head_subtxt">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -303,15 +304,15 @@
                     app:layout_constraintTop_toBottomOf="@id/common_sources" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
                     android:id="@+id/articles_recycler_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/articles_txt"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="150dp"
-                    tools:listitem="@layout/home_articles_recycler_view_item"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/articles_txt"
+                    tools:listitem="@layout/home_articles_recycler_view_item" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

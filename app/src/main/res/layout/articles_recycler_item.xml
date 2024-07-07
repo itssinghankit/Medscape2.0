@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:id="@+id/article"
+        android:backgroundTint="@color/bg_colors"
+        app:strokeColor="@color/grey_surface"
+        app:strokeWidth="1dp">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:id="@+id/article_img"
+                    android:scaleType="centerCrop"
+                    android:foreground="@drawable/home_articles_gradient_foreground"
+                    android:src="@color/grey_txt"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/author_img"
+                    android:src="@drawable/outline_person_edit_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:padding="6dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/article_author_round_bg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tint="@color/grey_txt" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/author"
+                    android:text="The New Stack"
+                    android:textSize="16dp"
+                    android:ellipsize="end"
+                    android:justificationMode="inter_word"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    android:maxLines="1"
+                    app:layout_constraintStart_toEndOf="@id/author_img"
+                    app:layout_constraintTop_toTopOf="@id/author_img"
+                    app:layout_constraintBottom_toBottomOf="@id/author_img"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:id="@+id/article_title"
+                    android:text="Some thing happend in the washingdon dc all are very ready to say tha"
+                    android:textSize="20dp"
+                    android:maxLines="2"
+                    android:layout_marginBottom="16dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/article_img"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/article_line"
+                    app:layout_constraintTop_toBottomOf="@id/article_img"
+                    android:background="@color/grey_surface" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:id="@+id/article_description"
+                    android:layout_marginEnd="16dp"
+                    android:text="The happend in the and the and the ajfnkj afjshk afkjs afdkjshdsfakjh jkdafsh fsadkjh fdsajkh fsdjkahkjfsah and the and the  and the dfhd dfjh dfjh dfjh dfjhj fdjjfd hfd washingdon d afh fhs  sjdfhj sjfhj c all are very ready to say tha"
+                    android:textSize="12dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ellipsize="end"
+                    android:justificationMode="inter_word"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/grey_txt"
+                    android:maxLines="4"
+                    app:layout_constraintTop_toBottomOf="@id/article_line"/>
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:id="@+id/source_img"
+                    android:src="@drawable/baseline_newspaper_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tint="@color/primary_green_txt_btn" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/source"
+                    android:text="The New Stack"
+                    android:textSize="12dp"
+                    android:ellipsize="end"
+                    android:justificationMode="inter_word"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/primary_green_txt_btn"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    android:maxLines="1"
+                    app:layout_constraintStart_toEndOf="@id/source_img"
+                    app:layout_constraintTop_toTopOf="@id/source_img"
+                    app:layout_constraintBottom_toBottomOf="@id/source_img"/>
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/guideline"
+                    app:layout_constraintGuide_percent="0.7"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:padding="3dp"
+                    android:id="@+id/share_btn"
+                    android:src="@drawable/baseline_share_24"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/white" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</LinearLayout>

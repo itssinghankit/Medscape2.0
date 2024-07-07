@@ -1,12 +1,15 @@
 package com.example.medscape20.data.mapper
 
 import com.example.medscape20.data.remote.dto.user.home.articles.NewsResDto
-import com.example.medscape20.domain.models.HomeArticleModel
+import com.example.medscape20.domain.models.ArticleModel
 
-fun NewsResDto.toArticleList(): List<HomeArticleModel> {
+fun NewsResDto.toArticleList(): List<ArticleModel> {
 
-    val articleList = this.articles.map {
-        HomeArticleModel(
+    val articleList = this.articles.filter {
+        //they don't support web view
+        it.source.name != "Business Insider" && it.source.name != "Grist"
+    }.map {
+        ArticleModel(
             author = it.author,
             content = it.content,
             description = it.description,

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_webViewArticleFragment"
+            app:destination="@id/webViewArticleFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -32,7 +35,11 @@
         android:id="@+id/articlesFragment"
         android:name="com.example.medscape20.presentation.screens.user.articles.ArticlesFragment"
         android:label="fragment_articles"
-        tools:layout="@layout/fragment_articles" />
+        tools:layout="@layout/fragment_articles" >
+        <action
+            android:id="@+id/action_articlesFragment_to_webViewArticleFragment"
+            app:destination="@id/webViewArticleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/trashFragment"
         android:name="com.example.medscape20.presentation.screens.user.trash.TrashFragment"
@@ -51,4 +58,13 @@
         android:id="@+id/loginFragment"
         android:name="com.example.medscape20.presentation.screens.auth.login.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/webViewArticleFragment"
+        android:name="com.example.medscape20.presentation.screens.user.webview_article.WebViewArticleFragment"
+        android:label="fragment_webview_article"
+        tools:layout="@layout/fragment_webview_article" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>

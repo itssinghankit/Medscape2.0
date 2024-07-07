@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
+import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
 //import com.example.medscape20.presentation.screens.user.UserFragmentDirections
@@ -21,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),OnHomeArticleClicked {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +32,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -40,6 +41,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.avatar.setOnClickListener{
+            findNavController().navigate(R.id.action_homeFragment_to_webViewArticleFragment)
+        }
 
         //for category screens
         binding.biodegradable.setOnClickListener {
@@ -76,7 +81,7 @@ class HomeFragment : Fragment() {
                     if(state.newsArticlesList.isNotEmpty()){
                         //horizontal layout manager
                         binding.articlesRecyclerView.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        binding.articlesRecyclerView.adapter=HomeNewsArticlesAdapter(state.newsArticlesList,requireContext())
+                        binding.articlesRecyclerView.adapter=HomeNewsArticlesAdapter(state.newsArticlesList,requireContext(),this@HomeFragment)
                     }
                 }
             }
@@ -95,6 +100,13 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onClicked(url: String) {
+        super.onClicked(url)
+        val action = HomeFragmentDirections.actionHomeFragmentToWebViewArticleFragment(url)
+        findNavController().navigate(action)
+
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.medscape20.domain.usecase.home.home
+package com.example.medscape20.domain.usecase.user.home
 
 import com.example.medscape20.data.remote.repository.datastore.PreferencesKeys
 import com.example.medscape20.domain.repository.DataStoreRepository

@@ -1,7 +1,7 @@
 package com.example.medscape20.domain.models
 
 
-data class HomeArticleModel(
+data class ArticleModel(
     val author: String?="",
     val content: String?="",
     val description: String?="",

@@ -3,9 +3,8 @@ package com.example.medscape20.data.remote.repository
 import com.example.medscape20.data.mapper.toArticleList
 import com.example.medscape20.data.remote.MedscapeNewsApi
 import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
-import com.example.medscape20.data.remote.dto.user.home.articles.NewsResDto
 import com.example.medscape20.data.remote.dto.user.home.category.CategoryResDto
-import com.example.medscape20.domain.models.HomeArticleModel
+import com.example.medscape20.domain.models.ArticleModel
 import com.example.medscape20.domain.repository.UserRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
@@ -60,7 +59,7 @@ class UserRepositoryImplementation @Inject constructor(
 
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun getHomeNewsArticles(): Flow<ApiResult<List<HomeArticleModel>, DataError.Network>> =
+    override suspend fun getNewsArticles(): Flow<ApiResult<List<ArticleModel>, DataError.Network>> =
         flow{
             try {
                 emit(ApiResult.Loading)

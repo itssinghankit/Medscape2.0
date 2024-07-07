@@ -55,4 +55,4 @@
     <string name="error_login_invalid_credential_error">Incorrect email or password</string>
     <string name="error_could_not_get_address">Could not get address</string>
     <string name="error_address_not_found">Address not found</string>
-   </resources>
+</resources>

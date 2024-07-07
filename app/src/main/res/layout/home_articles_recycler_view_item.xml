@@ -9,6 +9,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="280dp"
         android:layout_height="276dp"
+        android:id="@+id/article"
         android:backgroundTint="@color/bg_colors"
         app:strokeColor="@color/grey_surface"
         app:strokeWidth="1dp">

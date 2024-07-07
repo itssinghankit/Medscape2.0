@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.data.remote.dto.user.home.category.Subtopic
-import com.example.medscape20.domain.usecase.home.home.category.CategoryGetDataUseCase
+import com.example.medscape20.domain.usecase.user.home.category.CategoryGetDataUseCase
 import com.example.medscape20.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

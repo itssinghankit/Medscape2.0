@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_colors"
+    tools:context=".presentation.screens.user.webview_article.WebViewArticleFragment">
+
+
+   <WebView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_marginTop="48dp"
+       android:id="@+id/webview"/>
+   <ProgressBar
+       android:id="@+id/progress_circular"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center"
+       android:indeterminateTint="@color/dark_green_splash_txt_bg"
+       android:visibility="visible" />
+
+</FrameLayout>
