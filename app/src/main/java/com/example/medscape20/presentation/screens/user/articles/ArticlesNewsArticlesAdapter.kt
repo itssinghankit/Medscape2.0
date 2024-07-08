@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.example.medscape20.R
 import com.example.medscape20.domain.models.ArticleModel
 import com.google.android.material.card.MaterialCardView
 
-class ArticlesNewsArticlesAdapter ( private val newsArticlesList: List<ArticleModel>,
+class ArticlesNewsArticlesAdapter ( private val newsArticlesList: ArrayList<ArticleModel>,
 val context: Context,
 private val listener: OnArticlesArticleClicked
 ) : RecyclerView.Adapter<ArticlesNewsArticlesAdapter.ViewHolder>() {
@@ -48,6 +49,12 @@ private val listener: OnArticlesArticleClicked
             }
         }
 
+    }
+
+    fun updateData(newItems: List<ArticleModel>) {
+        newsArticlesList.clear()
+        newsArticlesList.addAll(newItems)
+        notifyDataSetChanged()
     }
 }
 

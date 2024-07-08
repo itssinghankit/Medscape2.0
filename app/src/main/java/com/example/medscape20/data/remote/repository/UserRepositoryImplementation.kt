@@ -59,14 +59,17 @@ class UserRepositoryImplementation @Inject constructor(
 
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun getNewsArticles(): Flow<ApiResult<List<ArticleModel>, DataError.Network>> =
-        flow{
+    override suspend fun getNewsArticles(params: Pair<String, Map<String, String>>): Flow<ApiResult<List<ArticleModel>, DataError.Network>> =
+        flow {
             try {
                 emit(ApiResult.Loading)
-                val response=medscapeNewsApi.getNewsArticles().toArticleList()
+                val response = medscapeNewsApi.getNewsArticles(
+                    path = params.first,
+                    queryParams = params.second
+                ).toArticleList()
                 emit(ApiResult.Success(response))
 
-            } catch (e: HttpException ) {
+            } catch (e: HttpException) {
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
 
             } catch (e: IOException) {

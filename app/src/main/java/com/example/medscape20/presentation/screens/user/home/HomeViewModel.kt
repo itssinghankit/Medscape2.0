@@ -3,6 +3,7 @@ package com.example.medscape20.presentation.screens.user.home
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medscape20.BuildConfig
 import com.example.medscape20.R
 import com.example.medscape20.domain.models.ArticleModel
 import com.example.medscape20.domain.usecase.user.home.HomeGetNewsArticlesUseCase
@@ -59,8 +60,13 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+//    BASE_URL=https://newsapi.org/v2/
+//    NEWS_API_KEY=&apiKey=6161697ad1174baca526057bbddd80a3
+//    #everything?q=waste-management&apiKey=6161697ad1174baca526057bbddd80a3
+
 
     private fun getUserData() {
+
         val uid = firebaseAuth.currentUser!!.uid
         viewModelScope.launch {
             homeGetUserDataUseCase(uid).collect { result ->
@@ -112,10 +118,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun createParameter(): Pair<String, Map<String, String>> {
+        val path = "everything"
+        val queryParams = mapOf("q" to "waste-management", "apiKey" to BuildConfig.NEWS_API_KEY)
+        return Pair(path, queryParams)
+    }
+
     private fun getNewsArticles() {
 
+        val params = createParameter()
+
         viewModelScope.launch(Dispatchers.IO) {
-            homeGetNewsArticlesUseCase().collect { result ->
+            homeGetNewsArticlesUseCase(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {
                         when (result.error) {

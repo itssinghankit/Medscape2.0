@@ -139,3 +139,7 @@ class LoginFragment : Fragment() {
 //TODO: change dispatchers for viewmodelscope
 //TODO: save data in avatar screen
 //TODO:datastore not working
+//TODO: radio button color of aritcles bottom sheet
+//TODO: material alert dialog
+//TODO: app:behavior_peekHeight="1000dp"
+//TODO: background color of spinner

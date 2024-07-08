@@ -20,7 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
 
-class ImagePickerBottomSheet : BottomSheetDialogFragment() {
+class ImagePickerBottomSheet() : BottomSheetDialogFragment() {
 
     private var imageUri: Uri? = null
 

@@ -26,7 +26,7 @@
                    android:layout_height="200dp"
                    android:id="@+id/article_img"
                    android:scaleType="centerCrop"
-                   android:foreground="@drawable/home_articles_gradient_foreground"
+                   android:foreground="@drawable/fg_home_articles_gradient_"
                    android:src="@color/grey_txt"
                    app:layout_constraintTop_toTopOf="parent"/>
                <TextView

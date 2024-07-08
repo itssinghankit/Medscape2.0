@@ -13,7 +13,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/screen_bg"
+        android:background="@drawable/bg_screen"
         tools:context=".presentation.screens.auth.login.LoginFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +69,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/txt_fld_bg"
+                    android:background="@drawable/bg_txt_fld"
                     android:fontFamily="@font/lato_regular"
                     android:maxLines="1"
                     android:text="@={viewModel.email}"
@@ -115,7 +115,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/txt_fld_bg"
+                    android:background="@drawable/bg_txt_fld"
                     android:fontFamily="@font/lato_regular"
                     android:maxLines="1"
                     android:text="@={viewModel.password}"

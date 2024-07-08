@@ -3,6 +3,7 @@ package com.example.medscape20.presentation.screens.user.articles
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medscape20.BuildConfig
 import com.example.medscape20.R
 import com.example.medscape20.domain.models.ArticleModel
 import com.example.medscape20.domain.usecase.user.articles.ArticlesGetNewsUseCase
@@ -16,13 +17,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.toImmutableMap
 import javax.inject.Inject
 
 data class ArticlesStates(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
-    val newsArticlesList: List<ArticleModel> = emptyList()
+    val newsArticlesList: ArrayList<ArticleModel> = arrayListOf(),
+    val category: String = NewsCategory.ALL.value,
+    val countryAbbreviation: String = "all",
+    val showResultNullError:Boolean=false
 )
 
 @HiltViewModel
@@ -32,6 +37,8 @@ class ArticlesViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ArticlesStates())
     val state: StateFlow<ArticlesStates> = _state.asStateFlow()
+
+    val searchTxt = MutableStateFlow("")
 
     init {
         getNewsArticles()
@@ -45,13 +52,43 @@ class ArticlesViewModel @Inject constructor(
                     it.copy(isError = false, errMessage = null)
                 }
             }
+
+            is ArticlesEvents.OnFilterSet -> {
+                _state.update {
+                    it.copy(
+                        countryAbbreviation = action.countryAbbreviation,
+                        category = action.category
+                    )
+                }
+                getNewsArticles()
+            }
         }
+    }
+
+    //creating parameters according to selected filters
+    private fun createParameter(): Pair<String, Map<String, String>> {
+        val path = state.value.category
+
+        val queryParams = mutableMapOf<String,String>()
+        if(path==NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation!="all"){
+            queryParams["country"] = state.value.countryAbbreviation
+        }else if(path==NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation=="all"){
+            queryParams["q"] = "all"
+        }
+        else{
+            queryParams["q"] = searchTxt.value.ifEmpty { "waste management" }
+        }
+        queryParams["apiKey"] = BuildConfig.NEWS_API_KEY
+
+        return Pair(path, queryParams as Map<String,String>)
     }
 
     private fun getNewsArticles() {
 
+        val params = createParameter()
+
         viewModelScope.launch(Dispatchers.IO) {
-            articlesGetNewsArticlesUseCase().collect { result ->
+            articlesGetNewsArticlesUseCase(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {
                         when (result.error) {
@@ -106,7 +143,8 @@ class ArticlesViewModel @Inject constructor(
                             withContext(Dispatchers.Main) {
                                 it.copy(
                                     isLoading = false,
-                                    newsArticlesList = result.data
+                                    newsArticlesList = if (result.data.isEmpty()) arrayListOf() else result.data as ArrayList,
+                                    showResultNullError = result.data.isEmpty()
                                 )
                             }
                         }

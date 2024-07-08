@@ -10,6 +10,6 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun getUserData(uid:String): Flow<ApiResult<HomeGetUserDataResDto, DataError.Network>>
     suspend fun getCategoryData():Flow<ApiResult<ArrayList<CategoryResDto>,DataError.Network>>
-    suspend fun getNewsArticles():Flow<ApiResult<List<ArticleModel>,DataError.Network>>
+    suspend fun getNewsArticles(params:Pair<String, Map<String,String>>):Flow<ApiResult<List<ArticleModel>,DataError.Network>>
 
 }

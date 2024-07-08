@@ -1,63 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="32dp"
-    android:background="@color/bg_colors"
-    android:orientation="vertical"
-    tools:context=".presentation.screens.user.articles.ArticlesFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_bar"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    <data>
+    <variable
+        name="viewModel"
+        type="com.example.medscape20.presentation.screens.user.articles.ArticlesViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:hint="Search..."
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColorHighlight="@color/grey_txt"
-        android:textColorHint="@color/grey_txt"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="32dp"
+        android:background="@color/bg_colors"
+        android:orientation="vertical"
+        tools:context=".presentation.screens.user.articles.ArticlesFragment">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_bar"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="Search..."
+            android:paddingStart="16dp"
+            android:textColorHighlight="@color/grey_txt"
+            android:textColorHint="@color/grey_txt"
+            android:textSize="11sp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@={viewModel.searchTxt}"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:padding="12dp"
+            android:id="@+id/filter"
+            android:src="@drawable/ic_filter"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/search_bar"
+            app:layout_constraintBottom_toBottomOf="@id/search_bar"
+            android:background="@android:color/transparent" />
+
+        <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_surface"
+            app:layout_constraintTop_toBottomOf="@id/search_bar" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey_surface"
-        app:layout_constraintTop_toBottomOf="@id/search_bar" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/articles_recyler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:listitem="@layout/" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/articles_recyler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        tools:listitem="@layout/articles_recycler_item" />
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/dark_green_splash_txt_bg"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/articles_recyler_view"
+            app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
+            app:layout_constraintTop_toTopOf="@id/articles_recyler_view" />
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/dark_green_splash_txt_bg"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/articles_recyler_view"
-        app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
-        app:layout_constraintTop_toTopOf="@id/articles_recyler_view" />
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/emptyResult"
+           android:layout_marginBottom="24dp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="@id/articles_recyler_view"
+           app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
+           app:layout_constraintTop_toTopOf="@id/articles_recyler_view"
+           android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+           <ImageView
+               android:layout_width="250dp"
+               android:layout_height="250dp"
+               android:src="@drawable/vector_no_article_found"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/article_title"
+               android:text="Opps, no articles found!!"
+               android:textSize="20dp"
+               android:layout_gravity="center"
+               android:maxLines="2"
+               android:layout_marginBottom="16dp"
+               android:ellipsize="end"
+               android:fontFamily="@font/lato_regular"
+               android:textColor="@color/grey_txt"/>
+
+       </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

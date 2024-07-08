@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,35 +27,74 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentArticlesBinding.inflate(layoutInflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setFragmentResultListener(FilterArgs.REQUEST_KEY.value) { _, bundle ->
+            val country = bundle.getString(FilterArgs.COUNTRY.value)
+            val countryAbbreviation = bundle.getString(FilterArgs.CATEGORY.value)
+
+            if (country != null && countryAbbreviation != null) {
+                viewModel.event(ArticlesEvents.OnFilterSet(countryAbbreviation, country))
+            }
+
+        }
+
+        //setting the recycler view
+        binding.articlesRecylerView.layoutManager = LinearLayoutManager(context)
+        val adapter = ArticlesNewsArticlesAdapter(
+            viewModel.state.value.newsArticlesList,
+            requireContext(),
+            this@ArticlesFragment
+        )
+        binding.articlesRecylerView.adapter = adapter
+
+        //setting the filter listener
+        binding.filter.setOnClickListener {
+
+            //we have to pass data like this so as persist configuration changes
+            val bottomSheet = ArticlesFilterBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putString(FilterArgs.COUNTRY.value, viewModel.state.value.countryAbbreviation)
+                    putString(FilterArgs.CATEGORY.value, viewModel.state.value.category)
+                }
+            }
+            bottomSheet.show(parentFragmentManager, "filter")
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 viewModel.state.collect { state ->
-                    if (state.newsArticlesList.isNotEmpty()) {
-                        binding.articlesRecylerView.layoutManager = LinearLayoutManager(context)
-                        binding.articlesRecylerView.adapter = ArticlesNewsArticlesAdapter(
-                            state.newsArticlesList,
-                            requireContext(),
-                            this@ArticlesFragment
-                        )
-                    }
+
+                    //no condition as we want it to run on either case
+                    adapter.updateData(state.newsArticlesList)
+
                     if (state.isLoading) {
+                        binding.emptyResult.visibility=View.GONE
                         binding.progressCircular.visibility = View.VISIBLE
                     } else {
                         binding.progressCircular.visibility = View.GONE
                     }
+
+                    if(state.showResultNullError){
+                        binding.emptyResult.visibility=View.VISIBLE
+                    }else{
+                        binding.emptyResult.visibility=View.GONE
+                    }
+
                 }
             }
         }
     }
+
 
     override fun onClicked(url: String) {
         val action = ArticlesFragmentDirections.actionArticlesFragmentToWebViewArticleFragment(url)
@@ -65,5 +105,10 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
         super.onDestroy()
         _binding = null
     }
+
+    private data class Filters(
+        val country: String? = null,
+        val category: NewsCategory? = null
+    )
 
 }
