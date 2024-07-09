@@ -8,7 +8,7 @@
         name="viewModel"
         type="com.example.medscape20.presentation.screens.user.articles.ArticlesViewModel" />
     </data>
-
+<!--    android:fitsSystemWindows="true"-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

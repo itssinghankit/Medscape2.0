@@ -12,6 +12,8 @@ import androidx.fragment.app.setFragmentResult
 import com.example.medscape20.R
 import com.example.medscape20.databinding.ArticlesBottomSheetFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import timber.log.Timber
 
 class ArticlesFilterBottomSheet :
     BottomSheetDialogFragment() {
@@ -63,32 +65,22 @@ class ArticlesFilterBottomSheet :
             when (check_id) {
                 R.id.all -> {
                     category = NewsCategory.ALL
-                    binding.countrySpinner.setSelection(0)
+                    binding.countrySpinner.setText("All",false)
+                    countryAbbreviation="all"
                 }
 
                 R.id.top_headlines -> category = NewsCategory.TOP_HEADLINES
             }
         }
 
-        binding.countrySpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                //that is for initial setup when radio button is set to all
-                if (position != 0) {
-                    binding.topHeadlines.isChecked = true
-                }
-                countryAbbreviation = countriesMap.values.toList()[position]
+        binding.countrySpinner.setOnItemClickListener { parent, view, position, id ->
+            if (position != 0) {
+                binding.topHeadlines.isChecked = true
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //do nothing
-            }
-
+            countryAbbreviation = countriesMap.values.toList()[position]
+            Toast.makeText(context, "$countryAbbreviation $category", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun setPreviousFilter() {
@@ -103,10 +95,9 @@ class ArticlesFilterBottomSheet :
         }
 
         setAdapterToCountrySpinner()
-
         countriesMap.onEachIndexed { index, entry ->
             if (entry.value == countryAbbreviation) {
-                binding.countrySpinner.setSelection(index)
+                binding.countrySpinner.setText(entry.key,false)
                 return@onEachIndexed
             }
         }
@@ -171,17 +162,12 @@ class ArticlesFilterBottomSheet :
             "Venezuela" to "ve"
         )
         val countryArray = countriesMap.keys.toList()
-        val adapter =
-            ArrayAdapter(
+        val adapter = ArrayAdapter(
                 requireContext(),
                 R.layout.articles_bottom_sheet_spinner_item,
                 countryArray
-            ).also {
-                it.setDropDownViewResource(R.layout.articles_bottom_sheet_spinner_item)
-            }
-        binding.countrySpinner.adapter = adapter
-
-//        val position:Int=adapter.getPosition(countriesMap.filterValues { it == countryAbbreviation }.keys.first())
+            )
+        binding.countrySpinner.setAdapter(adapter)
 
     }
 

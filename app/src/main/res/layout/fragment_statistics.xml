@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    app:statusBarBackground="@color/black"
     tools:context=".presentation.screens.user.statistics.StatisticsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/hello"
+        app:layout_behavior="@string/searchbar_scrolling_view_behavior">
+        <!-- Screen content goes here. -->
+        <TextView
+            android:id="@+id/sources_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Sources of waste"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/biodegradable" />
+    </androidx.core.widget.NestedScrollView>
 
-</FrameLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/appbar"
+        android:layout_height="wrap_content">
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search" />
+    </com.google.android.material.appbar.AppBarLayout>
+<!--    <TextView-->
+<!--        android:id="@+id/dg"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:fontFamily="@font/montserrat_bold"-->
+<!--        android:text="Sources of waste"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="16sp"-->
+<!--        app:layout_anchor="@id/appbar"-->
+<!--        app:layout_anchorGravity="bottom |center "-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/biodegradable" />-->
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+<!--    <com.google.android.material.search.SearchView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:hint="Hello"-->
+<!--        app:layout_anchor="@id/search_bar">-->
+
+        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+
+<!--    </com.google.android.material.search.SearchView>-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
