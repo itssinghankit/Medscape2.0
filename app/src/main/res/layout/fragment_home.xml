@@ -12,13 +12,14 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:statusBarBackground="@color/bg_colors">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="43dp"
             android:background="@color/bg_colors"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
@@ -27,13 +28,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/avatar_cont"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginTop="40dp"
                     app:cardCornerRadius="24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -53,10 +54,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:text="Hi "
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                    android:text="Hi, "
                     android:textColor="@color/white"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@id/avatar_cont"
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
                     app:layout_constraintTop_toTopOf="@id/avatar_cont" />
@@ -66,10 +66,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/lato_bold"
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:text="@{viewModel.state.name}"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@id/avatar_cont"
                     app:layout_constraintStart_toEndOf="@id/name_txt"
                     app:layout_constraintTop_toTopOf="@id/avatar_cont" />
@@ -80,60 +79,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:text="Level up your waste management!"
                     android:textColor="@color/grey_txt"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
                     app:layout_constraintTop_toBottomOf="@id/name_txt" />
 
-                <com.google.android.material.search.SearchView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="64dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:hint="Search..."
+                <com.google.android.material.search.SearchBar
                     android:id="@+id/search_bar"
-                    android:textColorHighlight="@color/grey_txt"
-                    android:textColorHint="@color/grey_txt"
-                    android:textSize="11sp"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="126dp"
+                    android:hint="Search article..."
+                    app:backgroundTint="@color/bg_colors"
+                    app:defaultMarginsEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/head_subtxt">
-
-                    <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-
-                </com.google.android.material.search.SearchView>
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/search_bar"-->
-<!--                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="54dp"-->
-<!--                    android:layout_marginTop="64dp"-->
-<!--                    android:fontFamily="@font/montserrat_regular"-->
-<!--                    android:hint="Search..."-->
-<!--                    android:textColorHighlight="@color/grey_txt"-->
-<!--                    android:textColorHint="@color/grey_txt"-->
-<!--                    android:textSize="11sp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/head_subtxt">-->
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent" />-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
+                    app:layout_constraintTop_toBottomOf="@id/head_subtxt"
+                    app:strokeColor="@color/grey_txt"
+                    app:strokeWidth="1dp" />
 
                 <TextView
                     android:id="@+id/category_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="64dp"
-                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_marginTop="40dp"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:text="Category"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_bar" />
 
@@ -171,11 +144,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="Biodegrable\nwaste"
+                            android:text="Biodegradable\nwaste"
                             android:textAlignment="center"
                             android:textColor="@color/grey_txt"
-                            android:textSize="11sp" />
+                            android:textAppearance="?attr/textAppearanceBodySmall"/>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -213,11 +185,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="Non-Biodegrable\nwaste"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="Non-Biodegradable\nwaste"
                             android:textAlignment="center"
-                            android:textColor="@color/grey_txt"
-                            android:textSize="11sp" />
+                            android:textColor="@color/grey_txt" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -227,10 +198,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:fontFamily="@font/montserrat_bold"
                     android:text="Sources of waste"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/biodegradable" />
 
@@ -266,10 +236,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="10dp"
-                            android:fontFamily="@font/montserrat_bold"
                             android:text="Common sources"
                             android:textColor="@color/white"
-                            android:textSize="16sp"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
                             app:layout_constraintStart_toEndOf="@id/continue_learning_image"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -281,11 +250,10 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="16dp"
                             android:ellipsize="end"
-                            android:fontFamily="@font/montserrat_regular"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
                             android:maxLines="3"
                             android:text="There are many sources of waste, some of them are Medical waste, Household waste, Commercial waste, Industrial waste, etc. To know more, click on explore button."
                             android:textColor="@color/grey_txt"
-                            android:textSize="11sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/continue_learning_image"
                             app:layout_constraintTop_toBottomOf="@id/sources_title" />
@@ -300,6 +268,7 @@
                             android:backgroundTint="@color/primary_green_txt_btn"
                             android:text="Go to Dashboard"
                             android:textColor="@color/black"
+                            android:textAppearance="?attr/textAppearanceLabelMedium"
                             app:cornerRadius="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -314,10 +283,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:fontFamily="@font/montserrat_bold"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:text="Latest articles"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/common_sources" />
 
@@ -334,7 +302,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/progress_circular"
@@ -343,6 +311,20 @@
             android:layout_gravity="center"
             android:indeterminateTint="@color/dark_green_splash_txt_bg"
             android:visibility="visible" />
+
+        <com.google.android.material.search.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Search..."
+            app:backgroundTint="@color/bg_colors">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResultsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.search.SearchView>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

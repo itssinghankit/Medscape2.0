@@ -1,8 +1,22 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/primary_green_txt_btn</item>
+        <!--        <item name="android:windowActivityTransitions">true</item>-->
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.MyApp.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.MyApp.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.MyApp.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.MyApp.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.MyApp.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.MyApp.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.MyApp.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.MyApp.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.MyApp.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.MyApp.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.MyApp.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.MyApp.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.MyApp.LabelSmall</item>
     </style>
 </resources>

@@ -112,7 +112,6 @@
                     android:text="The New Stack"
                     android:textSize="12dp"
                     android:ellipsize="end"
-                    android:justificationMode="inter_word"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/primary_green_txt_btn"
                     app:layout_constraintEnd_toStartOf="@id/guideline"

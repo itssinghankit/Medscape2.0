@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentHomeBinding
+import com.example.medscape20.domain.models.ArticleModel
 import com.google.android.material.snackbar.Snackbar
 //import com.example.medscape20.presentation.screens.user.UserFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +43,84 @@ class HomeFragment : Fragment(),OnHomeArticleClicked {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //search view logic
+        binding.searchView.setupWithSearchBar(binding.searchBar)
+val arraylist= arrayListOf<ArticleModel>(
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    ),
+    ArticleModel(
+        author = "ankit",
+        content = "null",
+        description = "null",
+        publishedAt = "null",
+        source = "null",
+        title = "null",
+        url = "null",
+        urlToImage = "null"
+    )
+)
+        binding.searchResultsRecyclerView.layoutManager=LinearLayoutManager(context)
+        binding.searchResultsRecyclerView.adapter=HomeSearchArticleAdapter(arraylist)
+
+
         binding.avatar.setOnClickListener{
             findNavController().navigate(R.id.action_homeFragment_to_webViewArticleFragment)
         }
@@ -52,7 +131,6 @@ class HomeFragment : Fragment(),OnHomeArticleClicked {
                 HomeFragmentDirections.actionHomeFragmentToCategoryFragment(Category.BIODEGRADABLE.value)
             findNavController().navigate(action)
         }
-
         binding.nonbiodegradable.setOnClickListener {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToCategoryFragment(Category.NON_BIODEGRADABLE.value)

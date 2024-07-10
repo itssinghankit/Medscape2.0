@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="122dp"
+    android:background="@color/bg_colors">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/article_cont">
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:id="@+id/article_img"
+            android:src="@color/grey_surface"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:id="@+id/source_img"
+        android:layout_toEndOf="@id/article_cont"
+        android:src="@drawable/ic_newspaper"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:id="@+id/source"
+        android:text="The New Stack"
+        android:textSize="12dp"
+        android:layout_marginTop="18dp"
+        android:layout_toEndOf="@id/source_img"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/primary_green_txt_btn"
+        android:maxLines="1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:id="@+id/article_title"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="The New Stack jfkaj fkjask kfjsa jfaskj kjfas  kafjs  kajfs kajf  kjfk ksjf kajfsk kjafk  kajf kjfa kjfa kjfas kjaf kjfas  kajfs  kjafs  kjfas  jkafs  fajks kfaj kajf  kajf  kjaf  kajfsd  kajsf  kjaf  kfaj ekjr ekjr  ckjas ekjf ejk "
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/article_cont"
+        android:layout_below="@id/source_img"
+        android:ellipsize="end"
+        android:justificationMode="inter_word"
+        android:textColor="@color/white"
+        android:maxLines="3"
+        android:layout_marginBottom="16dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_surface"/>
+
+</RelativeLayout>
