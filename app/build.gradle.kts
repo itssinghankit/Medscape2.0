@@ -31,6 +31,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled=true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -124,6 +125,10 @@ dependencies {
     //okhttp
     implementation ("com.squareup.okhttp3:okhttp:4.10.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    //anyApp-graphs
+    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
+    implementation ("com.android.support:multidex:1.0.3")
 
 }
 kapt {

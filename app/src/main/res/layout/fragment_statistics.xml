@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     app:statusBarForeground="@color/white"
     android:layout_width="match_parent"
+    android:background="@color/bg_colors"
     android:layout_height="match_parent">
 
     <!-- Content above the search bar -->
@@ -15,118 +15,19 @@
         android:text="Content above search bar"
         android:textAlignment="center"
         android:layout_marginTop="16dp"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Search bar in the center -->
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/searchBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Search..."
+    <com.anychart.AnyChartView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pie_chart"
         app:layout_constraintTop_toBottomOf="@id/topContent"
-        app:layout_constraintBottom_toTopOf="@id/bottomContent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Content below the search bar -->
-    <TextView
-        android:id="@+id/bottomContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Content below search bar"
-        android:textAlignment="center"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- SearchView (hidden initially) -->
-    <com.google.android.material.search.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:hint="Search..."
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchResultsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            xmlns:android="http://schemas.android.com/apk/res/android" />
-    </com.google.android.material.search.SearchView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    android:fitsSystemWindows="true"-->
-<!--    app:statusBarBackground="@color/black"-->
-<!--    tools:context=".presentation.screens.user.statistics.StatisticsFragment">-->
-
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:id="@+id/hello"-->
-<!--        app:layout_behavior="@string/searchbar_scrolling_view_behavior">-->
-<!--        &lt;!&ndash; Screen content goes here. &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/sources_txt"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="32dp"-->
-<!--            android:fontFamily="@font/montserrat_bold"-->
-<!--            android:text="Sources of waste"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/biodegradable" />-->
-<!--    </androidx.core.widget.NestedScrollView>-->
-
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:id="@+id/appbar"-->
-<!--        android:layout_height="wrap_content">-->
-<!--        <com.google.android.material.search.SearchBar-->
-<!--            android:id="@+id/search_bar"-->
-
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Search" />-->
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-<!--&lt;!&ndash;    <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;        android:id="@+id/dg"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_marginTop="32dp"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:fontFamily="@font/montserrat_bold"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:text="Sources of waste"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:textColor="@color/black"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:textSize="16sp"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_anchor="@id/appbar"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_anchorGravity="bottom |center "&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintTop_toBottomOf="@id/biodegradable" />&ndash;&gt;-->
-<!--&lt;!&ndash;    <androidx.core.widget.NestedScrollView&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="match_parent">&ndash;&gt;-->
-
-<!--&lt;!&ndash;    </androidx.core.widget.NestedScrollView>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    <com.google.android.material.search.SearchView&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:hint="Hello"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_anchor="@id/search_bar">&ndash;&gt;-->
-
-<!--        &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
-
-<!--&lt;!&ndash;    </com.google.android.material.search.SearchView>&ndash;&gt;-->
-
-<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->

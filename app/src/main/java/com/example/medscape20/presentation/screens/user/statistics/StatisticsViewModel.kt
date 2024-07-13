@@ -3,6 +3,7 @@ package com.example.medscape20.presentation.screens.user.statistics
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medscape20.data.remote.dto.user.home.statistics.income_waste.StatisticsIncomeWasteDto
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetIncomeWasteDataUseCase
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetIndiaWasteTreatmentDataUseCase
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetRegionWasteDataUseCase
@@ -13,14 +14,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 data class StatisticsStates(
     val isLoading: Boolean = false,
     val error: String = "",
-    @StringRes val errorMessage: Int? = null
+    @StringRes val errorMessage: Int? = null,
+    val data:StatisticsIncomeWasteDto?=null
 
 )
 
@@ -75,6 +79,11 @@ class StatisticsViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         Timber.d("success")
                         Timber.d(result.data.toString())
+                        _states.update {
+                            withContext(Dispatchers.Main){
+                                it.copy(data = result.data)
+                            }
+                        }
                     }
                 }
             }

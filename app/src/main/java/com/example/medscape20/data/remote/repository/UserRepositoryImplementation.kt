@@ -120,7 +120,6 @@ class UserRepositoryImplementation @Inject constructor(
                 data.getValue(StatisticsWasteCompositionDto::class.java)
             emit(ApiResult.Success(response!!))
         } catch (e: Exception) {
-            Timber.e(e)
             emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
         }
 
