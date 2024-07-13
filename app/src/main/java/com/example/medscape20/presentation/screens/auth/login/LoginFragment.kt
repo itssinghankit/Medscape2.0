@@ -142,4 +142,4 @@ class LoginFragment : Fragment() {
 //TODO: radio button color of aritcles bottom sheet
 //TODO: material alert dialog
 //TODO: app:behavior_peekHeight="1000dp"
-//TODO: background color of spinner
+//TODO: article keyboard disable

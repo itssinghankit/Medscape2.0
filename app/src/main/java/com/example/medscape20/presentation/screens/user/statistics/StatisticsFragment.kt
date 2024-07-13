@@ -6,15 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medscape20.R
+import com.example.medscape20.databinding.FragmentStatisticsBinding
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StatisticsFragment : Fragment() {
+
+    private var _binding: FragmentStatisticsBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel:StatisticsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
 
 //        searchView.addTransitionListener { searchView, previousState, newState ->
@@ -36,30 +45,30 @@ class StatisticsFragment : Fragment() {
 //    }
     }
 
-    fun performSearch(query: String) {
-        // Implement your search logic here
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_statistics, container, false)
+    ): View {
 
-        val searchBar = view.findViewById<SearchBar>(R.id.searchBar)
-        val searchView = view.findViewById<SearchView>(R.id.searchView)
-        val searchResultsRecyclerView = view.findViewById<RecyclerView>(R.id.searchResultsRecyclerView)
+        _binding= FragmentStatisticsBinding.inflate(layoutInflater,container,false)
+        return binding.root
 
-        searchView.setupWithSearchBar(searchBar)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.apply {
+            getIncomeWasteData()
+            getRegionWasteData()
+            getWasteCompositionData()
+            getIndiaWasteTreatmentData()
+        }
+    }
 
-
-//        searchBar.setOnClickListener {
-//            searchView.show()
-//        }
-        return view
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
     }
 
 

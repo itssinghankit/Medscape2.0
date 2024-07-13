@@ -4,6 +4,10 @@ import com.example.medscape20.data.mapper.toArticleList
 import com.example.medscape20.data.remote.MedscapeNewsApi
 import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
 import com.example.medscape20.data.remote.dto.user.home.category.CategoryResDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.waste_composition.StatisticsWasteCompositionDto
 import com.example.medscape20.domain.models.ArticleModel
 import com.example.medscape20.domain.repository.UserRepository
 import com.example.medscape20.util.ApiResult
@@ -76,5 +80,66 @@ class UserRepositoryImplementation @Inject constructor(
                 emit(ApiResult.Error(DataError.Network.NO_INTERNET))
             }
         }.flowOn(Dispatchers.IO)
+
+    override suspend fun getStatsRegionWaste(): Flow<ApiResult<StatisticsRegionWasteDto, DataError.Network>> = flow {
+            try {
+                emit(ApiResult.Loading)
+                val dataRef = firebaseDatabase.getReference("/stats/region_waste")
+                val data = dataRef.get().await()
+                val response =
+                    data.getValue(StatisticsRegionWasteDto::class.java)
+                emit(ApiResult.Success(response!!))
+            } catch (e: Exception) {
+                Timber.e(e)
+                emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+            }
+
+        }.flowOn(Dispatchers.IO)
+
+    override suspend fun getStatsIncomeWaste(): Flow<ApiResult<StatisticsIncomeWasteDto, DataError.Network>> = flow {
+        try {
+            emit(ApiResult.Loading)
+            val dataRef = firebaseDatabase.getReference("/stats/income_waste")
+            val data = dataRef.get().await()
+            val response =
+                data.getValue(StatisticsIncomeWasteDto::class.java)
+            emit(ApiResult.Success(response!!))
+        } catch (e: Exception) {
+            Timber.e(e)
+            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getStatsWasteComposition(): Flow<ApiResult<StatisticsWasteCompositionDto, DataError.Network>> = flow {
+        try {
+            emit(ApiResult.Loading)
+            val dataRef = firebaseDatabase.getReference("/stats/waste_composition")
+            val data = dataRef.get().await()
+            val response =
+                data.getValue(StatisticsWasteCompositionDto::class.java)
+            emit(ApiResult.Success(response!!))
+        } catch (e: Exception) {
+            Timber.e(e)
+            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getStatsIndiaWasteTreatment(): Flow<ApiResult<StatisticsIndiaWasteTreatmentDto, DataError.Network>> = flow {
+        try {
+            emit(ApiResult.Loading)
+            val dataRef = firebaseDatabase.getReference("/stats/india_waste_treatment")
+            val data = dataRef.get().await()
+            val response =
+                data.getValue(StatisticsIndiaWasteTreatmentDto::class.java)
+            emit(ApiResult.Success(response!!))
+        } catch (e: Exception) {
+            Timber.e(e)
+            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
 
 }
