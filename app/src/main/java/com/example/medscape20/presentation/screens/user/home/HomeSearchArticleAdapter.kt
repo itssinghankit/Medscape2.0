@@ -2,21 +2,33 @@ package com.example.medscape20.presentation.screens.user.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.medscape20.databinding.HomeArticleNewsSearchRecyclerItemBinding
 import com.example.medscape20.domain.models.ArticleModel
 
-class HomeSearchArticleAdapter(private val oldArticlesList: ArrayList<ArticleModel>) :
-    RecyclerView.Adapter<HomeSearchArticleAdapter.ViewHolder>() {
+class HomeSearchArticleAdapter(private val onItemClick: (String) -> Unit) :
+    ListAdapter<ArticleModel, HomeSearchArticleAdapter.ViewHolder>(HomeSearchArticleDiffCallback()) {
 
-    class ViewHolder(private val binding: HomeArticleNewsSearchRecyclerItemBinding) :
+    class ViewHolder(
+        private val binding: HomeArticleNewsSearchRecyclerItemBinding,
+        private val onItemClick: (String) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: ArticleModel) {
-            Glide.with(binding.root.context).load(item.url).into(binding.articleImg)
-            binding.articleTitle.text = item.title
-            binding.source.text = item.source
+
+            binding.apply {
+                articleTitle.text = item.title
+                source.text = item.source
+            }
+            Glide.with(binding.root.context).load(item.urlToImage).into(binding.articleImg)
+
+            itemView.setOnClickListener { onItemClick(item.url ?: "") }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,14 +37,18 @@ class HomeSearchArticleAdapter(private val oldArticlesList: ArrayList<ArticleMod
             parent,
             false
         )
-        return ViewHolder(binding)
+        return ViewHolder(binding, onItemClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(oldArticlesList[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return oldArticlesList.size
+    class HomeSearchArticleDiffCallback : DiffUtil.ItemCallback<ArticleModel>() {
+        override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean =
+            oldItem.url == newItem.url
+
+        override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean =
+            oldItem == newItem
     }
 }

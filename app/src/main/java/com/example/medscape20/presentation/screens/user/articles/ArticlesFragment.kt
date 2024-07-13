@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -17,11 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
+class ArticlesFragment : Fragment(){
 
     private var _binding: FragmentArticlesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ArticlesViewModel by viewModels()
+    private lateinit var articlesAdapter:ArticlesNewsArticlesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,22 +44,23 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
             val countryAbbreviation = bundle.getString(FilterArgs.CATEGORY.value)
 
             if (country != null && countryAbbreviation != null) {
+                viewModel.searchTxt.value=""
                 viewModel.event(ArticlesEvents.OnFilterSet(countryAbbreviation, country))
             }
 
         }
 
         //setting the recycler view
-        binding.articlesRecylerView.layoutManager = LinearLayoutManager(context)
-        val adapter = ArticlesNewsArticlesAdapter(
-            viewModel.state.value.newsArticlesList,
-            requireContext(),
-            this@ArticlesFragment
-        )
-        binding.articlesRecylerView.adapter = adapter
+        setupRecyclerView()
+
+        binding.searchTxt.doOnTextChanged{text,_,_,_->
+            if(!text.isNullOrEmpty()){
+                viewModel.event(ArticlesEvents.SearchArticles)
+            }
+        }
 
         //setting the filter listener
-        binding.filter.setOnClickListener {
+        binding.searchBar.setEndIconOnClickListener {
 
             //we have to pass data like this so as persist configuration changes
             val bottomSheet = ArticlesFilterBottomSheet().apply {
@@ -74,9 +77,6 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
 
                 viewModel.state.collect { state ->
 
-                    //no condition as we want it to run on either case
-                    adapter.updateData(state.newsArticlesList)
-
                     if (state.isLoading) {
                         binding.emptyResult.visibility=View.GONE
                         binding.progressCircular.visibility = View.VISIBLE
@@ -85,9 +85,14 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
                     }
 
                     if(state.showResultNullError){
+                        articlesAdapter.submitList(emptyList())
                         binding.emptyResult.visibility=View.VISIBLE
                     }else{
                         binding.emptyResult.visibility=View.GONE
+                    }
+
+                    if(state.newsArticlesList.isNotEmpty()){
+                        articlesAdapter.submitList(state.newsArticlesList)
                     }
 
                 }
@@ -96,19 +101,19 @@ class ArticlesFragment : Fragment(), OnArticlesArticleClicked {
     }
 
 
-    override fun onClicked(url: String) {
-        val action = ArticlesFragmentDirections.actionArticlesFragmentToWebViewArticleFragment(url)
-        findNavController().navigate(action)
+    private fun setupRecyclerView() {
+        articlesAdapter = ArticlesNewsArticlesAdapter { url ->
+            val action = ArticlesFragmentDirections.actionArticlesFragmentToWebViewArticleFragment(url)
+            findNavController().navigate(action)
+        }
+        binding.articlesRecylerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = articlesAdapter
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
-    private data class Filters(
-        val country: String? = null,
-        val category: NewsCategory? = null
-    )
-
 }

@@ -14,21 +14,26 @@ import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 data class HomeStates(
     val isLoading: Boolean = false,
+    val isSearching: Boolean = false,
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
     val name: String = "",
     val avatar: String? = null,
-    val newsArticlesList: List<ArticleModel> = emptyList()
+    val newsArticlesList: List<ArticleModel> = emptyList(),
+    val searchNewsArticleList: List<ArticleModel> = emptyList()
 )
 
 @HiltViewModel
@@ -40,15 +45,20 @@ class HomeViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    private val _state = MutableStateFlow(HomeStates())
-    val state: StateFlow<HomeStates> = _state.asStateFlow()
-
     init {
         getDataFromDatastore()
         getUserData()
 //        getNewsArticles()
-//        https://newsapi.org/v2/top-headlines?country=us&apiKey=6161697ad1174baca526057bbddd80a3
     }
+
+    private val _state = MutableStateFlow(HomeStates())
+    val state: StateFlow<HomeStates> = _state.asStateFlow()
+
+    //no need to make flow
+    private var searchTopic =""
+    private var searchNetworkCall: Boolean = false
+
+    private var job: Job? = null
 
     fun event(action: HomeEvents) {
         when (action) {
@@ -58,12 +68,27 @@ class HomeViewModel @Inject constructor(
                     it.copy(isError = false, errMessage = null)
                 }
             }
+
+            is HomeEvents.ShowNewsArticle -> {
+                job = viewModelScope.launch(Dispatchers.IO) {
+                    searchTopic = action.url
+                    getNewsArticles()
+                }
+            }
+
+            is HomeEvents.GetNewsArticles -> {
+                job?.cancel()
+                job = viewModelScope.launch(Dispatchers.IO) {
+                    delay(500)
+
+                    searchTopic = action.searchTopic
+                    searchNetworkCall = true
+                    getNewsArticles()
+                }
+
+            }
         }
     }
-//    BASE_URL=https://newsapi.org/v2/
-//    NEWS_API_KEY=&apiKey=6161697ad1174baca526057bbddd80a3
-//    #everything?q=waste-management&apiKey=6161697ad1174baca526057bbddd80a3
-
 
     private fun getUserData() {
 
@@ -120,12 +145,14 @@ class HomeViewModel @Inject constructor(
 
     private fun createParameter(): Pair<String, Map<String, String>> {
         val path = "everything"
-        val queryParams = mapOf("q" to "waste-management", "apiKey" to BuildConfig.NEWS_API_KEY)
+        val queryParams = mapOf(
+            "q" to if (searchNetworkCall) searchTopic else "waste management",
+            "apiKey" to BuildConfig.NEWS_API_KEY
+        )
         return Pair(path, queryParams)
     }
 
     private fun getNewsArticles() {
-
         val params = createParameter()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -139,6 +166,7 @@ class HomeViewModel @Inject constructor(
                                         it.copy(
                                             isError = true,
                                             isLoading = false,
+                                            isSearching = false,
                                             errMessage = R.string.error_no_internet_connection
                                         )
                                     }
@@ -151,6 +179,7 @@ class HomeViewModel @Inject constructor(
                                         it.copy(
                                             isError = true,
                                             isLoading = false,
+                                            isSearching = false,
                                             errMessage = R.string.error_internal_server
                                         )
                                     }
@@ -163,6 +192,7 @@ class HomeViewModel @Inject constructor(
                                         it.copy(
                                             isError = true,
                                             isLoading = false,
+                                            isSearching = false,
                                             errMessage = R.string.error_unknown
                                         )
                                     }
@@ -174,7 +204,10 @@ class HomeViewModel @Inject constructor(
                     ApiResult.Loading -> {
                         _state.update {
                             withContext(Dispatchers.Main) {
-                                it.copy(isLoading = true)
+                                it.copy(
+                                    isLoading = !searchNetworkCall,
+                                    isSearching = searchNetworkCall
+                                )
                             }
                         }
                     }
@@ -182,10 +215,20 @@ class HomeViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _state.update {
                             withContext(Dispatchers.Main) {
-                                it.copy(
-                                    isLoading = false,
-                                    newsArticlesList = result.data
-                                )
+                                if (searchNetworkCall) {
+                                    it.copy(
+                                        isLoading = false,
+                                        isSearching = false,
+                                        searchNewsArticleList = result.data
+                                    )
+                                } else {
+                                    it.copy(
+                                        isLoading = false,
+                                        isSearching = false,
+                                        newsArticlesList = result.data
+                                    )
+                                }
+
                             }
                         }
                     }

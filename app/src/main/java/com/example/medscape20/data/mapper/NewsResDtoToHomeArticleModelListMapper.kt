@@ -7,7 +7,7 @@ fun NewsResDto.toArticleList(): List<ArticleModel> {
 
     val articleList = this.articles.filter {
         //they don't support web view
-        it.source.name != "Business Insider" && it.source.name != "Grist"
+        it.source.name != "Business Insider" && it.source.name != "Grist" && it.source.id!=null
     }.map {
         ArticleModel(
             author = it.author,

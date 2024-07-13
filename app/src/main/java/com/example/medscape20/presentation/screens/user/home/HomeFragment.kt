@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,22 +13,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
-import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentHomeBinding
-import com.example.medscape20.domain.models.ArticleModel
 import com.google.android.material.snackbar.Snackbar
-//import com.example.medscape20.presentation.screens.user.UserFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),OnHomeArticleClicked {
+class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
+    private lateinit var homeRecyclerAdapter: HomeNewsArticlesAdapter
+    private lateinit var searchRecyclerAdapter: HomeSearchArticleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,86 +42,19 @@ class HomeFragment : Fragment(),OnHomeArticleClicked {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //setting up articles recyclerview
+        setupHomeRecyclerView()
+
+        //setting up search recyclerview
+        setupSearchRecyclerView()
+
         //search view logic
         binding.searchView.setupWithSearchBar(binding.searchBar)
-val arraylist= arrayListOf<ArticleModel>(
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    ),
-    ArticleModel(
-        author = "ankit",
-        content = "null",
-        description = "null",
-        publishedAt = "null",
-        source = "null",
-        title = "null",
-        url = "null",
-        urlToImage = "null"
-    )
-)
-        binding.searchResultsRecyclerView.layoutManager=LinearLayoutManager(context)
-        binding.searchResultsRecyclerView.adapter=HomeSearchArticleAdapter(arraylist)
+        binding.searchView.editText.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                viewModel.event(HomeEvents.GetNewsArticles(text.toString()))
+            }
 
-
-        binding.avatar.setOnClickListener{
-            findNavController().navigate(R.id.action_homeFragment_to_webViewArticleFragment)
         }
 
         //for category screens
@@ -140,31 +72,67 @@ val arraylist= arrayListOf<ArticleModel>(
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                viewModel.state.collect {state->
+                viewModel.state.collect { state ->
                     state.avatar?.let { avatar ->
                         Glide.with(this@HomeFragment).load(avatar).into(binding.avatar)
                     }
 
-                    if(state.isError){
+                    if (state.isError) {
                         showError(state.errMessage)
                     }
 
-                    if(state.isLoading){
-                        binding.progressCircular.visibility=View.VISIBLE
-                        binding.mainLayout.visibility=View.INVISIBLE
-                    }else{
-                        binding.progressCircular.visibility=View.GONE
-                        binding.mainLayout.visibility=View.VISIBLE
+                    if (state.isLoading) {
+                        binding.progressCircular.visibility = View.VISIBLE
+                        binding.mainLayout.visibility = View.INVISIBLE
+                    } else {
+                        binding.progressCircular.visibility = View.GONE
+                        binding.mainLayout.visibility = View.VISIBLE
                     }
-                    if(state.newsArticlesList.isNotEmpty()){
-                        //horizontal layout manager
-                        binding.articlesRecyclerView.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        binding.articlesRecyclerView.adapter=HomeNewsArticlesAdapter(state.newsArticlesList,requireContext(),this@HomeFragment)
+
+                    if (state.newsArticlesList.isNotEmpty()) {
+                        homeRecyclerAdapter.submitList(state.newsArticlesList) {
+                            binding.articlesRecyclerView.scrollToPosition(0)
+                        }
+                    }
+
+                    if (state.isSearching) {
+                        binding.seachingProgressCircular.visibility = View.VISIBLE
+                    } else {
+                        binding.seachingProgressCircular.visibility = View.GONE
+                    }
+
+                    if (state.searchNewsArticleList.isNotEmpty()) {
+                        searchRecyclerAdapter.submitList(state.searchNewsArticleList) {
+                            binding.searchResultsRecyclerView.scrollToPosition(0)
+                        }
                     }
                 }
             }
         }
 
+    }
+
+    private fun setupHomeRecyclerView() {
+        homeRecyclerAdapter = HomeNewsArticlesAdapter{ url ->
+            //on click navigating to show complete article
+            val action = HomeFragmentDirections.actionHomeFragmentToWebViewArticleFragment(url)
+            findNavController().navigate(action)
+        }
+        binding.articlesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = homeRecyclerAdapter
+        }
+    }
+
+    private fun setupSearchRecyclerView() {
+        searchRecyclerAdapter = HomeSearchArticleAdapter { url ->
+            val action = HomeFragmentDirections.actionHomeFragmentToWebViewArticleFragment(url)
+            findNavController().navigate(action)
+        }
+        binding.searchResultsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = searchRecyclerAdapter
+        }
     }
 
     private fun showError(errorMessage: Int?) {
@@ -180,14 +148,8 @@ val arraylist= arrayListOf<ArticleModel>(
         _binding = null
     }
 
-    override fun onClicked(url: String) {
-        super.onClicked(url)
-        val action = HomeFragmentDirections.actionHomeFragmentToWebViewArticleFragment(url)
-        findNavController().navigate(action)
-
-    }
-
 }
+
 enum class Category(val value: String) {
     BIODEGRADABLE("Biodegradable Waste"),
     NON_BIODEGRADABLE("Non Biodegradable Waste")

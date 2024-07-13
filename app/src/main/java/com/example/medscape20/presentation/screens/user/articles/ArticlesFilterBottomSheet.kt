@@ -78,7 +78,6 @@ class ArticlesFilterBottomSheet :
                 binding.topHeadlines.isChecked = true
             }
             countryAbbreviation = countriesMap.values.toList()[position]
-            Toast.makeText(context, "$countryAbbreviation $category", Toast.LENGTH_SHORT).show()
         }
 
     }

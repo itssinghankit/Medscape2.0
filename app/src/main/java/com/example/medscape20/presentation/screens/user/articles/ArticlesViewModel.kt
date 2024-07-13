@@ -11,13 +11,14 @@ import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.toImmutableMap
 import javax.inject.Inject
 
 data class ArticlesStates(
@@ -27,7 +28,7 @@ data class ArticlesStates(
     val newsArticlesList: ArrayList<ArticleModel> = arrayListOf(),
     val category: String = NewsCategory.ALL.value,
     val countryAbbreviation: String = "all",
-    val showResultNullError:Boolean=false
+    val showResultNullError: Boolean = false
 )
 
 @HiltViewModel
@@ -43,6 +44,8 @@ class ArticlesViewModel @Inject constructor(
     init {
         getNewsArticles()
     }
+
+    private var job: Job? = null
 
     fun event(action: ArticlesEvents) {
         when (action) {
@@ -62,6 +65,20 @@ class ArticlesViewModel @Inject constructor(
                 }
                 getNewsArticles()
             }
+
+            ArticlesEvents.SearchArticles -> {
+                job?.cancel()
+                job = viewModelScope.launch {
+                    delay(500)
+
+                    //searching topics with country(category) selection is not allowed by NewsApi
+                    _state.update {
+                        it.copy(category = NewsCategory.ALL.value, countryAbbreviation = "all")
+                    }
+
+                    getNewsArticles()
+                }
+            }
         }
     }
 
@@ -69,18 +86,17 @@ class ArticlesViewModel @Inject constructor(
     private fun createParameter(): Pair<String, Map<String, String>> {
         val path = state.value.category
 
-        val queryParams = mutableMapOf<String,String>()
-        if(path==NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation!="all"){
+        val queryParams = mutableMapOf<String, String>()
+        if (path == NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation != "all") {
             queryParams["country"] = state.value.countryAbbreviation
-        }else if(path==NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation=="all"){
+        } else if (path == NewsCategory.TOP_HEADLINES.value && state.value.countryAbbreviation == "all") {
             queryParams["q"] = "all"
-        }
-        else{
+        } else {
             queryParams["q"] = searchTxt.value.ifEmpty { "waste management" }
         }
         queryParams["apiKey"] = BuildConfig.NEWS_API_KEY
 
-        return Pair(path, queryParams as Map<String,String>)
+        return Pair(path, queryParams as Map<String, String>)
     }
 
     private fun getNewsArticles() {

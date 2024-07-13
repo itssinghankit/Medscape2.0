@@ -21,42 +21,36 @@
             android:id="@+id/search_bar"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/montserrat_regular"
-            android:hint="Search..."
             android:paddingStart="16dp"
-            android:textColorHighlight="@color/grey_txt"
-            android:textColorHint="@color/grey_txt"
+            app:endIconMode="custom"
             android:textSize="11sp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@id/filter"
+            app:endIconDrawable="@drawable/ic_filters"
+            app:endIconTint="@color/white"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:inputType="textCapSentences"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:padding="6dp"
+                android:hint="Search..."
+                android:textColor="@color/grey_txt"
+                android:id="@+id/search_txt"
                 android:text="@={viewModel.searchTxt}"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:padding="12dp"
-            android:id="@+id/filter"
-            android:src="@drawable/ic_filter"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/search_bar"
-            app:layout_constraintBottom_toBottomOf="@id/search_bar"
-            android:background="@android:color/transparent" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@color/grey_surface"
             app:layout_constraintTop_toBottomOf="@id/search_bar" />
 
@@ -66,8 +60,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:listitem="@layout/home_article_news_search_recycler_item" />
+            app:layout_constraintTop_toBottomOf="@id/divider" />
 
         <ProgressBar
             android:id="@+id/progress_circular"
