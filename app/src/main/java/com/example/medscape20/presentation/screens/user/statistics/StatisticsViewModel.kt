@@ -4,6 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.data.remote.dto.user.home.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.home.statistics.waste_composition.StatisticsWasteCompositionDto
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetIncomeWasteDataUseCase
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetIndiaWasteTreatmentDataUseCase
 import com.example.medscape20.domain.usecase.user.statistics.StatisticsGetRegionWasteDataUseCase
@@ -14,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,8 +28,10 @@ data class StatisticsStates(
     val isLoading: Boolean = false,
     val error: String = "",
     @StringRes val errorMessage: Int? = null,
-    val data:StatisticsIncomeWasteDto?=null
-
+    val incomeWasteData:StatisticsIncomeWasteDto?=null,
+    val indiaWasteTreatmentData:StatisticsIndiaWasteTreatmentDto?=null,
+    val wasteCompositionData:StatisticsWasteCompositionDto?=null,
+    val regionWasteData: StatisticsRegionWasteDto?=null
 )
 
 @HiltViewModel
@@ -35,14 +41,19 @@ class StatisticsViewModel @Inject constructor(
     private val getWasteCompositionDataUseCase: StatisticsGetWasteCompositionDataUseCase,
     private val getIndiaWasteTreatmentDataUseCase: StatisticsGetIndiaWasteTreatmentDataUseCase
 ) : ViewModel() {
+
     init {
-//        getRegionWasteData()
+        getRegionWasteData()
+        getWasteCompositionData()
+        getIncomeWasteData()
+        getIndiaWasteTreatmentData()
     }
 
     private val _states= MutableStateFlow(StatisticsStates())
     val states:StateFlow<StatisticsStates> = _states.asStateFlow()
 
-    fun getRegionWasteData() {
+    private fun getRegionWasteData() {
+
         viewModelScope.launch(Dispatchers.IO) {
             getRegionWasteDataUseCase().collect { result ->
                 when (result) {
@@ -55,8 +66,11 @@ class StatisticsViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        Timber.d("success")
-                        Timber.d(result.data.toString())
+                        _states.update {
+                            withContext(Dispatchers.Main){
+                                it.copy(regionWasteData = result.data)
+                            }
+                        }
                     }
                 }
             }
@@ -64,7 +78,8 @@ class StatisticsViewModel @Inject constructor(
         }
     }
 
-    fun getIncomeWasteData() {
+    private fun getIncomeWasteData() {
+
         viewModelScope.launch(Dispatchers.IO) {
             getIncomeWasteDataUseCase().collect { result ->
                 when (result) {
@@ -77,11 +92,9 @@ class StatisticsViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        Timber.d("success")
-                        Timber.d(result.data.toString())
                         _states.update {
                             withContext(Dispatchers.Main){
-                                it.copy(data = result.data)
+                                it.copy(incomeWasteData = result.data)
                             }
                         }
                     }
@@ -91,7 +104,8 @@ class StatisticsViewModel @Inject constructor(
         }
     }
 
-    fun getWasteCompositionData() {
+    private fun getWasteCompositionData() {
+
         viewModelScope.launch(Dispatchers.IO) {
             getWasteCompositionDataUseCase().collect { result ->
                 when (result) {
@@ -104,15 +118,20 @@ class StatisticsViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        Timber.d("success")
-                        Timber.d(result.data.toString())
+                        _states.update {
+                            withContext(Dispatchers.Main){
+                                it.copy(wasteCompositionData = result.data)
+                            }
+                        }
                     }
                 }
             }
 
         }
     }
-    fun getIndiaWasteTreatmentData() {
+
+    private fun getIndiaWasteTreatmentData() {
+
         viewModelScope.launch(Dispatchers.IO) {
             getIndiaWasteTreatmentDataUseCase().collect { result ->
                 when (result) {
@@ -125,8 +144,11 @@ class StatisticsViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        Timber.d("success")
-                        Timber.d(result.data.toString())
+                        _states.update {
+                            withContext(Dispatchers.Main){
+                                it.copy(indiaWasteTreatmentData = result.data)
+                            }
+                        }
                     }
                 }
             }

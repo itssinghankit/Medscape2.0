@@ -131,6 +131,7 @@ dependencies {
     implementation ("com.android.support:multidex:1.0.3")
 
 }
+
 kapt {
     correctErrorTypes = true
 }

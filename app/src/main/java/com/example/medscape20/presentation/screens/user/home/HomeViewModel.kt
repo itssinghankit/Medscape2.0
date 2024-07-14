@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
         getUserData()
 //        getNewsArticles()
     }
-
+//TODO: NULLPOINTER EXCEPTION IN 97 and 248
     private val _state = MutableStateFlow(HomeStates())
     val state: StateFlow<HomeStates> = _state.asStateFlow()
 

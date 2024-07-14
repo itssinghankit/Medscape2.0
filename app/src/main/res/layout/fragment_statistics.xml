@@ -1,33 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:statusBarForeground="@color/white"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_colors"
-    android:layout_height="match_parent">
+    android:fitsSystemWindows="true">
 
-    <!-- Content above the search bar -->
-    <TextView
-        android:id="@+id/topContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Content above search bar"
-        android:textAlignment="center"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <com.anychart.AnyChartView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/pie_chart"
-        app:layout_constraintTop_toBottomOf="@id/topContent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Statistics"
+            android:textAppearance="@style/TextAppearance.MyApp.TitleLarge"
+            android:textColor="@color/white" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_surface" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="Global Statistics (Pie Charts)"
+            android:textAppearance="@style/TextAppearance.MyApp.TitleMedium"
+            android:textColor="@color/grey_txt" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/global_pie_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Indian Statistics (Bar Graphs)"
+            android:textAppearance="@style/TextAppearance.MyApp.TitleMedium"
+            android:textColor="@color/grey_txt" />
+
+        <com.anychart.AnyChartView
+            android:id="@+id/bar_graph"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layerType="hardware" />
+
+    </LinearLayout>
+</ScrollView>
