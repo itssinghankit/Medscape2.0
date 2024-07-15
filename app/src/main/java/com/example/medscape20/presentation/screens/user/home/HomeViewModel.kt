@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 data class HomeStates(
@@ -42,20 +41,25 @@ class HomeViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val homeGetSavedDataStoreUseCase: HomeGetSavedDataStoreUseCase,
     private val homeGetNewsArticlesUseCase: HomeGetNewsArticlesUseCase,
-
-    ) : ViewModel() {
+) : ViewModel() {
 
     init {
         getDataFromDatastore()
-        getUserData()
+
+        firebaseAuth.addAuthStateListener { auth ->
+            if (auth.currentUser != null) {
+                getUserData()
+            }
+        }
 //        getNewsArticles()
     }
-//TODO: NULLPOINTER EXCEPTION IN 97 and 248
+
+    //TODO: NULLPOINTER EXCEPTION IN 97 and 248
     private val _state = MutableStateFlow(HomeStates())
     val state: StateFlow<HomeStates> = _state.asStateFlow()
 
     //no need to make flow
-    private var searchTopic =""
+    private var searchTopic = ""
     private var searchNetworkCall: Boolean = false
 
     private var job: Job? = null

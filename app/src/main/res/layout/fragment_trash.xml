@@ -1,10 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_colors"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.screens.user.trash.TrashFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_colors">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bg_colors"
+                    android:contentDescription="@string/back_button"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="@string/trash_board"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_surface"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
+
+            <TextView
+                android:id="@+id/head_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/dump_your_waste"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/head_sub_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/contribute_in_making_our_nation_more_cleaner"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_txt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/head_txt" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/head_sub_txt">
+
+                <ImageView
+                    android:id="@+id/trash_dump_img"
+                    android:layout_width="350dp"
+                    android:layout_height="220dp"
+                    android:contentDescription="@string/image"
+                    android:src="@drawable/vector_trash_dumping"/>
+
+                <TextView
+                    android:id="@+id/dump_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/click_on_the_dump_button_below_nto_dump_your_waste"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/grey_txt" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/dump"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:text="@string/dump"
+                    android:textColor="@color/black"
+                    app:cornerRadius="8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/head_sub_txt">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Selected garbage type :"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="@color/primary_green_txt_btn"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginTop="12dp">
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggle_btn"
+                        android:layout_width="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:layout_height="wrap_content">
+                        <Button
+                            style="@style/Widget.MyApp.Button.OutlinedButton"
+                            android:id="@+id/general_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="General"
+                            />
+                        <Button
+                            style="@style/Widget.MyApp.Button.OutlinedButton"
+                            android:id="@+id/medical_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medical"
+                            />
+                        <Button
+                            style="@style/Widget.MyApp.Button.OutlinedButton"
+                            android:id="@+id/plastic_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Plastic"
+                            />
+                        <Button
+                            style="@style/Widget.MyApp.Button.OutlinedButton"
+                            android:id="@+id/metal_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Metal"
+                            />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                </HorizontalScrollView>
+
+                <ImageView
+                    android:id="@+id/trash_truck_img"
+                    android:layout_width="350dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_height="220dp"
+                    android:contentDescription="@string/image"
+                    android:src="@drawable/vector_trash_truck"/>
+
+                <TextView
+                    android:id="@+id/dumped_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="We will be reaching soon to collect\nyour trash, wait for us!!"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="48dp"
+                    app:strokeColor="@color/grey_txt"
+                    app:rippleColor="@color/grey_hint"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:text="Edit"
+                    android:textColor="@color/black"
+                    app:cornerRadius="8dp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/grey_surface"
+                    app:layout_anchor="@id/app_bar"
+                    app:layout_anchorGravity="bottom" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="48dp"
+                    app:strokeColor="@color/grey_txt"
+                    app:rippleColor="@color/grey_hint"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:text="Cancel"
+                    android:textColor="@color/grey_txt"
+                    app:cornerRadius="8dp" />
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

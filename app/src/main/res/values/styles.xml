@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    font styles-->
+    <!--    font styles-->
     <style name="TextAppearance.MyApp.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
         <item name="fontFamily">@font/montserrat_bold</item>
     </style>
@@ -9,9 +9,11 @@
     <style name="TextAppearance.MyApp.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="fontFamily">@font/montserrat_bold</item>
     </style>
+
     <style name="TextAppearance.MyApp.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
         <item name="fontFamily">@font/montserrat_bold</item>
     </style>
+
     <style name="TextAppearance.MyApp.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textSize">22sp</item>
@@ -21,9 +23,11 @@
     <style name="TextAppearance.MyApp.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/montserrat_bold</item>
     </style>
+
     <style name="TextAppearance.MyApp.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/montserrat_bold</item>
     </style>
+
     <style name="TextAppearance.MyApp.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
         <item name="fontFamily">@font/montserrat_semibold</item>
     </style>
@@ -31,9 +35,11 @@
     <style name="TextAppearance.MyApp.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
         <item name="fontFamily">@font/montserrat_regular</item>
     </style>
+
     <style name="TextAppearance.MyApp.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
         <item name="fontFamily">@font/montserrat_regular</item>
     </style>
+
     <style name="TextAppearance.MyApp.BodySmall" parent="TextAppearance.Material3.BodySmall">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">11sp</item>
@@ -42,11 +48,26 @@
     <style name="TextAppearance.MyApp.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
         <item name="fontFamily">@font/montserrat_semibold</item>
     </style>
+
     <style name="TextAppearance.MyApp.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
         <item name="fontFamily">@font/montserrat_semibold</item>
     </style>
+
     <style name="TextAppearance.MyApp.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
         <item name="fontFamily">@font/montserrat_regular</item>
+    </style>
+
+    <style name="Widget.MyApp.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/selector_trash_chip_bg_color</item>
+        <item name="chipStrokeColor">@color/grey_surface</item>
+        <item name="checkedIconTint">@color/black</item>
+        <item name="android:textColor">@color/selector_trash_chip_text_color</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/selector_trash_chip_bg_color</item>
+        <item name="android:textColor">@color/selector_trash_chip_text_color</item>
+        <item name="strokeColor">@color/grey_surface</item>
     </style>
 
 </resources>

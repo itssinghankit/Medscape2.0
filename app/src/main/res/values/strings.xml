@@ -55,4 +55,10 @@
     <string name="error_login_invalid_credential_error">Incorrect email or password</string>
     <string name="error_could_not_get_address">Could not get address</string>
     <string name="error_address_not_found">Address not found</string>
+    <string name="click_on_the_dump_button_below_nto_dump_your_waste">Click on the Dump button below \nto dump your waste</string>
+    <string name="contribute_in_making_our_nation_more_cleaner">Contribute in making our nation more cleaner</string>
+    <string name="dump">Dump</string>
+    <string name="dump_your_waste">Dump Your Waste!!</string>
+    <string name="trash_board">Trash board</string>
+    <string name="image">image</string>
 </resources>

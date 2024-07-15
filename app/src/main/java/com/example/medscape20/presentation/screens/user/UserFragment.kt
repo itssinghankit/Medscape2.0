@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.medscape20.databinding.FragmentUserBinding
 
@@ -34,6 +35,10 @@ class UserFragment : Fragment() {
         navController=navHostFragment.navController
         val bottomNavigationView=binding.bottomNav
         setupWithNavController(bottomNavigationView,navController)
+
+        binding.trashFab.setOnClickListener {
+         findNavController().navigate(R.id.action_userFragment_to_trashFragment)
+        }
     }
 
     override fun onDestroy() {

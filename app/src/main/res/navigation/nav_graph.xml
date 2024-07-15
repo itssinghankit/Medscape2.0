@@ -121,7 +121,11 @@
         android:id="@+id/userFragment"
         android:name="com.example.medscape20.presentation.screens.user.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_trashFragment"
+            app:destination="@id/trashFragment" />
+    </fragment>
     <fragment
         android:id="@+id/articlesFragment"
         android:name="com.example.medscape20.presentation.screens.user.articles.ArticlesFragment"
@@ -137,4 +141,9 @@
         android:name="com.example.medscape20.presentation.screens.user.statistics.StatisticsFragment"
         android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/trashFragment"
+        android:name="com.example.medscape20.presentation.screens.user.trash.TrashFragment"
+        android:label="fragment_trash"
+        tools:layout="@layout/fragment_trash" />
 </navigation>
