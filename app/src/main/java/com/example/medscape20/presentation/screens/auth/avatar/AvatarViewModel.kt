@@ -162,7 +162,11 @@ class AvatarViewModel @Inject constructor(
             lng=args.lng.toDouble(),
             state = args.state,
             city = args.city,
-            locality = args.locality
+            locality = args.locality,
+            metal = false,
+            medical = false,
+            general = false,
+            plastic = false
         )
         viewModelScope.launch {
             avatarSaveDetailsUseCase(data).collect { result ->

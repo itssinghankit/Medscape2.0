@@ -13,5 +13,9 @@ data class AvatarSaveDetailsReqDto(
     val lng:Double,
     val state:String?,
     val city:String?,
-    val locality:String?
+    val locality:String?,
+    val metal:Boolean?,
+    val general:Boolean?,
+    val medical:Boolean?,
+    val plastic:Boolean
 )

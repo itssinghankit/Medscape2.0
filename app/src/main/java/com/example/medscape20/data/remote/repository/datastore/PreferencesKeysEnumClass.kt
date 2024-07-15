@@ -12,5 +12,9 @@ enum class PreferencesKeys(val key: String) {
     LAT("lat"),
     LNG("lng"),
     MOBILE("mobile"),
-    LOCALITY("locality")
+    LOCALITY("locality"),
+    METAL("metal"),
+    GENERAL("general"),
+    MEDICAL("medical"),
+    PLASTIC("plastic")
 }

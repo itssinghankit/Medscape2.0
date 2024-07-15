@@ -91,8 +91,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
+                android:id="@+id/dump_layout"
                 android:orientation="vertical"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/head_sub_txt">
@@ -134,7 +135,8 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:id="@+id/dumped_layout"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/head_sub_txt">
