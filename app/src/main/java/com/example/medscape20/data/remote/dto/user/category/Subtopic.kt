@@ -1,4 +1,4 @@
-package com.example.medscape20.data.remote.dto.user.home.category
+package com.example.medscape20.data.remote.dto.user.category
 
 data class Subtopic(
     val description: String,

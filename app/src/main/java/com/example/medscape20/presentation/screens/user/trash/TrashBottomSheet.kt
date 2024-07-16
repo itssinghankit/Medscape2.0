@@ -46,7 +46,6 @@ class TrashBottomSheet :
                         R.id.medical -> trashTypeList.add(TrashType.MEDICAL.value)
                     }
                 }
-                Timber.d(trashTypeList.toString())
             }
         }
         //setting the dump logic
@@ -64,6 +63,7 @@ class TrashBottomSheet :
         binding.cancel.setOnClickListener {
             dismiss()
         }
+
     }
 
 

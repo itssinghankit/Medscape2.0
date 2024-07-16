@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.user.home.category.Subtopic
+import com.example.medscape20.data.remote.dto.user.category.Subtopic
 
 class CategoryRecyclerViewAdapter(private val list: List<Subtopic>) :
     RecyclerView.Adapter<CategoryRecyclerViewAdapter.CategoryViewHolder>() {

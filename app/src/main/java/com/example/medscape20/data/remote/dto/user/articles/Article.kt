@@ -1,4 +1,4 @@
-package com.example.medscape20.data.remote.dto.user.home.articles
+package com.example.medscape20.data.remote.dto.user.articles
 
 data class Article(
     val author: String,

@@ -22,10 +22,10 @@ import com.anychart.enums.HoverMode
 import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.user.home.statistics.income_waste.StatisticsIncomeWasteDto
-import com.example.medscape20.data.remote.dto.user.home.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
-import com.example.medscape20.data.remote.dto.user.home.statistics.region_waste.StatisticsRegionWasteDto
-import com.example.medscape20.data.remote.dto.user.home.statistics.waste_composition.StatisticsWasteCompositionDto
+import com.example.medscape20.data.remote.dto.user.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.statistics.waste_composition.StatisticsWasteCompositionDto
 import com.example.medscape20.databinding.FragmentStatisticsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

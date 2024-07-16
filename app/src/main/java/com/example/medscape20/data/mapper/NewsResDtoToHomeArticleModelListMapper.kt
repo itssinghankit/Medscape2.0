@@ -1,6 +1,6 @@
 package com.example.medscape20.data.mapper
 
-import com.example.medscape20.data.remote.dto.user.home.articles.NewsResDto
+import com.example.medscape20.data.remote.dto.user.articles.NewsResDto
 import com.example.medscape20.domain.models.ArticleModel
 
 fun NewsResDto.toArticleList(): List<ArticleModel> {

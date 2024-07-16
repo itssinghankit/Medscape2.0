@@ -1,6 +1,6 @@
 package com.example.medscape20.data.remote
 
-import com.example.medscape20.data.remote.dto.user.home.articles.NewsResDto
+import com.example.medscape20.data.remote.dto.user.articles.NewsResDto
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -16,7 +16,7 @@ interface MedscapeNewsApi {
     suspend fun getNewsArticles(
        @Path("path") path: String,
        @QueryMap queryParams: Map<String, String>
-    ):NewsResDto
+    ): NewsResDto
 
 
 }

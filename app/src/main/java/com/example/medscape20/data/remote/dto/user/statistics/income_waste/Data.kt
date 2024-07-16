@@ -1,4 +1,4 @@
-package com.example.medscape20.data.remote.dto.user.home.statistics.income_waste
+package com.example.medscape20.data.remote.dto.user.statistics.income_waste
 
 data class Data(
     val income_level: String,

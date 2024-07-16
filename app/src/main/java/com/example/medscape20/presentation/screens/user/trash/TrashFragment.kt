@@ -1,25 +1,27 @@
 package com.example.medscape20.presentation.screens.user.trash
 
-import android.content.DialogInterface
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentTrashBinding
-import com.example.medscape20.presentation.screens.auth.maps.MapsFragment.Companion.PERMISSIONS_ARRAY
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class TrashFragment : Fragment() {
 
     private var _binding: FragmentTrashBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: TrashViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +33,16 @@ class TrashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //dump trash type bottom sheet filter result
+        setFragmentResultListener(TrashType.REQUEST_KEY.value) { _, bundle ->
+            val trashTypeList = bundle.getStringArrayList(TrashType.ARGUMENT_KEY.value)
+
+            trashTypeList?.let {
+                viewModel.event(TrashEvents.OnTrashTypesSet(trashTypeList))
+            }
+
+        }
 
         binding.backBtn.setOnClickListener {
             findNavController().navigateUp()
@@ -45,13 +57,42 @@ class TrashFragment : Fragment() {
             showCancelDialog()
         }
 
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.states.collect { state ->
+
+                    if (state.isLoading) {
+                        binding.dumpLayout.visibility = View.GONE
+                        binding.dumpedLayout.visibility = View.GONE
+                        binding.progressCircular.visibility = View.VISIBLE
+                    } else {
+                        binding.progressCircular.visibility = View.GONE
+                        if (state.showDumpPage) {
+                            binding.dumpLayout.visibility = View.VISIBLE
+                        } else {
+                            binding.dumpedLayout.visibility = View.VISIBLE
+
+                            //set toggle buttons for showing user current trash type selected
+                            if (state.metal) binding.toggleBtn.check(R.id.metal_btn)
+                            if (state.general) binding.toggleBtn.check(R.id.general_btn)
+                            if (state.medical) binding.toggleBtn.check(R.id.medical_btn)
+                            if (state.plastic) binding.toggleBtn.check(R.id.plastic_btn)
+                        }
+                    }
+
+
+                }
+            }
+        }
+
     }
 
     private fun showCancelDialog() {
         android.app.AlertDialog.Builder(requireContext())
             .setTitle("Confirmation")
             .setMessage(
-               "Are you sure you want to cancel?"
+                "Are you sure you want to cancel?"
             )
             .setPositiveButton("Yes") { dialog, _ ->
                 dialog.dismiss()
@@ -59,7 +100,7 @@ class TrashFragment : Fragment() {
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-           .create().show()
+            .create().show()
     }
 
     override fun onDestroy() {

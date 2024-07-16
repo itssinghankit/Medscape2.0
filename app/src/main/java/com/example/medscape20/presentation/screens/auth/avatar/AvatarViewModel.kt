@@ -157,7 +157,7 @@ class AvatarViewModel @Inject constructor(
             address = args.address,
             avatar = imgUrl,
             uid = firebaseAuth.currentUser!!.uid,
-            isDump = false,
+            dump = false,
             lat = args.lat.toDouble(),
             lng=args.lng.toDouble(),
             state = args.state,
@@ -182,7 +182,9 @@ class AvatarViewModel @Inject constructor(
                     }
 
                     ApiResult.Loading -> {
-                        //nothing to do already loading
+                        _state.update {
+                            it.copy(isLoading = true)
+                        }
                     }
 
                     is ApiResult.Success -> {

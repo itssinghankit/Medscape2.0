@@ -8,7 +8,7 @@ data class AvatarSaveDetailsReqDto(
     val address: String,
     val avatar:String,
     val uid:String,
-    val isDump:Boolean,
+    val dump:Boolean,
     val lat:Double,
     val lng:Double,
     val state:String?,
@@ -17,5 +17,5 @@ data class AvatarSaveDetailsReqDto(
     val metal:Boolean?,
     val general:Boolean?,
     val medical:Boolean?,
-    val plastic:Boolean
+    val plastic:Boolean?
 )
