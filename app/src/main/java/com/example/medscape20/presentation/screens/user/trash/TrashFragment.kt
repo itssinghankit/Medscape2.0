@@ -100,6 +100,7 @@ class TrashFragment : Fragment() {
                 "Are you sure you want to cancel?"
             )
             .setPositiveButton("Yes") { dialog, _ ->
+                viewModel.event(TrashEvents.OnCancelClicked)
                 dialog.dismiss()
 
             }.setNegativeButton("Cancel") { dialog, _ ->

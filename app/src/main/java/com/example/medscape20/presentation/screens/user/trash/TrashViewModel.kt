@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.user.trash.TrashIsDumpedUseCase
-import com.example.medscape20.domain.usecase.user.trash.TrashSetDumpUseCase
+import com.example.medscape20.domain.usecase.user.trash.TrashUpdateDumpUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 data class TrashStates(
@@ -34,7 +33,7 @@ data class TrashStates(
 @HiltViewModel
 class TrashViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val trashSetDumpUseCase: TrashSetDumpUseCase,
+    private val trashUpdateDumpUseCase: TrashUpdateDumpUseCase,
     private val trashIsDumpedUseCase: TrashIsDumpedUseCase
 ) : ViewModel() {
 
@@ -65,16 +64,29 @@ class TrashViewModel @Inject constructor(
                     "medical" to action.trashTypeList.contains(TrashType.MEDICAL.value),
                     "plastic" to action.trashTypeList.contains(TrashType.PLASTIC.value)
                 )
-                setTrashDump(updates)
+                updateTrashDump(updates)
+            }
+
+            TrashEvents.OnCancelClicked -> {
+                val updates = hashMapOf<String, Any>(
+                    "dump" to false,
+                    "metal" to false,
+                    "general" to false,
+                    "medical" to false,
+                    "plastic" to false
+                )
+                updateTrashDump(updates)
             }
         }
     }
 
-    private fun setTrashDump(updates: HashMap<String, Any>) {
+
+
+    private fun updateTrashDump(updates: HashMap<String, Any>) {
 
         viewModelScope.launch(Dispatchers.IO) {
             val uid = firebaseAuth.currentUser?.uid!!
-            trashSetDumpUseCase(uid, updates).collect { result ->
+            trashUpdateDumpUseCase(uid, updates).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {
                         when (result.error) {

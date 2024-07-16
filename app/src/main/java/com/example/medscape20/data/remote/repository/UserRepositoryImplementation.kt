@@ -145,7 +145,7 @@ class UserRepositoryImplementation @Inject constructor(
 
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun setTrashDump(
+    override suspend fun updateTrashDump(
         uid: String,
         updates: HashMap<String, Any>
     ): Flow<ApiResult<Unit, DataError.Network>> = flow {
@@ -167,12 +167,12 @@ class UserRepositoryImplementation @Inject constructor(
                 emit(ApiResult.Loading)
                 val dataRef = firebaseDatabase.getReference("/users/$uid")
                 val data = dataRef.get().await()
-                val response = data.getValue(TrashIsDumpedResDto::class.java)!!.toTrashIsDumpedModel()
+                val response =
+                    data.getValue(TrashIsDumpedResDto::class.java)!!.toTrashIsDumpedModel()
                 emit(ApiResult.Success(response))
             } catch (e: Exception) {
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
             }
         }.flowOn(Dispatchers.IO)
-
 
 }

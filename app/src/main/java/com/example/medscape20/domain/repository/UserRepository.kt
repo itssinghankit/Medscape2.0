@@ -6,7 +6,6 @@ import com.example.medscape20.data.remote.dto.user.statistics.income_waste.Stati
 import com.example.medscape20.data.remote.dto.user.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
 import com.example.medscape20.data.remote.dto.user.statistics.region_waste.StatisticsRegionWasteDto
 import com.example.medscape20.data.remote.dto.user.statistics.waste_composition.StatisticsWasteCompositionDto
-import com.example.medscape20.data.remote.dto.user.trash.TrashSetDumpReqDto
 import com.example.medscape20.domain.models.ArticleModel
 import com.example.medscape20.domain.models.TrashIsDumpedModel
 import com.example.medscape20.util.ApiResult
@@ -21,6 +20,7 @@ interface UserRepository {
     suspend fun getStatsIncomeWaste(): Flow<ApiResult<StatisticsIncomeWasteDto, DataError.Network>>
     suspend fun getStatsWasteComposition(): Flow<ApiResult<StatisticsWasteCompositionDto, DataError.Network>>
     suspend fun getStatsIndiaWasteTreatment(): Flow<ApiResult<StatisticsIndiaWasteTreatmentDto, DataError.Network>>
-    suspend fun setTrashDump(uid: String,updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
+    suspend fun updateTrashDump(uid: String, updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
     suspend fun isDumped(uid: String): Flow<ApiResult<TrashIsDumpedModel, DataError.Network>>
+
 }
