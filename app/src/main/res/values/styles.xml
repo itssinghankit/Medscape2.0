@@ -68,6 +68,7 @@
         <item name="backgroundTint">@color/selector_trash_chip_bg_color</item>
         <item name="android:textColor">@color/selector_trash_chip_text_color</item>
         <item name="strokeColor">@color/grey_surface</item>
+        <item name="android:clickable">false</item>
     </style>
 
 </resources>

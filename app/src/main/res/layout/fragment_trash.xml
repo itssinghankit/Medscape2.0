@@ -93,7 +93,7 @@
                 android:layout_marginTop="80dp"
                 android:id="@+id/dump_layout"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/head_sub_txt">
@@ -154,6 +154,7 @@
                     android:layout_height="wrap_content"
                     android:scrollbars="none"
                     android:layout_marginTop="12dp">
+
                     <com.google.android.material.button.MaterialButtonToggleGroup
                         android:id="@+id/toggle_btn"
                         android:layout_width="wrap_content"

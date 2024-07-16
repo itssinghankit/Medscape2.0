@@ -48,7 +48,12 @@ class TrashFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        //in both cases we have to do same thing that is update trash types
         binding.dump.setOnClickListener {
+            val bottomSheet = TrashBottomSheet()
+            bottomSheet.show(parentFragmentManager, "trashBottomSheet")
+        }
+        binding.edit.setOnClickListener {
             val bottomSheet = TrashBottomSheet()
             bottomSheet.show(parentFragmentManager, "trashBottomSheet")
         }
@@ -74,10 +79,10 @@ class TrashFragment : Fragment() {
                             binding.dumpedLayout.visibility = View.VISIBLE
 
                             //set toggle buttons for showing user current trash type selected
-                            if (state.metal) binding.toggleBtn.check(R.id.metal_btn)
-                            if (state.general) binding.toggleBtn.check(R.id.general_btn)
-                            if (state.medical) binding.toggleBtn.check(R.id.medical_btn)
-                            if (state.plastic) binding.toggleBtn.check(R.id.plastic_btn)
+                            if (state.metal) binding.toggleBtn.check(R.id.metal_btn) else binding.toggleBtn.uncheck(R.id.metal_btn)
+                            if (state.general) binding.toggleBtn.check(R.id.general_btn) else binding.toggleBtn.uncheck(R.id.general_btn)
+                            if (state.medical) binding.toggleBtn.check(R.id.medical_btn) else binding.toggleBtn.uncheck(R.id.medical_btn)
+                            if (state.plastic) binding.toggleBtn.check(R.id.plastic_btn) else binding.toggleBtn.uncheck(R.id.plastic_btn)
                         }
                     }
 

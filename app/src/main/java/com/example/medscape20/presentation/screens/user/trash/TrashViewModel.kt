@@ -40,7 +40,7 @@ class TrashViewModel @Inject constructor(
 
     init {
         firebaseAuth.addAuthStateListener { auth->
-            if(auth.currentUser == null){
+            if(auth.currentUser != null){
                 idDumped()
             }
         }
@@ -167,7 +167,6 @@ class TrashViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
-                        Timber.d(result.data.toString())
                         _state.update {
                             withContext(Dispatchers.Main) {
                                 it.copy(
