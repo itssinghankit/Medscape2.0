@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_loginFragment_to_userFragment"
             app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_collectorHomeFragment"
+            app:destination="@id/collectorHomeFragment" />
 
     </fragment>
     <fragment
@@ -114,12 +117,12 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.medscape20.presentation.screens.user.home.HomeFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.example.medscape20.presentation.screens.user.UserFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" >
         <action
@@ -128,22 +131,27 @@
     </fragment>
     <fragment
         android:id="@+id/articlesFragment"
-        android:name="com.example.medscape20.presentation.screens.user.articles.ArticlesFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.articles.ArticlesFragment"
         android:label="fragment_articles"
         tools:layout="@layout/fragment_articles" />
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.example.medscape20.presentation.screens.user.account.AccountFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.example.medscape20.presentation.screens.user.statistics.StatisticsFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.statistics.StatisticsFragment"
         android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/trashFragment"
-        android:name="com.example.medscape20.presentation.screens.user.trash.TrashFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.trash.TrashFragment"
         android:label="fragment_trash"
         tools:layout="@layout/fragment_trash" />
+    <fragment
+        android:id="@+id/collectorHomeFragment"
+        android:name="com.example.medscape20.presentation.screens.user.collector.home.CollectorHomeFragment"
+        android:label="fragment_collector_home"
+        tools:layout="@layout/fragment_collector_home" />
 </navigation>

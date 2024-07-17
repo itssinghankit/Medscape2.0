@@ -6,7 +6,7 @@
     <data>
     <variable
         name="viewModel"
-        type="com.example.medscape20.presentation.screens.user.articles.ArticlesViewModel" />
+        type="com.example.medscape20.presentation.screens.user.customer.articles.ArticlesViewModel" />
     </data>
 <!--    android:fitsSystemWindows="true"-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_marginTop="32dp"
         android:background="@color/bg_colors"
         android:orientation="vertical"
-        tools:context=".presentation.screens.user.articles.ArticlesFragment">
+        tools:context=".presentation.screens.user.customer.articles.ArticlesFragment">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/search_bar"

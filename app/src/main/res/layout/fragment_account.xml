@@ -14,7 +14,7 @@
         android:background="@color/bg_colors"
         android:paddingEnd="24dp"
         android:layout_height="match_parent"
-        tools:context=".presentation.screens.user.account.AccountFragment">
+        tools:context=".presentation.screens.user.customer.account.AccountFragment">
 
         <ScrollView
             android:layout_width="match_parent"

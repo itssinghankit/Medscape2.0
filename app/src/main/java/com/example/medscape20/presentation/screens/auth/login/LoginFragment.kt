@@ -50,6 +50,7 @@ class LoginFragment : Fragment() {
 
         binding.lgnBtn.setOnClickListener {
             viewModel.event(LoginEvents.OnLoginClicked)
+
         }
 
         binding.email.doOnTextChanged { text, _, _, _ ->
@@ -112,6 +113,10 @@ class LoginFragment : Fragment() {
 
     private fun navigateToUserScreen() {
         viewModel.event(LoginEvents.OnNavigationDone)
+        if(binding.collectorCheckBox.isChecked){
+            findNavController().navigate(R.id.action_loginFragment_to_collectorHomeFragment)
+            return
+        }
         findNavController().navigate(
             R.id.action_loginFragment_to_userFragment,
             null,
@@ -126,7 +131,8 @@ class LoginFragment : Fragment() {
         if (currentUser != null) {
 
             findNavController().navigate(
-                R.id.action_loginFragment_to_userFragment,
+//                R.id.action_loginFragment_to_userFragment,
+                R.id.action_loginFragment_to_collectorHomeFragment,
                 null,
                 NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
             )
@@ -143,3 +149,4 @@ class LoginFragment : Fragment() {
 //TODO: material alert dialog
 //TODO: app:behavior_peekHeight="1000dp"
 //TODO: article keyboard disable
+//TODO: login logic for collector waste

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.medscape20.presentation.screens.user.home.HomeViewModel" />
+            type="com.example.medscape20.presentation.screens.user.customer.home.HomeViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,7 +24,7 @@
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:scrollbars="none"
-            tools:context=".presentation.screens.user.home.HomeFragment">
+            tools:context=".presentation.screens.user.customer.home.HomeFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -54,8 +54,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="20dp"
-                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:text="Hi, "
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@id/avatar_cont"
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
@@ -66,8 +66,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:text="@{viewModel.state.name}"
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@id/avatar_cont"
                     app:layout_constraintStart_toEndOf="@id/name_txt"
@@ -79,8 +79,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:text="Level up your waste management!"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/grey_txt"
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
                     app:layout_constraintTop_toBottomOf="@id/name_txt" />
@@ -104,8 +104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:text="Category"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_bar" />
@@ -146,8 +146,8 @@
                             android:layout_marginTop="8dp"
                             android:text="Biodegradable\nwaste"
                             android:textAlignment="center"
-                            android:textColor="@color/grey_txt"
-                            android:textAppearance="?attr/textAppearanceBodySmall"/>
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="@color/grey_txt" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -185,9 +185,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
                             android:text="Non-Biodegradable\nwaste"
                             android:textAlignment="center"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
                             android:textColor="@color/grey_txt" />
                     </LinearLayout>
 
@@ -199,8 +199,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:text="Sources of waste"
-                    android:textColor="@color/white"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/biodegradable" />
 
@@ -237,8 +237,8 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="10dp"
                             android:text="Common sources"
-                            android:textColor="@color/white"
                             android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:textColor="@color/white"
                             app:layout_constraintStart_toEndOf="@id/continue_learning_image"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -250,16 +250,16 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="16dp"
                             android:ellipsize="end"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
                             android:maxLines="3"
                             android:text="There are many sources of waste, some of them are Medical waste, Household waste, Commercial waste, Industrial waste, etc. To know more, click on explore button."
+                            android:textAppearance="?attr/textAppearanceBodySmall"
                             android:textColor="@color/grey_txt"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/continue_learning_image"
                             app:layout_constraintTop_toBottomOf="@id/sources_title" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/dashboard"
+                            android:id="@+id/dashboard_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -267,8 +267,8 @@
                             android:layout_marginBottom="16dp"
                             android:backgroundTint="@color/primary_green_txt_btn"
                             android:text="Go to Dashboard"
-                            android:textColor="@color/black"
                             android:textAppearance="?attr/textAppearanceLabelMedium"
+                            android:textColor="@color/black"
                             app:cornerRadius="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -283,8 +283,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:text="Latest articles"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/common_sources" />
@@ -323,6 +323,7 @@
                 android:id="@+id/searchResultsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
             <ProgressBar
                 android:id="@+id/seaching_progress_circular"
                 android:layout_width="wrap_content"

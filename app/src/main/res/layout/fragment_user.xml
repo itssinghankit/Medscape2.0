@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_colors"
     android:theme="@style/Theme.MaterialComponents"
-    tools:context=".presentation.screens.user.UserFragment">
+    tools:context=".presentation.screens.user.customer.UserFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/user_fragment_holder"

@@ -7,9 +7,9 @@ import com.example.medscape20.R
 import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
 import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
 import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
-import com.example.medscape20.domain.usecase.avatar.AvatarSaveAvatarUseCase
-import com.example.medscape20.domain.usecase.avatar.AvatarSaveDetailsUseCase
-import com.example.medscape20.domain.usecase.avatar.AvatarSignupUseCase
+import com.example.medscape20.domain.usecase.auth.avatar.AvatarSaveAvatarUseCase
+import com.example.medscape20.domain.usecase.auth.avatar.AvatarSaveDetailsUseCase
+import com.example.medscape20.domain.usecase.auth.avatar.AvatarSignupUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth

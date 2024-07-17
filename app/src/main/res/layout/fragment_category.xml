@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.medscape20.presentation.screens.user.home.category.CategoryViewModel" />
+            type="com.example.medscape20.presentation.screens.user.customer.home.category.CategoryViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_colors"
-        tools:context=".presentation.screens.user.home.category.CategoryFragment">
+        tools:context=".presentation.screens.user.customer.home.category.CategoryFragment">
 
         <ProgressBar
             android:id="@+id/progress_circular"

@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
 import com.example.medscape20.data.remote.dto.login.LoginReqDto
-import com.example.medscape20.domain.usecase.login.LoginGetUserDataUseCase
-import com.example.medscape20.domain.usecase.login.LoginSaveDataUseCase
-import com.example.medscape20.domain.usecase.login.LoginUseCase
-import com.example.medscape20.domain.usecase.login.LoginValidateEmailUseCase
-import com.example.medscape20.domain.usecase.login.LoginValidatePasswordUseCase
+import com.example.medscape20.domain.usecase.auth.login.LoginGetUserDataUseCase
+import com.example.medscape20.domain.usecase.auth.login.LoginSaveDataUseCase
+import com.example.medscape20.domain.usecase.auth.login.LoginUseCase
+import com.example.medscape20.domain.usecase.auth.login.LoginValidateEmailUseCase
+import com.example.medscape20.domain.usecase.auth.login.LoginValidatePasswordUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.example.medscape20.util.EmailError

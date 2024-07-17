@@ -2,8 +2,8 @@ package com.example.medscape20.presentation.screens.auth.signup
 
 import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
-import com.example.medscape20.domain.usecase.signup.SignupValidateEmailUseCase
-import com.example.medscape20.domain.usecase.signup.ValidatePasswordUseCase
+import com.example.medscape20.domain.usecase.auth.signup.SignupValidateEmailUseCase
+import com.example.medscape20.domain.usecase.auth.signup.ValidatePasswordUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.EmailError
 import com.example.medscape20.util.PassError
