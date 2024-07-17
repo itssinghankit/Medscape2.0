@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
-import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
-import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveAvatarReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveDetailsReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSignupReqDto
 import com.example.medscape20.domain.usecase.auth.avatar.AvatarSaveAvatarUseCase
 import com.example.medscape20.domain.usecase.auth.avatar.AvatarSaveDetailsUseCase
 import com.example.medscape20.domain.usecase.auth.avatar.AvatarSignupUseCase

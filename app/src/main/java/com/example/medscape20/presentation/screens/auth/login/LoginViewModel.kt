@@ -4,8 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
-import com.example.medscape20.data.remote.dto.login.LoginReqDto
+import com.example.medscape20.data.remote.dto.auth.login.LoginGetUserDataResDto
+import com.example.medscape20.data.remote.dto.auth.login.LoginReqDto
 import com.example.medscape20.domain.usecase.auth.login.LoginGetUserDataUseCase
 import com.example.medscape20.domain.usecase.auth.login.LoginSaveDataUseCase
 import com.example.medscape20.domain.usecase.auth.login.LoginUseCase
@@ -140,7 +140,7 @@ class LoginViewModel @Inject constructor(
     private fun login() {
 
         viewModelScope.launch {
-            val loginReqDto=LoginReqDto(email.value.lowercase().trim(),password.value.trim())
+            val loginReqDto= LoginReqDto(email.value.lowercase().trim(),password.value.trim())
             loginUseCase(loginReqDto).collect{ result->
                 when(result){
                     is ApiResult.Error ->{

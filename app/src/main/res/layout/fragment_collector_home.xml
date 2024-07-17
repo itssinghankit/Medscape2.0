@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.medscape20.presentation.screens.user.collector.home.CollectorHomeViewModel" />
@@ -27,7 +28,8 @@
                 android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="true"
+                android:visibility="visible">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/avatar_cont"
@@ -72,17 +74,39 @@
                     app:layout_constraintStart_toEndOf="@id/name_txt"
                     app:layout_constraintTop_toTopOf="@id/avatar_cont" />
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/subtxt_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8" />
+
                 <TextView
                     android:id="@+id/head_subtxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="Level up your waste management!"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/grey_txt"
+                    app:layout_constraintEnd_toStartOf="@id/subtxt_guideline"
                     app:layout_constraintStart_toEndOf="@id/avatar_cont"
                     app:layout_constraintTop_toBottomOf="@id/name_txt" />
+
+                <ImageButton
+                    android:id="@+id/logout_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="-12dp"
+                    android:backgroundTint="@color/bg_colors"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_logout"
+                    app:layout_constraintBottom_toBottomOf="@id/avatar_cont"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/avatar_cont" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/people_count_card"

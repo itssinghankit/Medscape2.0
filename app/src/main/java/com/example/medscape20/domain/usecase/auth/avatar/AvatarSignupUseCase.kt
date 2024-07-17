@@ -1,6 +1,6 @@
 package com.example.medscape20.domain.usecase.auth.avatar
 
-import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSignupReqDto
 import com.example.medscape20.domain.repository.AuthRepository
 import javax.inject.Inject
 

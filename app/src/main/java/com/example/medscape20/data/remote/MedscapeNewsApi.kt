@@ -1,6 +1,6 @@
 package com.example.medscape20.data.remote
 
-import com.example.medscape20.data.remote.dto.user.articles.NewsResDto
+import com.example.medscape20.data.remote.dto.user.customer.articles.NewsResDto
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path

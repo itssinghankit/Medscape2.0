@@ -1,11 +1,11 @@
 package com.example.medscape20.data.remote.repository
 
-import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
-import com.example.medscape20.data.remote.dto.avatar.AvatarSaveDetailsReqDto
-import com.example.medscape20.data.remote.dto.avatar.AvatarSignupReqDto
-import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
-import com.example.medscape20.data.remote.dto.login.LoginReqDto
-import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveAvatarReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveDetailsReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSignupReqDto
+import com.example.medscape20.data.remote.dto.auth.login.LoginGetUserDataResDto
+import com.example.medscape20.data.remote.dto.auth.login.LoginReqDto
+import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto
 import com.example.medscape20.domain.repository.AuthRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError

@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
-import com.example.medscape20.data.remote.dto.user.category.Subtopic
+import com.example.medscape20.data.remote.dto.user.customer.category.Subtopic
 import com.example.medscape20.domain.usecase.user.customer.home.category.CategoryGetDataUseCase
 import com.example.medscape20.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel

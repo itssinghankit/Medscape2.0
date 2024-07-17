@@ -1,6 +1,6 @@
 package com.example.medscape20.data.mapper
 
-import com.example.medscape20.data.remote.dto.user.trash.TrashIsDumpedResDto
+import com.example.medscape20.data.remote.dto.user.customer.trash.TrashIsDumpedResDto
 import com.example.medscape20.domain.models.TrashIsDumpedModel
 
 fun TrashIsDumpedResDto.toTrashIsDumpedModel(): TrashIsDumpedModel {

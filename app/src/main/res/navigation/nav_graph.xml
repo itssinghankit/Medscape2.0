@@ -153,5 +153,9 @@
         android:id="@+id/collectorHomeFragment"
         android:name="com.example.medscape20.presentation.screens.user.collector.home.CollectorHomeFragment"
         android:label="fragment_collector_home"
-        tools:layout="@layout/fragment_collector_home" />
+        tools:layout="@layout/fragment_collector_home" >
+        <action
+            android:id="@+id/action_collectorHomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

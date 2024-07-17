@@ -3,10 +3,10 @@ package com.example.medscape20.presentation.screens.user.customer.statistics
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medscape20.data.remote.dto.user.statistics.income_waste.StatisticsIncomeWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
-import com.example.medscape20.data.remote.dto.user.statistics.region_waste.StatisticsRegionWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.waste_composition.StatisticsWasteCompositionDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.waste_composition.StatisticsWasteCompositionDto
 import com.example.medscape20.domain.usecase.user.customer.statistics.StatisticsGetIncomeWasteDataUseCase
 import com.example.medscape20.domain.usecase.user.customer.statistics.StatisticsGetIndiaWasteTreatmentDataUseCase
 import com.example.medscape20.domain.usecase.user.customer.statistics.StatisticsGetRegionWasteDataUseCase

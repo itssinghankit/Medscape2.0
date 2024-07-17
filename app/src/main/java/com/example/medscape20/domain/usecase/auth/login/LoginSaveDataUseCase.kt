@@ -1,6 +1,6 @@
 package com.example.medscape20.domain.usecase.auth.login
 
-import com.example.medscape20.data.remote.dto.login.LoginGetUserDataResDto
+import com.example.medscape20.data.remote.dto.auth.login.LoginGetUserDataResDto
 import com.example.medscape20.domain.repository.DataStoreRepository
 import com.example.medscape20.data.remote.repository.datastore.PreferencesKeys
 import kotlinx.coroutines.flow.first

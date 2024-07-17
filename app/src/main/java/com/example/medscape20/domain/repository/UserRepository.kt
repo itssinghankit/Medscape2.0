@@ -1,12 +1,13 @@
 package com.example.medscape20.domain.repository
 
-import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
-import com.example.medscape20.data.remote.dto.user.category.CategoryResDto
-import com.example.medscape20.data.remote.dto.user.statistics.income_waste.StatisticsIncomeWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
-import com.example.medscape20.data.remote.dto.user.statistics.region_waste.StatisticsRegionWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.waste_composition.StatisticsWasteCompositionDto
+import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto
+import com.example.medscape20.data.remote.dto.user.customer.category.CategoryResDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.waste_composition.StatisticsWasteCompositionDto
 import com.example.medscape20.domain.models.ArticleModel
+import com.example.medscape20.domain.models.CustomerHomePeopleCountModel
 import com.example.medscape20.domain.models.TrashIsDumpedModel
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
@@ -22,5 +23,6 @@ interface UserRepository {
     suspend fun getStatsIndiaWasteTreatment(): Flow<ApiResult<StatisticsIndiaWasteTreatmentDto, DataError.Network>>
     suspend fun updateTrashDump(uid: String, updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
     suspend fun isDumped(uid: String): Flow<ApiResult<TrashIsDumpedModel, DataError.Network>>
+    suspend fun getDumpingPeopleCount(city:String,state:String):Flow<ApiResult<CustomerHomePeopleCountModel,DataError.Network>>
 
 }

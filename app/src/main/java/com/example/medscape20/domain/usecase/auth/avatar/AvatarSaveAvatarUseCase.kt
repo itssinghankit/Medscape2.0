@@ -1,6 +1,6 @@
 package com.example.medscape20.domain.usecase.auth.avatar
 
-import com.example.medscape20.data.remote.dto.avatar.AvatarSaveAvatarReqDto
+import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveAvatarReqDto
 import com.example.medscape20.domain.repository.AuthRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError

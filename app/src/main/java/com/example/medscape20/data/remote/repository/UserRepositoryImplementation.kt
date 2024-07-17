@@ -1,17 +1,19 @@
 package com.example.medscape20.data.remote.repository
 
 import com.example.medscape20.data.mapper.toArticleList
+import com.example.medscape20.data.mapper.toPeopleCountModel
 import com.example.medscape20.data.mapper.toTrashIsDumpedModel
 import com.example.medscape20.data.remote.MedscapeNewsApi
-import com.example.medscape20.data.remote.dto.user.category.CategoryResDto
-import com.example.medscape20.data.remote.dto.user.home.HomeGetUserDataResDto
-import com.example.medscape20.data.remote.dto.user.statistics.income_waste.StatisticsIncomeWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
-import com.example.medscape20.data.remote.dto.user.statistics.region_waste.StatisticsRegionWasteDto
-import com.example.medscape20.data.remote.dto.user.statistics.waste_composition.StatisticsWasteCompositionDto
-import com.example.medscape20.data.remote.dto.user.trash.TrashIsDumpedResDto
-import com.example.medscape20.data.remote.dto.user.trash.TrashSetDumpReqDto
+import com.example.medscape20.data.remote.dto.user.collector.home.CustomerHomePeopleCountResDto
+import com.example.medscape20.data.remote.dto.user.customer.category.CategoryResDto
+import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.income_waste.StatisticsIncomeWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.region_waste.StatisticsRegionWasteDto
+import com.example.medscape20.data.remote.dto.user.customer.statistics.waste_composition.StatisticsWasteCompositionDto
+import com.example.medscape20.data.remote.dto.user.customer.trash.TrashIsDumpedResDto
 import com.example.medscape20.domain.models.ArticleModel
+import com.example.medscape20.domain.models.CustomerHomePeopleCountModel
 import com.example.medscape20.domain.models.TrashIsDumpedModel
 import com.example.medscape20.domain.repository.UserRepository
 import com.example.medscape20.util.ApiResult
@@ -174,5 +176,23 @@ class UserRepositoryImplementation @Inject constructor(
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
             }
         }.flowOn(Dispatchers.IO)
+
+    override suspend fun getDumpingPeopleCount(
+        city: String,
+        state: String
+    ): Flow<ApiResult<CustomerHomePeopleCountModel, DataError.Network>> = flow {
+        try {
+            emit(ApiResult.Loading)
+            val dataRef = firebaseDatabase.getReference("/users")
+            val data = dataRef.get().await()
+            val response =
+                data.children.mapNotNull { it.getValue(CustomerHomePeopleCountResDto::class.java) }
+                    .toPeopleCountModel(city = city, state = state)
+            emit(ApiResult.Success(response))
+        } catch (e: Exception) {
+            Timber.e(e)
+            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+        }
+    }.flowOn(Dispatchers.IO)
 
 }
