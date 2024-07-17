@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    app:cardBackgroundColor="@color/grey_surface"
+    app:cardCornerRadius="24dp"
+    app:strokeWidth="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/avatar_cont"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@color/grey_txt" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/avatar_cont"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Ankit Singh"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_location" />
+
+                <TextView
+                    android:id="@+id/city_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="Vasant Vihar, Delhi"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="@color/primary_green_txt_btn" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="D-143, Kullu vihar, west Delhi, Near metro station,Delhi west Delhi, Near metro station,Delhi west Delhi, Near metro station,Delhi-110001"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="@color/grey_txt" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/info_layout"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey_txt" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:chipSpacingVertical="0dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/general"
+                style="@style/Widget.Customers.Chip.Suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/medical"
+                style="@style/Widget.Customers.Chip.Suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/plastic"
+                style="@style/Widget.Customers.Chip.Suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plastic" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/metal"
+                style="@style/Widget.Customers.Chip.Suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Metal" />
+
+        </com.google.android.material.chip.ChipGroup>
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

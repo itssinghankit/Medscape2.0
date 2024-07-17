@@ -157,5 +157,13 @@
         <action
             android:id="@+id/action_collectorHomeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_collectorHomeFragment_to_customersFragment"
+            app:destination="@id/customersFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/customersFragment"
+        android:name="com.example.medscape20.presentation.screens.user.collector.customers.CustomersFragment"
+        android:label="fragment_customers"
+        tools:layout="@layout/fragment_customers" />
 </navigation>

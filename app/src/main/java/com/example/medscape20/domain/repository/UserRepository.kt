@@ -1,5 +1,6 @@
 package com.example.medscape20.domain.repository
 
+import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
 import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto
 import com.example.medscape20.data.remote.dto.user.customer.category.CategoryResDto
 import com.example.medscape20.data.remote.dto.user.customer.statistics.income_waste.StatisticsIncomeWasteDto
@@ -24,5 +25,6 @@ interface UserRepository {
     suspend fun updateTrashDump(uid: String, updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
     suspend fun isDumped(uid: String): Flow<ApiResult<TrashIsDumpedModel, DataError.Network>>
     suspend fun getDumpingPeopleCount(city:String,state:String):Flow<ApiResult<CustomerHomePeopleCountModel,DataError.Network>>
+    suspend fun getDumpingPeoples():Flow<ApiResult<ArrayList<CustomersResDto>,DataError.Network>>
 
 }

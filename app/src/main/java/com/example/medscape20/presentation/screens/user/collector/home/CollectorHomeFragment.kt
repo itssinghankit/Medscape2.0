@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.medscape20.R
@@ -59,6 +60,10 @@ class CollectorHomeFragment : Fragment() {
             }
         }
 
+        binding.seeListBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_collectorHomeFragment_to_customersFragment)
+        }
+
         binding.logoutBtn.setOnClickListener {
             showLogoutAlertDialog()
         }
@@ -93,15 +98,19 @@ class CollectorHomeFragment : Fragment() {
     }
 
     private fun showLogoutAlertDialog() {
+
         AlertDialog.Builder(requireContext())
             .setTitle("Confirmation")
             .setMessage(
                 "Are you sure you want to logout?"
             )
             .setPositiveButton("Yes") { dialog, _ ->
-                viewModel.event(CollectorHomeEvents.OnLogOutClicked
+                viewModel.event(CollectorHomeEvents.OnLogOutClicked)
+                findNavController().navigate(
+                    R.id.action_collectorHomeFragment_to_loginFragment,
+                    null,
+                    NavOptions.Builder().setPopUpTo(R.id.collectorHomeFragment, true).build()
                 )
-                findNavController().navigate(R.id.action_collectorHomeFragment_to_loginFragment)
                 dialog.dismiss()
 
             }.setNegativeButton("No") { dialog, _ ->
