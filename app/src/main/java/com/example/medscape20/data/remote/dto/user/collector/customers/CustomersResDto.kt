@@ -1,5 +1,7 @@
 package com.example.medscape20.data.remote.dto.user.collector.customers
 
+import java.io.Serializable
+
 data class CustomersResDto (
     val name: String,
     val email: String,
@@ -18,6 +20,6 @@ data class CustomersResDto (
     val general:Boolean?,
     val medical:Boolean?,
     val plastic:Boolean?
-){
+):Serializable{
     constructor():this("","","","","","","",false,0.0,0.0,"","", "",false,false,false,false)
 }

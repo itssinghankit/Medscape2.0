@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.medscape20.databinding.FragmentCustomersBinding
+import com.example.medscape20.domain.usecase.user.collector.customers.CustomerDetailBottomSheetEnum
 import com.example.medscape20.domain.usecase.user.collector.customers.CustomersTrashFilters
 import com.example.medscape20.domain.usecase.user.collector.customers.CustomersViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +33,6 @@ class CustomersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCustomersBinding.inflate(layoutInflater, container, false)
-
         return binding.root
     }
 
@@ -55,6 +55,19 @@ class CustomersFragment : Fragment() {
             }
         }
 
+        //selected option form details bottom sheet
+        setFragmentResultListener(CustomerDetailBottomSheetEnum.REQUEST_KEY_DETAILS.name) { _, bundle ->
+            val selectedDisposeOption =
+                bundle.getBoolean(CustomerDetailBottomSheetEnum.DISPOSED_OPTION.name)
+            val currentItemPosition = bundle.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)
+            val selectedLocateOption =
+                bundle.getBoolean(CustomerDetailBottomSheetEnum.LOCATE_OPTION.name)
+
+            if (selectedLocateOption) viewModel.event(CustomersEvents.OnLocateClicked)
+            if (selectedDisposeOption) viewModel.event(CustomersEvents.OnDisposedClicked(currentItemPosition))
+
+        }
+
 
         binding.backBtn.setOnClickListener {
             findNavController().navigateUp()
@@ -64,8 +77,8 @@ class CustomersFragment : Fragment() {
             openFilterBottomSheet()
         }
 
-        val adapter = CustomersRecyclerAdapter { uid ->
-            //will do something
+        val adapter = CustomersRecyclerAdapter { position ->
+            showDetailBottomSheet(position)
         }
         binding.customersRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.customersRecyclerView.adapter = adapter
@@ -82,17 +95,26 @@ class CustomersFragment : Fragment() {
                         binding.mainContent.visibility = View.VISIBLE
                     }
 
-                    if (state.data.isNotEmpty()) {
-                        if (state.newFilteredList.isNotEmpty()) {
-                            adapter.submitList(state.newFilteredList)
-                        } else {
-                            adapter.submitList(state.data)
-                        }
+                    if (state.newFilteredList.isNotEmpty()) {
+                        adapter.submitList(state.newFilteredList)
                     }
 
                 }
             }
         }
+
+    }
+
+    private fun showDetailBottomSheet(position: Int) {
+
+        val customer = viewModel.state.value.newFilteredList[position]
+        val bottomSheet = CustomerDetailBottomSheet().apply {
+            arguments = Bundle().apply {
+                putSerializable(CustomerDetailBottomSheetEnum.ARGUMENT_KEY_DETAILS.name, customer)
+                putInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name,position)
+            }
+        }
+        bottomSheet.show(parentFragmentManager, "detail")
 
     }
 
@@ -107,7 +129,7 @@ class CustomersFragment : Fragment() {
         if (viewModel.filter.value.generalFilter) filtersList.add(CustomersTrashFilters.GENERAL.name)
         if (viewModel.filter.value.plasticFilter) filtersList.add(CustomersTrashFilters.PLASTIC.name)
 
-        val bottomSheet = CustomersBottomSheet().apply {
+        val bottomSheet = CustomersFilterBottomSheet().apply {
             arguments = Bundle().apply {
                 putStringArrayList(CustomersTrashFilters.FILTERS_LIST.name, filtersList)
             }

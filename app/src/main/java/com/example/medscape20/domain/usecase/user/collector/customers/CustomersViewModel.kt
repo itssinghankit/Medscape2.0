@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 data class CustomersStates(
@@ -25,7 +26,8 @@ data class CustomersStates(
     val data: List<CustomersResDto> = emptyList(),
     val newFilteredList: List<CustomersResDto> = emptyList(),
     val collectorCity: String = "",
-    val collectorState: String = ""
+    val collectorState: String = "",
+    val currentItemPosition: Int? = null
 )
 
 data class CustomersFilters(
@@ -40,7 +42,8 @@ data class CustomersFilters(
 @HiltViewModel
 class CustomersViewModel @Inject constructor(
     private val customersGetDumpingPeopleUseCase: CustomersGetDumpingPeopleUseCase,
-    private val customersSetFilterUseCase: CustomersSetFilterUseCase
+    private val customersSetFilterUseCase: CustomersSetFilterUseCase,
+    private val customersDisposedWasteUseCase: CustomersDisposedWasteUseCase
 ) : ViewModel() {
 
     init {
@@ -85,6 +88,84 @@ class CustomersViewModel @Inject constructor(
                     )
                 }
             }
+
+            is CustomersEvents.OnDisposedClicked -> {
+                val updates = hashMapOf<String, Any>(
+                    "dump" to false,
+                    "metal" to false,
+                    "general" to false,
+                    "medical" to false,
+                    "plastic" to false
+                )
+                updateDataBase(updates, action.position)
+
+            }
+
+            CustomersEvents.OnLocateClicked -> {
+                Timber.d("Locate clicked")
+            }
+        }
+    }
+
+
+    private fun updateDataBase(updates: HashMap<String, Any>, position: Int) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val uid = state.value.newFilteredList[position].uid
+            customersDisposedWasteUseCase(uid, updates).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> {
+                        when (result.error) {
+
+                            DataError.Network.INTERNAL_SERVER_ERROR -> {
+                                _state.update {
+                                    withContext(Dispatchers.Main) {
+                                        it.copy(
+                                            isError = true,
+                                            isLoading = false,
+                                            errMessage = R.string.error_internal_server
+                                        )
+                                    }
+                                }
+                            }
+
+                            else -> {
+                                _state.update {
+                                    withContext(Dispatchers.Main) {
+                                        it.copy(
+                                            isError = true,
+                                            isLoading = false,
+                                            errMessage = R.string.error_unknown
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    ApiResult.Loading -> {
+                        _state.update {
+                            withContext(Dispatchers.Main) {
+                                it.copy(isLoading = true)
+                            }
+                        }
+                    }
+
+                    is ApiResult.Success -> {
+                        val newUpdatedList = state.value.newFilteredList.toMutableList().also {
+                            it.removeAt(position)
+                        }
+                        _state.update {
+                            withContext(Dispatchers.Main) {
+                                it.copy(
+                                    newFilteredList = newUpdatedList, isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -114,6 +195,7 @@ class CustomersViewModel @Inject constructor(
 
 
     private fun getAllDumpingPeople() {
+
         viewModelScope.launch(Dispatchers.IO) {
             customersGetDumpingPeopleUseCase().collect { result ->
                 when (result) {
@@ -158,6 +240,7 @@ class CustomersViewModel @Inject constructor(
                             withContext(Dispatchers.Main) {
                                 it.copy(
                                     data = result.data,
+                                    newFilteredList = result.data,
                                     isLoading = false
                                 )
                             }
@@ -180,4 +263,12 @@ enum class CustomersTrashFilters {
     PLASTIC,
     GENERAL,
     MEDICAL
+}
+
+enum class CustomerDetailBottomSheetEnum {
+    REQUEST_KEY_DETAILS,
+    ARGUMENT_KEY_DETAILS,
+    DISPOSED_OPTION,
+    LOCATE_OPTION,
+    CURRENT_ITEM_POSITION
 }

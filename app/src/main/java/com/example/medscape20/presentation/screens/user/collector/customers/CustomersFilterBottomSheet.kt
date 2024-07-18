@@ -8,9 +8,8 @@ import androidx.fragment.app.setFragmentResult
 import com.example.medscape20.databinding.CustomersFilterBottomSheetBinding
 import com.example.medscape20.domain.usecase.user.collector.customers.CustomersTrashFilters
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import timber.log.Timber
 
-class CustomersBottomSheet : BottomSheetDialogFragment() {
+class CustomersFilterBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: CustomersFilterBottomSheetBinding
 
