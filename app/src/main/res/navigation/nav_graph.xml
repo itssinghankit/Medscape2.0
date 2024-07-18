@@ -165,5 +165,12 @@
         android:id="@+id/customersFragment"
         android:name="com.example.medscape20.presentation.screens.user.collector.customers.CustomersFragment"
         android:label="fragment_customers"
-        tools:layout="@layout/fragment_customers" />
+        tools:layout="@layout/fragment_customers" >
+        <argument
+            android:name="collector_city"
+            app:argType="string" />
+        <argument
+            android:name="collector_state"
+            app:argType="string" />
+    </fragment>
 </navigation>

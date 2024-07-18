@@ -61,7 +61,12 @@ class CollectorHomeFragment : Fragment() {
         }
 
         binding.seeListBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_collectorHomeFragment_to_customersFragment)
+            val action =
+                CollectorHomeFragmentDirections.actionCollectorHomeFragmentToCustomersFragment(
+                    viewModel.state.value.city ?: "",
+                    viewModel.state.value.state ?: ""
+                )
+            findNavController().navigate(action)
         }
 
         binding.logoutBtn.setOnClickListener {

@@ -64,13 +64,6 @@
         <item name="android:textColor">@color/selector_chip_text_color</item>
     </style>
 
-    <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="backgroundTint">@color/selector_trash_chip_bg_color</item>
-        <item name="android:textColor">@color/selector_chip_text_color</item>
-        <item name="strokeColor">@color/grey_surface</item>
-        <item name="android:clickable">false</item>
-    </style>
-
     <style name="Widget.MyApp.Chip.Suggestion" parent="Widget.Material3.Chip.Suggestion">
         <item name="chipCornerRadius">24dp</item>
         <item name="chipStrokeWidth">0dp</item>
@@ -85,6 +78,19 @@
         <item name="chipBackgroundColor">@color/selector_trash_chip_bg_color</item>
         <item name="android:textColor">@color/selector_chip_text_color</item>
         <item name="android:clickable">false</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/selector_trash_chip_bg_color</item>
+        <item name="android:textColor">@color/selector_chip_text_color</item>
+        <item name="strokeColor">@color/grey_surface</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="Widget.Customers.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/selector_trash_chip_bg_color</item>
+        <item name="android:textColor">@color/selector_chip_text_color</item>
+        <item name="strokeColor">@color/grey_surface</item>
     </style>
 
 </resources>
