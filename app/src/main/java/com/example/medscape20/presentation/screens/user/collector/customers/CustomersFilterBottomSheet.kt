@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
 import com.example.medscape20.databinding.CustomersFilterBottomSheetBinding
-import com.example.medscape20.domain.usecase.user.collector.customers.CustomersTrashFilters
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CustomersFilterBottomSheet : BottomSheetDialogFragment() {
@@ -50,8 +49,10 @@ class CustomersFilterBottomSheet : BottomSheetDialogFragment() {
 
     private fun setNewFilters(): ArrayList<String> {
         val filtersList = arrayListOf<String>()
-        if (binding.toggleBtn.checkedButtonId==binding.cityBtn.id) filtersList.add(CustomersTrashFilters.CITY.name)
-        if (binding.toggleBtn.checkedButtonId==binding.stateBtn.id) filtersList.add(CustomersTrashFilters.STATE.name)
+        if (binding.toggleBtn.checkedButtonId==binding.cityBtn.id) filtersList.add(
+            CustomersTrashFilters.CITY.name)
+        if (binding.toggleBtn.checkedButtonId==binding.stateBtn.id) filtersList.add(
+            CustomersTrashFilters.STATE.name)
         if (binding.metal.isChecked) filtersList.add(CustomersTrashFilters.METAL.name)
         if (binding.medical.isChecked) filtersList.add(CustomersTrashFilters.MEDICAL.name)
         if (binding.general.isChecked) filtersList.add(CustomersTrashFilters.GENERAL.name)

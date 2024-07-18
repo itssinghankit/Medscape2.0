@@ -19,9 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.medscape20.databinding.FragmentCustomersBinding
-import com.example.medscape20.domain.usecase.user.collector.customers.CustomerDetailBottomSheetEnum
-import com.example.medscape20.domain.usecase.user.collector.customers.CustomersTrashFilters
-import com.example.medscape20.domain.usecase.user.collector.customers.CustomersViewModel
+import com.example.medscape20.presentation.screens.user.collector.common.CustomerDetailBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -6,5 +6,4 @@ sealed class CustomersEvents {
     data class OnNewFiltersSet(val newFilters:ArrayList<String>): CustomersEvents()
     data class SetCollectorCityState(val city:String, val state:String): CustomersEvents()
     data class OnDisposedClicked(val position:Int):CustomersEvents()
-    data object OnLocateClicked:CustomersEvents()
 }

@@ -69,6 +69,10 @@ class CollectorHomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        binding.mapViewBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_collectorHomeFragment_to_collectorMapsFragment)
+        }
+
         binding.logoutBtn.setOnClickListener {
             showLogoutAlertDialog()
         }

@@ -1,15 +1,13 @@
-package com.example.medscape20.domain.usecase.user.collector.customers
+package com.example.medscape20.presentation.screens.user.collector.customers
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
-import com.example.medscape20.presentation.screens.user.collector.customers.CustomersEvents
+import com.example.medscape20.domain.usecase.user.collector.customers.CustomersDisposedWasteUseCase
+import com.example.medscape20.domain.usecase.user.collector.customers.CustomersGetDumpingPeopleUseCase
+import com.example.medscape20.domain.usecase.user.collector.customers.CustomersSetFilterUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -105,9 +103,6 @@ class CustomersViewModel @Inject constructor(
 
             }
 
-            CustomersEvents.OnLocateClicked -> {
-                Timber.d("Locate clicked")
-            }
         }
     }
 

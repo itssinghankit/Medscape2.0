@@ -1,6 +1,7 @@
 package com.example.medscape20.domain.usecase.user.collector.customers
 
 import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
+import com.example.medscape20.presentation.screens.user.collector.customers.CustomersFilters
 import javax.inject.Inject
 
 class CustomersSetFilterUseCase @Inject constructor(){

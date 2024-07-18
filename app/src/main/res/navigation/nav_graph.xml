@@ -160,6 +160,9 @@
         <action
             android:id="@+id/action_collectorHomeFragment_to_customersFragment"
             app:destination="@id/customersFragment" />
+        <action
+            android:id="@+id/action_collectorHomeFragment_to_collectorMapsFragment"
+            app:destination="@id/collectorMapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/customersFragment"
@@ -173,4 +176,9 @@
             android:name="collector_state"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/collectorMapsFragment"
+        android:name="com.example.medscape20.presentation.screens.user.collector.map.CollectorMapsFragment"
+        android:label="fragment_collector_maps"
+        tools:layout="@layout/fragment_collector_maps" />
 </navigation>

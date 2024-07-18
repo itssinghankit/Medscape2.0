@@ -1,32 +1,40 @@
-package com.example.medscape20.presentation.screens.auth.maps
+package com.example.medscape20.presentation.screens.user.collector.map
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import androidx.fragment.app.Fragment
+
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ProgressBar
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
+import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
+import com.example.medscape20.databinding.FragmentCollectorMapsBinding
+import com.example.medscape20.presentation.screens.auth.maps.MapsFragment
+import com.example.medscape20.presentation.screens.user.collector.common.CustomerDetailBottomSheet
+import com.example.medscape20.presentation.screens.user.collector.customers.CustomerDetailBottomSheetEnum
+import com.example.medscape20.presentation.screens.user.collector.customers.CustomersEvents
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -37,43 +45,43 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.Locale
 
-class MapsFragment : Fragment(), OnMapReadyCallback {
+@AndroidEntryPoint
+class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    private lateinit var locationCallback: LocationCallback
-
-    private lateinit var progressBar: ProgressBar
-    private lateinit var addTxtFld: EditText
-    private lateinit var myLocBtn: FloatingActionButton
-    private lateinit var doneBtn: FloatingActionButton
+    private var _binding:FragmentCollectorMapsBinding?=null
+    private val binding get() = _binding!!
+    private val viewModel:CollectorMapsViewModel by viewModels()
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
-
-    private var state: String? = null
-    private var city: String? = null
-    private var locality: String? = null
+    private lateinit var locationCallback: LocationCallback
 
     //initially permission is not granted
     private var permissionDenied = false
 
+    //for opening location on google maps
+    private lateinit var mapLauncher: ActivityResultLauncher<Intent>
+
     //requesting permission using Activity Result API
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            //check if permission is granted
+            //check if permission is granted or not
             if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true || it[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
                 // Permission is granted. Enable the location layer
                 enableMyLocation()
@@ -85,13 +93,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 permissionDenied = true
             }
         }
-
-    //start permission activity and then again enable location layer for current location
-    private val startActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        enableMyLocation()
-    }
 
     private val resolutionForLocationToggleResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -109,22 +110,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    //start permission activity and then again enable location layer for current location
+    private val startActivityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        enableMyLocation()
+    }
 
-        val layout = inflater.inflate(R.layout.fragment_maps, container, false)
-        progressBar = layout.findViewById(R.id.progress_circular)
-        addTxtFld = layout.findViewById(R.id.add_txt_fld)
-        myLocBtn = layout.findViewById(R.id.my_loc_btn)
-        doneBtn = layout.findViewById(R.id.done_btn)
-        return layout
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+       _binding= FragmentCollectorMapsBinding.inflate(layoutInflater, container, false)
+
+        mapLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+                //do nothing as we just have to show user on map
+            }
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
@@ -138,15 +148,102 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
+        //the main logic
+        //selected option form details bottom sheet
+        setFragmentResultListener(CustomerDetailBottomSheetEnum.REQUEST_KEY_DETAILS.name) { _, bundle ->
+            val selectedDisposeOption =
+                bundle.getBoolean(CustomerDetailBottomSheetEnum.DISPOSED_OPTION.name)
+            val currentItemPosition =
+                bundle.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)
+            val selectedLocateOption =
+                bundle.getBoolean(CustomerDetailBottomSheetEnum.LOCATE_OPTION.name)
+
+            if (selectedLocateOption) {
+                openLocationInGoogleMaps(
+                    viewModel.state.value.newFilteredList[currentItemPosition].lat,
+                    viewModel.state.value.newFilteredList[currentItemPosition].lng
+                )
+            }
+            if (selectedDisposeOption) viewModel.event(
+                CollectorMapsEvents.OnDisposedClicked(
+                    currentItemPosition
+                )
+            )
+
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+
+                viewModel.state.collect{state->
+                    if(state.newFilteredList.isNotEmpty()){
+                        addAllMarkers(state.newFilteredList)
+                    }
+                }
+            }
+        }
+
+
+
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+    private fun addAllMarkers(newFilteredList: List<CustomersResDto>) {
+        for (customer in newFilteredList) {
+            val markerOptions = MarkerOptions()
+                .position(LatLng(customer.lat, customer.lng))
+                .title(customer.name)
+            val marker = map.addMarker(markerOptions)
+            marker?.tag = customer.uid  // Storing user ID in the marker's tag for later retrieval
+        }
 
+        //moving camera to show all markers
+        val builder = LatLngBounds.Builder()
+        for (customer in newFilteredList) {
+            builder.include(LatLng(customer.lat, customer.lng))
+        }
+        val bounds = builder.build()
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val userId = marker.tag as? String ?: return false
+        val customer = viewModel.state.value.newFilteredList.find { it.uid == userId } ?: return false
+        val position = viewModel.state.value.newFilteredList.indexOf(customer)
+        val bottomSheet = CustomerDetailBottomSheet().apply {
+            arguments = Bundle().apply {
+                putSerializable(CustomerDetailBottomSheetEnum.ARGUMENT_KEY_DETAILS.name, customer)
+                putInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name, position)
+            }
+        }
+        bottomSheet.show(parentFragmentManager, "detail")
+
+        return true
+    }
+
+
+    override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.setOnMarkerClickListener(this)
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         enableMyLocation()
+    }
 
+    private fun openLocationInGoogleMaps(latitude: Double, longitude: Double) {
+
+        val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        try {
+            mapLauncher.launch(mapIntent)
+        } catch (e: ActivityNotFoundException) {
+            // Google Maps app is not installed, open in browser instead
+            val browserUri = Uri.parse("https://www.google.com/maps?q=$latitude,$longitude")
+            val browserIntent = Intent(Intent.ACTION_VIEW, browserUri)
+            mapLauncher.launch(browserIntent)
+        }
     }
 
     /* this function checks if the user has granted the location permission,
@@ -204,18 +301,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onResume() {
-        //after result launcher result is processed this is invoked and also if it goes to background
-        super.onResume()
-
-        if (permissionDenied) {
-
-            // Permission was not granted, display error dialog.
-            showPermissionRationaleDialog()
-            permissionDenied = false
-        }
-    }
-
     private fun showPermissionRationaleDialog() {
 
         AlertDialog.Builder(requireContext())
@@ -225,7 +310,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             )
             .setPositiveButton("OK") { _, _ ->
                 //request the permission again
-                requestPermissionLauncher.launch(PERMISSIONS_ARRAY)
+                requestPermissionLauncher.launch(MapsFragment.PERMISSIONS_ARRAY)
 
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -245,7 +330,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun startLocationUpdates() {
 
-        progressBar.visibility = View.VISIBLE
+        binding.progressCircular.visibility = View.VISIBLE
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -255,6 +340,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            //showing the blue dot of my location
+            map.isMyLocationEnabled = true
+            map.uiSettings.isMyLocationButtonEnabled = false
+
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
@@ -268,12 +357,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     fun animateCameraToCurrLoc(location: Location) {
         //for removing again and again location updates
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-        progressBar.visibility = View.GONE
+
+        binding.progressCircular.visibility = View.GONE
 
         val currentLoc = LatLng(location.latitude, location.longitude)
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
 
-        myLocBtn.setOnClickListener {
+        binding.myLocBtn.setOnClickListener {
             //setting the camera again to live location but there is a problem if we move
             //the location will get same as previous one also the last location is not updated
             //until another app or this app update its location manually
@@ -281,61 +371,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             startLocationUpdates()
         }
 
+        //main logic starts here
+        viewModel.event(CollectorMapsEvents.GetAllDumpingPeople)
+
         var currentTargetLat = location.latitude
         var currentTargetLng = location.longitude
 
-        // Set up camera move listener
-        map.setOnCameraIdleListener {
-            //until we haven't found live location map remain in this state that is the reason
-            //we need not to call getAddressFromLocation(center) for fetching address in text field.
-            val center = map.cameraPosition.target
-            currentTargetLat = center.latitude
-            currentTargetLng = center.longitude
 
-            getAddressFromLocation(center)
-        }
 
-        doneBtn.setOnClickListener {
-
-            //send address back to signup details page
-            val resultKey = MapData.RESULT_KEY.value
-            val resultBundle = Bundle().apply {
-                putString(MapData.ADDRESS.value, addTxtFld.text.toString())
-                putString(MapData.STATE.value, state?.lowercase(Locale.getDefault()))
-                putString(MapData.CITY.value, city?.lowercase(Locale.getDefault()))
-                putString(MapData.LOCALITY.value, locality?.lowercase(Locale.getDefault()))
-                putDouble(MapData.LATITUDE.value, currentTargetLat)
-                putDouble(MapData.LONGITUDE.value, currentTargetLng)
-            }
-            setFragmentResult(resultKey, resultBundle)
-
-            findNavController().navigateUp()
-        }
     }
 
-    private fun getAddressFromLocation(latLng: LatLng) {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                if (addresses?.isNotEmpty() == true) {
-                    val address = addresses[0]
-                    state = address.adminArea
-                    city = address.locality
-                    locality = address.subLocality
-                    val addressText =
-                        address.getAddressLine(0) ?: getString(R.string.error_address_not_found)
+    override fun onResume() {
+        //after result launcher result is processed this is invoked and also if it goes to background
+        super.onResume()
 
-                    withContext(Dispatchers.Main) {
-                        addTxtFld.setText(addressText)
-                    }
-                }
-            } catch (e: Exception) {
-                Timber.d(e.toString())
-                withContext(Dispatchers.Main) {
-                    addTxtFld.setText(getString(R.string.error_could_not_get_address))
-                }
-            }
+        if (permissionDenied) {
+
+            // Permission was not granted, display error dialog.
+            showPermissionRationaleDialog()
+            permissionDenied = false
         }
     }
 
@@ -346,14 +400,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-}
 
-enum class MapData(val value: String) {
-    RESULT_KEY("maps"),
-    ADDRESS("address"),
-    STATE("state"),
-    CITY("city"),
-    LOCALITY("locality"),
-    LATITUDE("lat"),
-    LONGITUDE("lng")
+
 }
