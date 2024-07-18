@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
 import com.example.medscape20.databinding.CustomerShowDetailsBottomSheetBinding
 import com.example.medscape20.domain.usecase.user.collector.customers.CustomerDetailBottomSheetEnum
-import com.example.medscape20.presentation.screens.user.customer.trash.TrashEvents
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CustomerDetailBottomSheet : BottomSheetDialogFragment() {
@@ -37,7 +35,7 @@ class CustomerDetailBottomSheet : BottomSheetDialogFragment() {
             CustomerDetailBottomSheetEnum.ARGUMENT_KEY_DETAILS.name,
             CustomersResDto::class.java
         )
-        val currentItemPos=arguments?.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)?:0
+        val currentItemPos=arguments?.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)!!
 
         details?.let {
             setDataToLayout(it)
@@ -49,6 +47,7 @@ class CustomerDetailBottomSheet : BottomSheetDialogFragment() {
 
         binding.mapViewBtn.setOnClickListener {
             setFragmentResult(CustomerDetailBottomSheetEnum.REQUEST_KEY_DETAILS.name,Bundle().apply {
+                putInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name,currentItemPos)
                 putBoolean(CustomerDetailBottomSheetEnum.LOCATE_OPTION.name,true)
             })
             dismiss()

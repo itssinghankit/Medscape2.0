@@ -1,9 +1,14 @@
 package com.example.medscape20.presentation.screens.user.collector.customers
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -28,11 +33,24 @@ class CustomersFragment : Fragment() {
     private val viewModel: CustomersViewModel by viewModels()
     private val args: CustomersFragmentArgs by navArgs()
 
+    private lateinit var mapLauncher: ActivityResultLauncher<Intent>
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCustomersBinding.inflate(layoutInflater, container, false)
+
+        mapLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+                //we don't need to do anything here as our map is shown in the app
+//                if (result.resultCode == Activity.RESULT_CANCELED) {
+//                    // Handle the case where the user cancelled the Maps action
+//                    Toast.makeText(context, "Map view was cancelled", Toast.LENGTH_SHORT).show()
+//                }
+            }
+
         return binding.root
     }
 
@@ -59,12 +77,22 @@ class CustomersFragment : Fragment() {
         setFragmentResultListener(CustomerDetailBottomSheetEnum.REQUEST_KEY_DETAILS.name) { _, bundle ->
             val selectedDisposeOption =
                 bundle.getBoolean(CustomerDetailBottomSheetEnum.DISPOSED_OPTION.name)
-            val currentItemPosition = bundle.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)
+            val currentItemPosition =
+                bundle.getInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name)
             val selectedLocateOption =
                 bundle.getBoolean(CustomerDetailBottomSheetEnum.LOCATE_OPTION.name)
 
-            if (selectedLocateOption) viewModel.event(CustomersEvents.OnLocateClicked)
-            if (selectedDisposeOption) viewModel.event(CustomersEvents.OnDisposedClicked(currentItemPosition))
+            if (selectedLocateOption) {
+                openLocationInGoogleMaps(
+                    viewModel.state.value.newFilteredList[currentItemPosition].lat,
+                    viewModel.state.value.newFilteredList[currentItemPosition].lng
+                )
+            }
+            if (selectedDisposeOption) viewModel.event(
+                CustomersEvents.OnDisposedClicked(
+                    currentItemPosition
+                )
+            )
 
         }
 
@@ -111,7 +139,7 @@ class CustomersFragment : Fragment() {
         val bottomSheet = CustomerDetailBottomSheet().apply {
             arguments = Bundle().apply {
                 putSerializable(CustomerDetailBottomSheetEnum.ARGUMENT_KEY_DETAILS.name, customer)
-                putInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name,position)
+                putInt(CustomerDetailBottomSheetEnum.CURRENT_ITEM_POSITION.name, position)
             }
         }
         bottomSheet.show(parentFragmentManager, "detail")
@@ -136,6 +164,22 @@ class CustomersFragment : Fragment() {
         }
         bottomSheet.show(parentFragmentManager, "filter")
 
+    }
+
+    private fun openLocationInGoogleMaps(latitude: Double, longitude: Double) {
+
+        val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        try {
+            mapLauncher.launch(mapIntent)
+        } catch (e: ActivityNotFoundException) {
+            // Google Maps app is not installed, open in browser instead
+            val browserUri = Uri.parse("https://www.google.com/maps?q=$latitude,$longitude")
+            val browserIntent = Intent(Intent.ACTION_VIEW, browserUri)
+            mapLauncher.launch(browserIntent)
+        }
     }
 
     override fun onDestroy() {

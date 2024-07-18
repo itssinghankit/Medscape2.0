@@ -1,6 +1,10 @@
 package com.example.medscape20.domain.usecase.user.collector.customers
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
@@ -193,7 +197,6 @@ class CustomersViewModel @Inject constructor(
         }
     }
 
-
     private fun getAllDumpingPeople() {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -251,6 +254,7 @@ class CustomersViewModel @Inject constructor(
 
         }
     }
+
 }
 
 enum class CustomersTrashFilters {
