@@ -10,20 +10,20 @@ import androidx.fragment.app.setFragmentResult
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
-import com.example.medscape20.databinding.CustomerShowDetailsBottomSheetBinding
+import com.example.medscape20.databinding.BottomSheetCustomerShowDetailsBinding
 import com.example.medscape20.presentation.screens.user.collector.customers.CustomerDetailBottomSheetEnum
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CustomerDetailBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: CustomerShowDetailsBottomSheetBinding
+    private lateinit var binding: BottomSheetCustomerShowDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = CustomerShowDetailsBottomSheetBinding.inflate(layoutInflater)
+        binding = BottomSheetCustomerShowDetailsBinding.inflate(layoutInflater)
         return binding.root
     }
 

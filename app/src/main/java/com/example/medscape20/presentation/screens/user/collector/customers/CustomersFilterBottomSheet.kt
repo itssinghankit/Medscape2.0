@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
-import com.example.medscape20.databinding.CustomersFilterBottomSheetBinding
+import com.example.medscape20.databinding.BottomSheetCustomersFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CustomersFilterBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: CustomersFilterBottomSheetBinding
+    private lateinit var binding: BottomSheetCustomersFilterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -18,7 +18,7 @@ class CustomersFilterBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = CustomersFilterBottomSheetBinding.inflate(layoutInflater)
+        binding = BottomSheetCustomersFilterBinding.inflate(layoutInflater)
         return binding.root
     }
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.medscape20.databinding.ArticlesRecyclerItemBinding
+import com.example.medscape20.databinding.RecyclerItemArticlesBinding
 import com.example.medscape20.domain.models.ArticleModel
 
 
@@ -14,7 +14,7 @@ class ArticlesNewsArticlesAdapter(private val onItemClick: (String) -> Unit) :
     ListAdapter<ArticleModel, ArticlesNewsArticlesAdapter.ViewHolder>(DiffCallback()) {
 
     class ViewHolder(
-        private val binding: ArticlesRecyclerItemBinding,
+        private val binding: RecyclerItemArticlesBinding,
         private val onItemClick: (String) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,7 +34,7 @@ class ArticlesNewsArticlesAdapter(private val onItemClick: (String) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ArticlesRecyclerItemBinding.inflate(
+        val binding = RecyclerItemArticlesBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

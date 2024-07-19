@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.medscape20.databinding.HomeArticlesRecyclerViewItemBinding
+import com.example.medscape20.databinding.RecyclerItemHomeArticlesBinding
 import com.example.medscape20.domain.models.ArticleModel
 
 class HomeNewsArticlesAdapter(private val onItemClick: (String) -> Unit) :
     ListAdapter<ArticleModel, HomeNewsArticlesAdapter.ViewHolder>(DiffUtilCallback()) {
 
     inner class ViewHolder(
-        private val binding: HomeArticlesRecyclerViewItemBinding,
+        private val binding: RecyclerItemHomeArticlesBinding,
         private val onItemClick: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -27,7 +27,7 @@ class HomeNewsArticlesAdapter(private val onItemClick: (String) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = HomeArticlesRecyclerViewItemBinding.inflate(
+        val binding = RecyclerItemHomeArticlesBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

@@ -9,6 +9,7 @@ import com.example.medscape20.domain.usecase.user.collector.maps.CollectorMapGet
 import com.example.medscape20.domain.usecase.user.collector.maps.CollectorMapsDisposedWasteUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,9 +24,16 @@ data class CollectorMapsStates(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
+    val setFilter: Boolean = false,
+    val currentItemPosition: Int? = null,
     val data: List<CustomersResDto> = emptyList(),
     val newFilteredList: List<CustomersResDto> = emptyList(),
-    val currentItemPosition: Int? = null
+)
+
+data class CollectorMapFilters(
+    val showAll:Boolean=false,
+    val range:Double = 0.5,
+    val currentLoc:LatLng?=null
 )
 
 @HiltViewModel
@@ -34,22 +42,34 @@ class CollectorMapsViewModel @Inject constructor(
     private val collectorMapsDisposedWasteUseCase: CollectorMapsDisposedWasteUseCase
 ): ViewModel(){
 
+//    init {
+//        runBlocking {
+//            getAllDumpingPeople()
+//        }
+//
+//    }
+
     private val _state = MutableStateFlow(CollectorMapsStates())
     val state: StateFlow<CollectorMapsStates> = _state.asStateFlow()
 
+    private var _filters=CollectorMapFilters()
+    val filters get() = _filters
+
+
     fun event(action: CollectorMapsEvents){
         when(action){
-            is CollectorMapsEvents.OnNewFiltersSet -> {
-
-            }
             CollectorMapsEvents.ResetErrorMessage -> {
                 _state.update {
                     it.copy(isError = false, errMessage = null)
                 }
             }
 
-            CollectorMapsEvents.GetAllDumpingPeople -> {
-                getAllDumpingPeople()
+            is CollectorMapsEvents.OnNewFiltersSet -> {
+                _state.update { it.copy(setFilter = true) }
+            }
+
+            CollectorMapsEvents.FilterSettedSuccessfully -> {
+                _state.update { it.copy(setFilter = false) }
             }
 
             is CollectorMapsEvents.OnDisposedClicked ->{
@@ -62,10 +82,16 @@ class CollectorMapsViewModel @Inject constructor(
                 )
                 updateDataBase(updates, action.position)
             }
+
+            is CollectorMapsEvents.SaveCurrentLocation -> {
+
+                   _filters = _filters.copy(currentLoc = action.currLoc)
+
+            }
         }
     }
 
-    private fun getAllDumpingPeople() {
+    fun getAllDumpingPeople() {
 
         viewModelScope.launch(Dispatchers.IO) {
             collectorMapGetDumpingPeopleUseCase().collect { result ->
@@ -110,9 +136,10 @@ class CollectorMapsViewModel @Inject constructor(
                         _state.update {
                             withContext(Dispatchers.Main) {
                                 it.copy(
+                                    isLoading = false,
                                     data = result.data,
                                     newFilteredList = result.data,
-                                    isLoading = false
+                                    setFilter = true
                                 )
                             }
                         }
@@ -126,7 +153,7 @@ class CollectorMapsViewModel @Inject constructor(
     private fun updateDataBase(updates: HashMap<String, Any>, position: Int) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val uid = state.value.newFilteredList[position].uid
+            val uid =_state.value.newFilteredList[position].uid
             collectorMapsDisposedWasteUseCase(uid, updates).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {
@@ -173,10 +200,12 @@ class CollectorMapsViewModel @Inject constructor(
                         _state.update {
                             withContext(Dispatchers.Main) {
                                 it.copy(
-                                    newFilteredList = newUpdatedList, isLoading = false
+                                    isLoading = false,
+                                    newFilteredList = newUpdatedList
                                 )
                             }
                         }
+
                     }
                 }
 

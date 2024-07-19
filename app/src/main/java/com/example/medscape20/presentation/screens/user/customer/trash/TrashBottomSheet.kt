@@ -4,25 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResult
 import com.example.medscape20.R
-import com.example.medscape20.databinding.TrashBottomSheetBinding
+import com.example.medscape20.databinding.BottomSheetTrashBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
-import timber.log.Timber
 
 class TrashBottomSheet :
     BottomSheetDialogFragment() {
 
-    lateinit var binding: TrashBottomSheetBinding
+    lateinit var binding: BottomSheetTrashBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = TrashBottomSheetBinding.inflate(layoutInflater)
+        binding = BottomSheetTrashBinding.inflate(layoutInflater)
         return binding.root
     }
 

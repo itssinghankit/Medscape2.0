@@ -3,14 +3,14 @@ package com.example.medscape20.presentation.screens.user.collector.map
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.net.Uri
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -22,6 +22,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -34,7 +35,6 @@ import com.example.medscape20.databinding.FragmentCollectorMapsBinding
 import com.example.medscape20.presentation.screens.auth.maps.MapsFragment
 import com.example.medscape20.presentation.screens.user.collector.common.CustomerDetailBottomSheet
 import com.example.medscape20.presentation.screens.user.collector.customers.CustomerDetailBottomSheetEnum
-import com.example.medscape20.presentation.screens.user.collector.customers.CustomersEvents
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -45,27 +45,30 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
+import com.google.maps.android.SphericalUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.sql.Time
+import kotlin.math.sqrt
 
 @AndroidEntryPoint
 class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    private var _binding:FragmentCollectorMapsBinding?=null
+    private var _binding: FragmentCollectorMapsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel:CollectorMapsViewModel by viewModels()
+    private val viewModel: CollectorMapsViewModel by viewModels()
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -122,7 +125,7 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-       _binding= FragmentCollectorMapsBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentCollectorMapsBinding.inflate(layoutInflater, container, false)
 
         mapLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
@@ -138,18 +141,7 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                for (location in locationResult.locations) {
-                    // Updating UI with location data
-                    animateCameraToCurrLoc(location)
-                }
-            }
-        }
-
-        //the main logic
-        //selected option form details bottom sheet
+        //the main logic - selected option from details bottom sheet
         setFragmentResultListener(CustomerDetailBottomSheetEnum.REQUEST_KEY_DETAILS.name) { _, bundle ->
             val selectedDisposeOption =
                 bundle.getBoolean(CustomerDetailBottomSheetEnum.DISPOSED_OPTION.name)
@@ -158,57 +150,84 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
             val selectedLocateOption =
                 bundle.getBoolean(CustomerDetailBottomSheetEnum.LOCATE_OPTION.name)
 
-            if (selectedLocateOption) {
-                openLocationInGoogleMaps(
+            when {
+                selectedLocateOption -> openLocationInGoogleMaps(
                     viewModel.state.value.newFilteredList[currentItemPosition].lat,
                     viewModel.state.value.newFilteredList[currentItemPosition].lng
                 )
-            }
-            if (selectedDisposeOption) viewModel.event(
-                CollectorMapsEvents.OnDisposedClicked(
-                    currentItemPosition
+
+                selectedDisposeOption -> viewModel.event(
+                    CollectorMapsEvents.OnDisposedClicked(currentItemPosition)
                 )
-            )
+            }
 
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
-                viewModel.state.collect{state->
-                    if(state.newFilteredList.isNotEmpty()){
-                        addAllMarkers(state.newFilteredList)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        Timber.d("caled on map ready")
+        map = googleMap
+        map.setOnMarkerClickListener(this)
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
+        enableMyLocation()
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.state.collect { state ->
+                    //if we removed any user by clicking on dumping button clear markers to re mark all markers
+                    if (state.setFilter) {
+                        if (::map.isInitialized) {
+                            map.clear()  // Clear existing markers
+                        }
+                        addAllMarkers(viewModel.state.value.newFilteredList)
                     }
+
                 }
             }
         }
 
-
-
     }
 
     private fun addAllMarkers(newFilteredList: List<CustomersResDto>) {
-        for (customer in newFilteredList) {
-            val markerOptions = MarkerOptions()
-                .position(LatLng(customer.lat, customer.lng))
-                .title(customer.name)
-            val marker = map.addMarker(markerOptions)
-            marker?.tag = customer.uid  // Storing user ID in the marker's tag for later retrieval
+
+        val customIcon = getIconFromResource(R.drawable.ic_trash)
+//        val builder = LatLngBounds.Builder()
+
+        newFilteredList.forEach { customer ->
+            val position = LatLng(customer.lat, customer.lng)
+            map.addMarker(
+                MarkerOptions()
+                    .position(position)
+                    .title(customer.name)
+                    .icon(customIcon)
+            )?.tag = customer.uid
+
+//            builder.include(position)
         }
 
-        //moving camera to show all markers
-        val builder = LatLngBounds.Builder()
-        for (customer in newFilteredList) {
-            builder.include(LatLng(customer.lat, customer.lng))
-        }
-        val bounds = builder.build()
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+        setMapViewForRadius(viewModel.filters.currentLoc!!, viewModel.filters.range)
+
+        //i am doing this so that i can apply new filter whenever available by changing setFilter state to true again
+        viewModel.event(CollectorMapsEvents.FilterSettedSuccessfully)
+
+//        map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50))
 
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val userId = marker.tag as? String ?: return false
-        val customer = viewModel.state.value.newFilteredList.find { it.uid == userId } ?: return false
+
+        //show bottom sheet containing details of customer
+        val customer =
+            viewModel.state.value.newFilteredList.find { it.uid == marker.tag as? String }
+                ?.takeIf { it.uid == marker.tag } ?: return false
+
         val position = viewModel.state.value.newFilteredList.indexOf(customer)
         val bottomSheet = CustomerDetailBottomSheet().apply {
             arguments = Bundle().apply {
@@ -221,54 +240,33 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         return true
     }
 
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map.setOnMarkerClickListener(this)
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
-        enableMyLocation()
-    }
-
     private fun openLocationInGoogleMaps(latitude: Double, longitude: Double) {
-
         val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
         val mapIntent = Intent(Intent.ACTION_VIEW, uri)
         mapIntent.setPackage("com.google.android.apps.maps")
 
-        try {
+        runCatching {
             mapLauncher.launch(mapIntent)
-        } catch (e: ActivityNotFoundException) {
-            // Google Maps app is not installed, open in browser instead
+        }.onFailure {
+            //if google maps app is not installed
             val browserUri = Uri.parse("https://www.google.com/maps?q=$latitude,$longitude")
-            val browserIntent = Intent(Intent.ACTION_VIEW, browserUri)
-            mapLauncher.launch(browserIntent)
+            mapLauncher.launch(Intent(Intent.ACTION_VIEW, browserUri))
         }
     }
 
-    /* this function checks if the user has granted the location permission,
-       if not, it requests the permission
-       if permission granted location layer will be turned on by map.isMyLocationEnabled = true */
+    //checks permission, if granted ask for turning on location toggle else request permission
     private fun enableMyLocation() {
-
-        //Check if permissions are granted, if so, enable the my location layer
-        if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+        if (requireContext().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) ||
+            requireContext().isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
-
-            //turn on location toggle
             turnOnLocationToggle()
             return
         }
 
-        //request permission if not granted - else part
+        //permission not granted ask for permission
         requestPermissionLauncher.launch(PERMISSIONS_ARRAY)
     }
 
-    //turn on location toggle
     private fun turnOnLocationToggle() {
 
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
@@ -344,6 +342,27 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
             map.isMyLocationEnabled = true
             map.uiSettings.isMyLocationButtonEnabled = false
 
+            //to prevent moving again and again with new loc
+            var runOneTime=true
+
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+
+                    for (location in locationResult.locations) {
+                        if(runOneTime){
+                            // Updating UI with location data
+                            proceedWithCurrentLocation(location)
+                            runOneTime=false
+                        }
+                        Timber.d("location updated")
+                        //updating curr location in viewmodel
+                        viewModel.event(CollectorMapsEvents.SaveCurrentLocation(LatLng(location.latitude, location.longitude)))
+
+                    }
+                }
+            }
+
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
@@ -354,32 +373,51 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
-    fun animateCameraToCurrLoc(location: Location) {
-        //for removing again and again location updates
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    fun proceedWithCurrentLocation(location: Location) {
 
         binding.progressCircular.visibility = View.GONE
 
         val currentLoc = LatLng(location.latitude, location.longitude)
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
+        viewModel.event(CollectorMapsEvents.SaveCurrentLocation(currentLoc))
+
+        viewModel.getAllDumpingPeople()
 
         binding.myLocBtn.setOnClickListener {
-            //setting the camera again to live location but there is a problem if we move
-            //the location will get same as previous one also the last location is not updated
-            //until another app or this app update its location manually
-            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 18f))
-            startLocationUpdates()
+           setMapViewForRadius(viewModel.filters.currentLoc!!,0.5)
         }
 
-        //main logic starts here
-        viewModel.event(CollectorMapsEvents.GetAllDumpingPeople)
-
-        var currentTargetLat = location.latitude
-        var currentTargetLng = location.longitude
-
-
-
     }
+
+    private fun setMapViewForRadius(center: LatLng, radiusInKm: Double) {
+
+        // Create a LatLngBounds that includes the area within the radius
+        val distanceFromCenterToBounds = radiusInKm * 1000 * sqrt(2.0)
+        val southwestCorner = SphericalUtil.computeOffset(center, distanceFromCenterToBounds, 225.0)
+        val northeastCorner = SphericalUtil.computeOffset(center, distanceFromCenterToBounds, 45.0)
+        val bounds = LatLngBounds(southwestCorner, northeastCorner)
+
+        // Move the camera
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
+    }
+
+    private fun getIconFromResource(drawable: Int): BitmapDescriptor {
+        val vectorDrawable = ContextCompat.getDrawable(requireContext(), drawable)
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable!!.intrinsicWidth,
+            vectorDrawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable.draw(canvas)
+
+        val customIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
+        return customIcon
+    }
+
+    //extension function for checking permission is granted or not
+    private fun Context.isPermissionGranted(permission: String) =
+        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
     override fun onResume() {
         //after result launcher result is processed this is invoked and also if it goes to background
@@ -393,13 +431,16 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
     companion object {
         val PERMISSIONS_ARRAY = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
-
-
 
 }

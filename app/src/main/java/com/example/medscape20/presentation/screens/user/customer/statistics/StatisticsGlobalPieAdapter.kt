@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.example.medscape20.databinding.StatisticsPieRecyclerItemBinding
+import com.example.medscape20.databinding.RecyclerItemStatisticsPieBinding
 
-class StatisticsGlobalPieAdapter() :
+class StatisticsGlobalPieAdapter :
     ListAdapter<StatisticsGlobalPieModel, StatisticsGlobalPieAdapter.ViewHolder>(DiffCallback()) {
 
     class ViewHolder(
-        private val binding: StatisticsPieRecyclerItemBinding
+        private val binding: RecyclerItemStatisticsPieBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: StatisticsGlobalPieModel) {
@@ -33,7 +33,7 @@ class StatisticsGlobalPieAdapter() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = StatisticsPieRecyclerItemBinding.inflate(
+        val binding = RecyclerItemStatisticsPieBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
