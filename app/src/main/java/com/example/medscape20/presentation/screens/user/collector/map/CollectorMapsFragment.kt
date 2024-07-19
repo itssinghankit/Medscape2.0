@@ -60,7 +60,6 @@ import com.google.maps.android.SphericalUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.sql.Time
 import kotlin.math.sqrt
 
 @AndroidEntryPoint
@@ -177,6 +176,12 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
             LocationServices.getFusedLocationProviderClient(requireActivity())
         enableMyLocation()
 
+        setFragmentResultListener(CollectorMapsEnum.REQUEST_KEY.name) { _, bundle ->
+            val radius = bundle.getDouble(CollectorMapsEnum.RADIUS.name)
+            val showAll = bundle.getBoolean(CollectorMapsEnum.SHOW_ALL.name)
+            viewModel.event(CollectorMapsEvents.OnNewFiltersSet(radius, showAll))
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
@@ -186,7 +191,12 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                         if (::map.isInitialized) {
                             map.clear()  // Clear existing markers
                         }
+                        binding.progressCircular.visibility = View.VISIBLE
                         addAllMarkers(viewModel.state.value.newFilteredList)
+                    }
+                    when (state.isLoading) {
+                        true -> binding.progressCircular.visibility = View.VISIBLE
+                        false -> binding.progressCircular.visibility = View.GONE
                     }
 
                 }
@@ -198,7 +208,7 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun addAllMarkers(newFilteredList: List<CustomersResDto>) {
 
         val customIcon = getIconFromResource(R.drawable.ic_trash)
-//        val builder = LatLngBounds.Builder()
+        val builder = LatLngBounds.Builder()
 
         newFilteredList.forEach { customer ->
             val position = LatLng(customer.lat, customer.lng)
@@ -209,15 +219,23 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                     .icon(customIcon)
             )?.tag = customer.uid
 
-//            builder.include(position)
+            builder.include(position)
         }
 
-        setMapViewForRadius(viewModel.filters.currentLoc!!, viewModel.filters.range)
+        if (viewModel.filters.showAll) {
+            if (newFilteredList.isNotEmpty()) {
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50))
+            } else {
+                setMapViewForRadius(viewModel.filters.currentLoc!!, 0.5)
+            }
+
+        } else {
+            setMapViewForRadius(viewModel.filters.currentLoc!!, viewModel.filters.radius)
+        }
 
         //i am doing this so that i can apply new filter whenever available by changing setFilter state to true again
         viewModel.event(CollectorMapsEvents.FilterSettedSuccessfully)
 
-//        map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50))
 
     }
 
@@ -343,21 +361,28 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
             map.uiSettings.isMyLocationButtonEnabled = false
 
             //to prevent moving again and again with new loc
-            var runOneTime=true
+            var runOneTime = true
 
             locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult) {
                     super.onLocationResult(locationResult)
 
                     for (location in locationResult.locations) {
-                        if(runOneTime){
+                        if (runOneTime) {
                             // Updating UI with location data
                             proceedWithCurrentLocation(location)
-                            runOneTime=false
+                            runOneTime = false
                         }
                         Timber.d("location updated")
                         //updating curr location in viewmodel
-                        viewModel.event(CollectorMapsEvents.SaveCurrentLocation(LatLng(location.latitude, location.longitude)))
+                        viewModel.event(
+                            CollectorMapsEvents.SaveCurrentLocation(
+                                LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                )
+                            )
+                        )
 
                     }
                 }
@@ -383,7 +408,18 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         viewModel.getAllDumpingPeople()
 
         binding.myLocBtn.setOnClickListener {
-           setMapViewForRadius(viewModel.filters.currentLoc!!,0.5)
+            setMapViewForRadius(viewModel.filters.currentLoc!!, 0.5)
+        }
+
+        //filter bottom sheet
+        binding.filterBtn.setOnClickListener {
+            val bottomSheet = CollectorMapFilterBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putDouble(CollectorMapsEnum.RADIUS.name, viewModel.filters.radius)
+                    putBoolean(CollectorMapsEnum.SHOW_ALL.name, viewModel.filters.showAll)
+                }
+            }
+            bottomSheet.show(parentFragmentManager, "filter_customer_map")
         }
 
     }
@@ -398,6 +434,7 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
         // Move the camera
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
+        binding.progressCircular.visibility = View.GONE
     }
 
     private fun getIconFromResource(drawable: Int): BitmapDescriptor {
@@ -443,4 +480,11 @@ class CollectorMapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         )
     }
 
+}
+
+enum class CollectorMapsEnum {
+    REQUEST_KEY,
+    ARGUMENT_KEY,
+    RADIUS,
+    SHOW_ALL
 }

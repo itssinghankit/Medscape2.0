@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_bottom_sheet"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp">
 
     <View
         android:layout_width="40dp"
@@ -32,14 +32,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Show All"
+            android:id="@+id/show_all_switch"
+            app:thumbTint="@color/selector_switch_thumb_tint"
+            app:trackTint="@color/selector_switch_track_tint"
+            android:checked="true"
+            app:trackDecorationTint="@color/selector_switch_track_decoration_tint"
             android:textColor="@color/white"
             android:textAppearance="?attr/textAppearanceTitleMedium"/>
+
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Area Radius (Km)"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textColor="@color/white" />
@@ -49,6 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:id="@+id/radius_slider"
+        android:layout_marginStart="-4dp"
+        app:trackColorInactive="@color/grey_surface"
         android:valueFrom="0.5"
         android:valueTo="100.0" />
 

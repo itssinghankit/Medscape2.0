@@ -32,7 +32,7 @@ data class CollectorMapsStates(
 
 data class CollectorMapFilters(
     val showAll:Boolean=false,
-    val range:Double = 0.5,
+    val radius:Double = 0.5,
     val currentLoc:LatLng?=null
 )
 
@@ -41,13 +41,6 @@ class CollectorMapsViewModel @Inject constructor(
     private val collectorMapGetDumpingPeopleUseCase: CollectorMapGetDumpingPeopleUseCase,
     private val collectorMapsDisposedWasteUseCase: CollectorMapsDisposedWasteUseCase
 ): ViewModel(){
-
-//    init {
-//        runBlocking {
-//            getAllDumpingPeople()
-//        }
-//
-//    }
 
     private val _state = MutableStateFlow(CollectorMapsStates())
     val state: StateFlow<CollectorMapsStates> = _state.asStateFlow()
@@ -65,6 +58,7 @@ class CollectorMapsViewModel @Inject constructor(
             }
 
             is CollectorMapsEvents.OnNewFiltersSet -> {
+                _filters = _filters.copy(radius = action.radius, showAll = action.showAll)
                 _state.update { it.copy(setFilter = true) }
             }
 
@@ -201,7 +195,8 @@ class CollectorMapsViewModel @Inject constructor(
                             withContext(Dispatchers.Main) {
                                 it.copy(
                                     isLoading = false,
-                                    newFilteredList = newUpdatedList
+                                    newFilteredList = newUpdatedList,
+                                    setFilter = true
                                 )
                             }
                         }
