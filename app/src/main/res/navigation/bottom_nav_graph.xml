@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
@@ -21,10 +21,13 @@
         android:id="@+id/accountFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" >
+        tools:layout="@layout/fragment_account">
         <action
             android:id="@+id/action_accountFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_accountDetailsFragment"
+            app:destination="@id/accountDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -35,7 +38,7 @@
         android:id="@+id/articlesFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.articles.ArticlesFragment"
         android:label="fragment_articles"
-        tools:layout="@layout/fragment_articles" >
+        tools:layout="@layout/fragment_articles">
         <action
             android:id="@+id/action_articlesFragment_to_webViewArticleFragment"
             app:destination="@id/webViewArticleFragment" />
@@ -49,7 +52,7 @@
         android:id="@+id/categoryFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.home.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" >
+        tools:layout="@layout/fragment_category">
         <argument
             android:name="category"
             app:argType="string" />
@@ -62,9 +65,20 @@
         android:id="@+id/webViewArticleFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.webview_article.WebViewArticleFragment"
         android:label="fragment_webview_article"
-        tools:layout="@layout/fragment_webview_article" >
+        tools:layout="@layout/fragment_webview_article">
         <argument
             android:name="url"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/accountDetailsFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.account_details.AccountDetailsFragment"
+        android:label="fragment_account_details"
+        tools:layout="@layout/fragment_account_details" >
+        <argument
+            android:name="details"
+            app:argType="com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto" />
+
+    </fragment>
+
 </navigation>

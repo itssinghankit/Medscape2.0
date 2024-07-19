@@ -1,20 +1,17 @@
 package com.example.medscape20.presentation.screens.user.customer.account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.anychart.AnyChart
-import com.anychart.AnyChartView
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.bumptech.glide.Glide
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +20,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AccountFragment : Fragment() {
 
-    private var _binding:FragmentAccountBinding?=null
+    private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AccountViewModel by viewModels()
@@ -33,7 +30,10 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding=FragmentAccountBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentAccountBinding.inflate(layoutInflater, container, false)
+        binding.viewModel=viewModel
+        binding.lifecycleOwner=viewLifecycleOwner
+
         return binding.root
     }
 
@@ -44,24 +44,53 @@ class AccountFragment : Fragment() {
             viewModel.event(AccountEvents.OnSignOutClicked)
         }
 
+        binding.accountDetails.setOnClickListener{
+            navigateToShowDetailsFragment()
+        }
+
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.state.collect{state->
-                    if(state.navigateToAuth){
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    if (state.navigateToAuth) {
                         navigateToAuth()
+                    }
+                    when (state.isLoading) {
+                        true -> {
+                            binding.mainView.visibility = View.GONE
+                            binding.progressCircular.visibility = View.VISIBLE
+                        }
+
+                        false -> {
+                            binding.mainView.visibility = View.VISIBLE
+                            binding.progressCircular.visibility = View.GONE
+                        }
+                    }
+                    state.avatar?.let {
+                        Glide.with(requireContext()).load(it).into(binding.avatar)
                     }
                 }
             }
         }
     }
 
+    private fun navigateToShowDetailsFragment() {
+        viewModel.state.value.userDetails?.let {
+            val action=AccountFragmentDirections.actionAccountFragmentToAccountDetailsFragment(it)
+            findNavController().navigate(action)
+        }
+    }
+
     private fun navigateToAuth() {
-        findNavController().navigate(R.id.action_accountFragment_to_loginFragment,null,NavOptions.Builder().setPopUpTo(R.id.accountFragment,true).build())
+        findNavController().navigate(
+            R.id.action_accountFragment_to_loginFragment,
+            null,
+            NavOptions.Builder().setPopUpTo(R.id.accountFragment, true).build()
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding=null
+        _binding = null
     }
 
 }

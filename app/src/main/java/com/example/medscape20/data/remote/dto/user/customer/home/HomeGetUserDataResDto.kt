@@ -1,5 +1,9 @@
 package com.example.medscape20.data.remote.dto.user.customer.home
 
+import android.os.Parcelable
+import java.io.Serializable
+
+
 data class HomeGetUserDataResDto(
     val address: String?=null,
     val avatar: String?=null,
@@ -14,4 +18,4 @@ data class HomeGetUserDataResDto(
     val state: String?=null,
     val uid: String?=null,
     val locality: String?=null
-)
+):Serializable

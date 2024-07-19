@@ -132,7 +132,7 @@ class LoginFragment : Fragment() {
 
             findNavController().navigate(
 //                R.id.action_loginFragment_to_userFragment,
-                R.id.action_loginFragment_to_collectorHomeFragment,
+                R.id.action_loginFragment_to_userFragment,
                 null,
                 NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
             )

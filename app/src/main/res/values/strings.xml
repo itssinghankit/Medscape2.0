@@ -62,4 +62,17 @@
     <string name="trash_board">Trash board</string>
     <string name="image">image</string>
     <string name="filter_button">filter button</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_details">Change Details</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="update_details">Update Details</string>
+    <string name="account_detail_option">account detail option</string>
+    <string name="account_details">Account Details</string>
+    <string name="avatar">avatar</string>
+    <string name="account">Account</string>
+    <string name="your_account">Your Account</string>
+    <string name="change_password_button">change password button</string>
+    <string name="change_details_button">change details button</string>
+    <string name="change_avatar_button">change avatar button</string>
+    <string name="sign_out">Sign out</string>
 </resources>
