@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_accountFragment_to_accountDetailsFragment"
             app:destination="@id/accountDetailsFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_accountChangeAvatarFragment"
+            app:destination="@id/accountChangeAvatarFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -80,5 +83,10 @@
             app:argType="com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto" />
 
     </fragment>
+    <fragment
+        android:id="@+id/accountChangeAvatarFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.change_avatar.AccountChangeAvatarFragment"
+        android:label="fragment_account_change_avatar"
+        tools:layout="@layout/fragment_account_change_avatar" />
 
 </navigation>

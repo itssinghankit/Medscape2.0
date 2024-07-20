@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAvatarBinding
+import com.example.medscape20.presentation.screens.common.ImagePickerBottomSheet
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

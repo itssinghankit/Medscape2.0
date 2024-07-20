@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.auth.avatar
+package com.example.medscape20.presentation.screens.common
 
 import android.Manifest
 import android.app.AlertDialog
@@ -17,7 +17,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 
 
 class ImagePickerBottomSheet() : BottomSheetDialogFragment() {
@@ -33,12 +32,13 @@ class ImagePickerBottomSheet() : BottomSheetDialogFragment() {
             }
         }
 
-    // Launcher for camera image capture
+    //if user denies camera permission
     private val openAppDetailsLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
         }
 
+    // Launcher for camera image capture
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success: Boolean ->
@@ -50,6 +50,7 @@ class ImagePickerBottomSheet() : BottomSheetDialogFragment() {
         }
     }
 
+    //camera permission launcher
     private val takeCameraPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -101,7 +102,7 @@ class ImagePickerBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun handleImageSelection() {
-        //to send it back to avatar screen
+        //to send it back to previous screen
         setFragmentResult("avatar", Bundle().apply {
             putString("avatar_uri", imageUri.toString())
         })

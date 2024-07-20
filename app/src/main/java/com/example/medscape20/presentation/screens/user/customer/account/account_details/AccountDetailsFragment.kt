@@ -36,6 +36,10 @@ class AccountDetailsFragment : Fragment() {
         binding.apply {
             name.text = args.details.name
             email.text = args.details.email
+            gender.text= args.details.gender?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString() }
+            address.text= args.details.address?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString() }
+            city.text=args.details.city?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString()  }
+            state.text=args.details.state?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString()  }
             Glide.with(requireContext())
                 .load(args.details.avatar)
                 .into(avatar)
