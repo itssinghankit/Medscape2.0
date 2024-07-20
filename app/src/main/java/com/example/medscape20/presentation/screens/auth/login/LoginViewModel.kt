@@ -9,8 +9,8 @@ import com.example.medscape20.data.remote.dto.auth.login.LoginReqDto
 import com.example.medscape20.domain.usecase.auth.login.LoginGetUserDataUseCase
 import com.example.medscape20.domain.usecase.auth.login.LoginSaveDataUseCase
 import com.example.medscape20.domain.usecase.auth.login.LoginUseCase
-import com.example.medscape20.domain.usecase.auth.login.LoginValidateEmailUseCase
-import com.example.medscape20.domain.usecase.auth.login.LoginValidatePasswordUseCase
+import com.example.medscape20.domain.usecase.common.validation.ValidateEmailUseCase
+import com.example.medscape20.domain.usecase.common.validation.ValidatePasswordUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.example.medscape20.util.EmailError
@@ -37,8 +37,8 @@ data class LoginStates(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginValidateEmailUseCase: LoginValidateEmailUseCase,
-    private val loginValidatePasswordUseCase: LoginValidatePasswordUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val loginUseCase: LoginUseCase,
     private val loginGetUserDataUseCase: LoginGetUserDataUseCase,
     private val firebaseAuth: FirebaseAuth,
@@ -55,7 +55,7 @@ class LoginViewModel @Inject constructor(
 
         when (action) {
             is LoginEvents.OnEmailChanged -> {
-                when (val result = loginValidateEmailUseCase(action.email)) {
+                when (val result = validateEmailUseCase(action.email)) {
                     is ApiResult.Error -> {
                         when (result.error) {
                             EmailError.EMPTY -> {
@@ -87,7 +87,7 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginEvents.OnPassChange -> {
-                when (val result = loginValidatePasswordUseCase(action.pass)) {
+                when (val result = validatePasswordUseCase(action.pass)) {
                     is ApiResult.Error -> {
                         when (result.error) {
                             PassError.EMPTY -> {

@@ -197,19 +197,35 @@ class UserRepositoryImplementation @Inject constructor(
     }.flowOn(Dispatchers.IO)
     //TODO: }.filter { it.dump }
 
-    override suspend fun getDumpingPeoples(): Flow<ApiResult<ArrayList<CustomersResDto>, DataError.Network>> = flow {
-        try {
-            emit(ApiResult.Loading)
-            val dataRef = firebaseDatabase.getReference("/users")
-            val data = dataRef.get().await()
-            val response =
-                data.children.mapNotNull { it.getValue(CustomersResDto::class.java) }.filter { it.dump } as ArrayList
+    override suspend fun getDumpingPeoples(): Flow<ApiResult<ArrayList<CustomersResDto>, DataError.Network>> =
+        flow {
+            try {
+                emit(ApiResult.Loading)
+                val dataRef = firebaseDatabase.getReference("/users")
+                val data = dataRef.get().await()
+                val response =
+                    data.children.mapNotNull { it.getValue(CustomersResDto::class.java) }
+                        .filter { it.dump } as ArrayList
 
-            emit(ApiResult.Success(response))
-        } catch (e: Exception) {
-            Timber.e(e)
-            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
-        }
-    }.flowOn(Dispatchers.IO)
+                emit(ApiResult.Success(response))
+            } catch (e: Exception) {
+                emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+            }
+        }.flowOn(Dispatchers.IO)
+
+    override suspend fun updatePasswordLoggedIn(password: String): Flow<ApiResult<Unit, DataError.Network>> =
+        flow {
+            try {
+                emit(ApiResult.Loading)
+                val user = firebaseAuth.currentUser
+                if (user != null && password.isNotEmpty()) {
+                    user.updatePassword(password).await()
+                }
+
+                emit(ApiResult.Success(Unit))
+            } catch (e: Exception) {
+                emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+            }
+        }.flowOn(Dispatchers.IO)
 
 }

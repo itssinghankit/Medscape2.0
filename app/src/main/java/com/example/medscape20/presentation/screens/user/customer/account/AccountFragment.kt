@@ -63,6 +63,10 @@ class AccountFragment : Fragment() {
             navigateToChangeAvatarFragment()
         }
 
+        binding.changePass.setOnClickListener{
+            navigateToChangePasswordFragment()
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
@@ -91,6 +95,10 @@ class AccountFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun navigateToChangePasswordFragment() {
+        findNavController().navigate(R.id.action_accountFragment_to_accountChangePasswordFragment)
     }
 
     private fun navigateToChangeAvatarFragment() {

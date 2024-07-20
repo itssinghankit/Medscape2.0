@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_accountFragment_to_accountChangeAvatarFragment"
             app:destination="@id/accountChangeAvatarFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_accountChangePasswordFragment"
+            app:destination="@id/accountChangePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -93,5 +96,9 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/accountChangePasswordFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.change_password.AccountChangePasswordFragment"
+        android:label="AccountChangePasswordFragment" />
 
 </navigation>

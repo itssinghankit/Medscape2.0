@@ -26,5 +26,5 @@ interface UserRepository {
     suspend fun isDumped(uid: String): Flow<ApiResult<TrashIsDumpedModel, DataError.Network>>
     suspend fun getDumpingPeopleCount(city:String,state:String):Flow<ApiResult<CustomerHomePeopleCountModel,DataError.Network>>
     suspend fun getDumpingPeoples():Flow<ApiResult<ArrayList<CustomersResDto>,DataError.Network>>
-
+    suspend fun updatePasswordLoggedIn(password:String):Flow<ApiResult<Unit,DataError.Network>>
 }
