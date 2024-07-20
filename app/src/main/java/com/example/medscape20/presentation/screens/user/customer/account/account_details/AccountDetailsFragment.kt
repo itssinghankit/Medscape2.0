@@ -22,7 +22,9 @@ class AccountDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding= FragmentAccountDetailsBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentAccountDetailsBinding.inflate(layoutInflater, container, false)
+        container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility = View.GONE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility = View.GONE
         return binding.root
     }
 
@@ -36,10 +38,14 @@ class AccountDetailsFragment : Fragment() {
         binding.apply {
             name.text = args.details.name
             email.text = args.details.email
-            gender.text= args.details.gender?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString() }
-            address.text= args.details.address?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString() }
-            city.text=args.details.city?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString()  }
-            state.text=args.details.state?.replaceFirstChar { if(it.isLowerCase()) it.titlecase() else it.toString()  }
+            gender.text =
+                args.details.gender?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            address.text =
+                args.details.address?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            city.text =
+                args.details.city?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            state.text =
+                args.details.state?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
             Glide.with(requireContext())
                 .load(args.details.avatar)
                 .into(avatar)

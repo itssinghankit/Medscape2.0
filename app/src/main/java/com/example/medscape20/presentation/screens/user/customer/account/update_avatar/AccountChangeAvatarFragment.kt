@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_avatar
+package com.example.medscape20.presentation.screens.user.customer.account.update_avatar
 
 import android.net.Uri
 import android.os.Bundle
@@ -17,7 +17,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAccountChangeAvatarBinding
-import com.example.medscape20.presentation.screens.auth.avatar.AvatarEvents
 import com.example.medscape20.presentation.screens.common.ImagePickerBottomSheet
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +36,9 @@ class AccountChangeAvatarFragment : Fragment() {
     ): View {
 
         _binding= FragmentAccountChangeAvatarBinding.inflate(layoutInflater, container, false)
+        container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility=View.GONE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility=View.GONE
+
         return binding.root
     }
 

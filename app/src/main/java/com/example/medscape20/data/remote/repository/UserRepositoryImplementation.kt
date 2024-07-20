@@ -162,6 +162,7 @@ class UserRepositoryImplementation @Inject constructor(
             emit(ApiResult.Success(Unit))
 
         } catch (e: Exception) {
+            Timber.e(e)
             emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
         }
     }.flowOn(Dispatchers.IO)

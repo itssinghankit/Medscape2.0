@@ -3,8 +3,8 @@ package com.example.medscape20.presentation.screens.auth.signup_details
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.example.medscape20.R
-import com.example.medscape20.domain.usecase.auth.signup_details.MobileValidationUseCase
-import com.example.medscape20.domain.usecase.auth.signup_details.NameValidationUseCase
+import com.example.medscape20.domain.usecase.common.validation.MobileValidationUseCase
+import com.example.medscape20.domain.usecase.common.validation.NameValidationUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.MobileError
 import com.example.medscape20.util.NameError

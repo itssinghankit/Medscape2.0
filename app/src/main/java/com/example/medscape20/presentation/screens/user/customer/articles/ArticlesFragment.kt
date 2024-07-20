@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentArticlesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,6 +36,9 @@ class ArticlesFragment : Fragment(){
         _binding = FragmentArticlesBinding.inflate(layoutInflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility=View.VISIBLE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility=View.VISIBLE
 
         return binding.root
     }

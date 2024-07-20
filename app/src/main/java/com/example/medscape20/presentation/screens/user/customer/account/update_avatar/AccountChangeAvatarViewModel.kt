@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_avatar
+package com.example.medscape20.presentation.screens.user.customer.account.update_avatar
 
 import android.net.Uri
 import androidx.annotation.StringRes
@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveAvatarReqDto
-import com.example.medscape20.domain.usecase.user.customer.account.change_avatar.AccountUpdateAvatarInDbUseCase
-import com.example.medscape20.domain.usecase.user.customer.account.change_avatar.AccountUpdateAvatarUseCase
+import com.example.medscape20.domain.usecase.user.customer.account.update_avatar.AccountUpdateAvatarInDbUseCase
+import com.example.medscape20.domain.usecase.user.customer.account.update_avatar.AccountUpdateAvatarUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.google.firebase.auth.FirebaseAuth

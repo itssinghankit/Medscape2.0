@@ -1,12 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.example.medscape20.presentation.screens.user.customer.account.update_password.AccountChangePasswordViewModel" />
-
+            <variable
+                name="viewModel"
+                type="com.example.medscape20.presentation.screens.user.customer.account.update_details.AccountUpdateDetailsViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_semibold"
                     android:paddingStart="8dp"
-                    android:text="@string/change_password"
+                    android:text="@string/update_details"
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     android:textColor="@color/white" />
 
@@ -59,7 +59,7 @@
             android:id="@+id/main_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="24dp"
+            android:paddingTop="32dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -73,79 +73,168 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/enter_current_password"
+                    android:text="Update the neccessary details you want"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="Name"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:textColor="@color/grey_txt" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/curr_pass_cont"
+                    android:id="@+id/name_cont"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:boxStrokeErrorColor="@color/err_col"
                     app:boxStrokeWidth="1dp"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/grey_txt"
                     app:cursorErrorColor="@color/err_col"
                     app:errorIconTint="@color/err_col"
                     app:errorTextColor="@color/err_col">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/curr_password"
+                        android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/lato_regular"
                         android:textAppearance="?attr/textAppearanceBodyLarge"
                         android:maxLines="1"
-                        android:text="@={viewModel.currentPassword}"
-                        android:textColor="@color/white"/>
+                        android:text="@={viewModel.name}"
+                        android:textColor="@color/white" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Email"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="@color/grey_txt" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_cont"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:boxStrokeErrorColor="@color/err_col"
+                    app:boxStrokeWidth="1dp"
+                    app:cursorErrorColor="@color/err_col"
+                    app:errorIconTint="@color/err_col"
+                    app:errorTextColor="@color/err_col">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:maxLines="1"
+                        android:text="@={viewModel.email}"
+                        android:textColor="@color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/enter_new_password"
+                    android:layout_marginTop="24dp"
+                    android:text="Mobile"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:textColor="@color/grey_txt" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pass_cont"
+                    android:id="@+id/mobile_cont"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:boxStrokeErrorColor="@color/err_col"
                     app:boxStrokeWidth="1dp"
-                    app:passwordToggleTint="@color/grey_txt"
-                    app:passwordToggleEnabled="true"
                     app:cursorErrorColor="@color/err_col"
                     app:errorIconTint="@color/err_col"
                     app:errorTextColor="@color/err_col">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/new_password"
+                        android:id="@+id/mobile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/lato_regular"
+                        android:inputType="number"
                         android:textAppearance="?attr/textAppearanceBodyLarge"
                         android:maxLines="1"
-                        android:text="@={viewModel.newPassword}"
+                        android:text="@={viewModel.mobile}"
                         android:textColor="@color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Address"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="@color/grey_txt" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/address_cont"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeErrorColor="@color/err_col"
+                        app:boxStrokeWidth="1dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toStartOf="@id/add_loc_btn"
+                        app:cursorErrorColor="@color/err_col"
+                        app:errorIconTint="@color/err_col"
+                        app:errorTextColor="@color/err_col">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:maxLines="3"
+                            android:ellipsize="end"
+                            android:enabled="false"
+                            android:text="@{viewModel.state.address}"
+                            android:textColor="@color/white" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageButton
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:id="@+id/add_loc_btn"
+                        android:background="@drawable/bg_txt_fld"
+                        android:backgroundTint="@color/primary_green_txt_btn"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:src="@drawable/ic_add_location"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/black" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/change_pass_btn"
+                    android:id="@+id/update_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="64dp"
                     android:backgroundTint="@color/primary_green_txt_btn"
                     android:padding="16dp"
-                    android:text="@string/change_password"
+                    android:text="Update"
                     android:textColor="@color/black_txt_bg_btn"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     app:cornerRadius="8dp" />
@@ -159,7 +248,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:layout_anchor="@id/change_pass_btn"
+            app:layout_anchor="@id/update_btn"
             app:layout_anchorGravity="center"
             android:indeterminateTint="@color/dark_green_splash_txt_bg"
             android:visibility="gone" />

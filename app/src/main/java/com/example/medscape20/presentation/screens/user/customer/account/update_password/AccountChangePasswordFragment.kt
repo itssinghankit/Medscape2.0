@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_password
+package com.example.medscape20.presentation.screens.user.customer.account.update_password
 
 import android.app.Activity
 import android.content.Context
@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAccountChangePasswordBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +38,8 @@ class AccountChangePasswordFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         this.container = container!!
+        container.rootView.findViewById<View>(R.id.bottotmAppBar).visibility=View.GONE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility=View.GONE
 
         return binding.root
     }

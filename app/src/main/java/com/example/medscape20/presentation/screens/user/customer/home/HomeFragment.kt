@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -15,9 +14,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentHomeBinding
-import com.example.medscape20.presentation.screens.user.customer.account.AccountEvents
-import com.example.medscape20.presentation.screens.user.customer.account.change_avatar.UpdateAvatarEnum
+import com.example.medscape20.presentation.screens.user.customer.account.update_avatar.UpdateAvatarEnum
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,6 +37,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility=View.VISIBLE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility=View.VISIBLE
 
         return binding.root
     }

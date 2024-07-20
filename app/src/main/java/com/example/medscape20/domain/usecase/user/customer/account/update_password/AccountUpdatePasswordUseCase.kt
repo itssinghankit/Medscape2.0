@@ -1,4 +1,4 @@
-package com.example.medscape20.domain.usecase.user.customer.account.change_password
+package com.example.medscape20.domain.usecase.user.customer.account.update_password
 
 import com.example.medscape20.domain.repository.UserRepository
 import javax.inject.Inject

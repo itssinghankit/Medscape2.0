@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_avatar
+package com.example.medscape20.presentation.screens.user.customer.account.update_avatar
 
 import android.net.Uri
 

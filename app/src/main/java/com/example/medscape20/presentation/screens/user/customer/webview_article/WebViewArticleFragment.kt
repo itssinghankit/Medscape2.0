@@ -12,6 +12,7 @@ import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentWebviewArticleBinding
 
 
@@ -27,6 +28,8 @@ class WebViewArticleFragment : Fragment() {
     ): View {
 
         _binding = FragmentWebviewArticleBinding.inflate(layoutInflater, container, false)
+        container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility=View.GONE
+        container.rootView.findViewById<View>(R.id.trash_fab).visibility=View.GONE
         return binding.root
     }
 

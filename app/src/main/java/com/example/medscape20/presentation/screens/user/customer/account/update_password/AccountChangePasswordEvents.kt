@@ -1,4 +1,4 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_password
+package com.example.medscape20.presentation.screens.user.customer.account.update_password
 
 sealed class AccountChangePasswordEvents {
     data object ResetMessage:AccountChangePasswordEvents()

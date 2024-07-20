@@ -1,16 +1,14 @@
-package com.example.medscape20.presentation.screens.user.customer.account.change_password
+package com.example.medscape20.presentation.screens.user.customer.account.update_password
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medscape20.R
 import com.example.medscape20.domain.usecase.common.validation.ValidatePasswordUseCase
-import com.example.medscape20.domain.usecase.user.customer.account.change_password.AccountUpdatePasswordUseCase
+import com.example.medscape20.domain.usecase.user.customer.account.update_password.AccountUpdatePasswordUseCase
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
 import com.example.medscape20.util.PassError
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

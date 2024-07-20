@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_accountFragment_to_accountChangePasswordFragment"
             app:destination="@id/accountChangePasswordFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_accountUpdateDetailsFragment"
+            app:destination="@id/accountUpdateDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -88,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountChangeAvatarFragment"
-        android:name="com.example.medscape20.presentation.screens.user.customer.account.change_avatar.AccountChangeAvatarFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.update_avatar.AccountChangeAvatarFragment"
         android:label="fragment_account_change_avatar"
         tools:layout="@layout/fragment_account_change_avatar" >
         <argument
@@ -98,11 +101,27 @@
     </fragment>
     <fragment
         android:id="@+id/accountChangePasswordFragment"
-        android:name="com.example.medscape20.presentation.screens.user.customer.account.change_password.AccountChangePasswordFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.update_password.AccountChangePasswordFragment"
         android:label="AccountChangePasswordFragment" >
         <argument
             android:name="email"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/accountUpdateDetailsFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.account.update_details.AccountUpdateDetailsFragment"
+        android:label="AccountUpdateDetailsFragment" >
+        <argument
+            android:name="details"
+            app:argType="com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto" />
+        <action
+            android:id="@+id/action_accountUpdateDetailsFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.medscape20.presentation.screens.auth.maps.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 
 </navigation>

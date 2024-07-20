@@ -1,4 +1,4 @@
-package com.example.medscape20.domain.usecase.user.customer.account.change_avatar
+package com.example.medscape20.domain.usecase.user.customer.account.update_avatar
 
 import com.example.medscape20.data.remote.dto.auth.avatar.AvatarSaveAvatarReqDto
 import com.example.medscape20.domain.repository.AuthRepository

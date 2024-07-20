@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_colors"
     android:fitsSystemWindows="true"
-    tools:context=".presentation.screens.user.customer.account.change_avatar.AccountChangeAvatarFragment">
+    tools:context=".presentation.screens.user.customer.account.update_avatar.AccountChangeAvatarFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

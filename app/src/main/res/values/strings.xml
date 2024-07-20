@@ -83,5 +83,8 @@
     <string name="update">Update</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="password_updated_successfully">Password Updated Successfully</string>
+    <string name="details_updated_successfully">Details Updated Successfully</string>
     <string name="enter_current_password">Enter current password</string>
+    <string name="update_avatar">Update Avatar</string>
+    <string name="update_password">Update Password</string>
 </resources>

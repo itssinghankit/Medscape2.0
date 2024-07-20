@@ -1,4 +1,4 @@
-package com.example.medscape20.domain.usecase.auth.signup_details
+package com.example.medscape20.domain.usecase.common.validation
 
 import com.example.medscape20.util.NameError
 import com.example.medscape20.util.ApiResult
