@@ -65,6 +65,10 @@ class AccountChangeAvatarFragment : Fragment() {
             viewModel.event(AccountChangeAvatarEvents.OnUpdateAvatarClicked)
         }
 
+        binding.backBtn.setOnClickListener{
+            findNavController().navigateUp()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
 

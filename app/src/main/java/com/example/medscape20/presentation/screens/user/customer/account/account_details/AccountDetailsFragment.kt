@@ -46,6 +46,7 @@ class AccountDetailsFragment : Fragment() {
                 args.details.city?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
             state.text =
                 args.details.state?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            mobile.text=args.details.mobile
             Glide.with(requireContext())
                 .load(args.details.avatar)
                 .into(avatar)

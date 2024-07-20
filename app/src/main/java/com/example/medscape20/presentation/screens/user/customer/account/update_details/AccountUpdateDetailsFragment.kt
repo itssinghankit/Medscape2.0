@@ -88,9 +88,6 @@ class AccountUpdateDetailsFragment : Fragment() {
         binding.name.doOnTextChanged { text, _, _, _ ->
             viewModel.event(AccountUpdateDetailsEvents.ValidateName(text.toString()))
         }
-        binding.email.doOnTextChanged { text, _, _, _ ->
-            viewModel.event(AccountUpdateDetailsEvents.ValidateEmail(text.toString()))
-        }
         binding.mobile.doOnTextChanged { text, _, _, _ ->
             viewModel.event(AccountUpdateDetailsEvents.ValidateMobile(text.toString()))
         }
@@ -107,14 +104,6 @@ class AccountUpdateDetailsFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 viewModel.state.collect { state ->
-
-                    //email validation
-                    if (!state.isEmailValid) {
-                        binding.emailCont.error = getString(state.emailError!!)
-                    } else {
-                        binding.emailCont.error = null
-                        binding.emailCont.isErrorEnabled = false
-                    }
 
                     //name validation
                     if (!state.isNameValid) {
@@ -170,7 +159,6 @@ class AccountUpdateDetailsFragment : Fragment() {
                     UpdateAccountDetailsEnum.ACCOUNT_DETAILS_UPDATED_ARGUMENT_KEY.name,
                     AccountUpdatedDetails(
                         name = viewModel.name.value,
-                        email = viewModel.email.value,
                         mobile = viewModel.mobile.value,
                         address = viewModel.state.value.state!!,
                         lat = viewModel.state.value.lat!!,
@@ -211,7 +199,6 @@ class AccountUpdateDetailsFragment : Fragment() {
 
 data class AccountUpdatedDetails(
     val name: String,
-    val email: String,
     val mobile: String,
     val address: String,
     val lat: Double,
@@ -224,3 +211,4 @@ enum class UpdateAccountDetailsEnum {
     ACCOUNT_DETAILS_UPDATED_REQUEST_KEY,
     ACCOUNT_DETAILS_UPDATED_ARGUMENT_KEY
 }
+//TODO: landing to home instead of account page

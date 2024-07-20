@@ -111,37 +111,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Email"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:textColor="@color/grey_txt" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/email_cont"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:boxStrokeErrorColor="@color/err_col"
-                    app:boxStrokeWidth="1dp"
-                    app:cursorErrorColor="@color/err_col"
-                    app:errorIconTint="@color/err_col"
-                    app:errorTextColor="@color/err_col">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textAppearance="?attr/textAppearanceBodyLarge"
-                        android:maxLines="1"
-                        android:text="@={viewModel.email}"
-                        android:textColor="@color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:text="Mobile"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:textColor="@color/grey_txt" />

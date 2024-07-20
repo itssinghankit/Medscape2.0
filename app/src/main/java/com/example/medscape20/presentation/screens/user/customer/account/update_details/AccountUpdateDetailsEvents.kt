@@ -5,7 +5,6 @@ import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserData
 sealed class AccountUpdateDetailsEvents {
     data object ResetSnackbarMessage : AccountUpdateDetailsEvents()
     data class ValidateName(val name: String) : AccountUpdateDetailsEvents()
-    data class ValidateEmail(val email: String) : AccountUpdateDetailsEvents()
     data class ValidateMobile(val mobile: String) : AccountUpdateDetailsEvents()
     data class SaveDetails(val data:HomeGetUserDataResDto): AccountUpdateDetailsEvents()
     data class OnAddressChanged(

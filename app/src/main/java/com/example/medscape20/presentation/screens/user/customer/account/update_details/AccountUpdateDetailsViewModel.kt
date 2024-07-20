@@ -32,8 +32,6 @@ data class AccountUpdateDetailsStates(
     val isMobileValid: Boolean = true,
     @StringRes val nameError: Int? = null,
     val isNameValid: Boolean = true,
-    @StringRes val emailError: Int? = null,
-    val isEmailValid: Boolean = true,
     val city: String? = null,
     val state: String? = null,
     val address: String? = null,
@@ -45,7 +43,6 @@ data class AccountUpdateDetailsStates(
 @HiltViewModel
 class AccountUpdateDetailsViewModel @Inject constructor(
     private val validateNameValidationUseCase: NameValidationUseCase,
-    private val validateEmailValidationUseCase: ValidateEmailUseCase,
     private val validateMobileValidationUseCase: MobileValidationUseCase,
     private val accountUpdateDetailsUseCase: AccountUpdateDetailsUseCase,
     private val firebaseAuth: FirebaseAuth
@@ -55,7 +52,6 @@ class AccountUpdateDetailsViewModel @Inject constructor(
     val state: StateFlow<AccountUpdateDetailsStates> = _state.asStateFlow()
 
     val name = MutableStateFlow("")
-    val email = MutableStateFlow("")
     val mobile = MutableStateFlow("")
 
     var flag = true
@@ -64,38 +60,6 @@ class AccountUpdateDetailsViewModel @Inject constructor(
         when (action) {
             AccountUpdateDetailsEvents.ResetSnackbarMessage -> {
                 _state.value = _state.value.copy(snackBarMessage = null)
-            }
-
-            is AccountUpdateDetailsEvents.ValidateEmail -> {
-                when (val result = validateEmailValidationUseCase(action.email)) {
-                    is ApiResult.Error -> {
-                        when (result.error) {
-                            EmailError.EMPTY -> {
-                                _state.update {
-                                    it.copy(
-                                        isEmailValid = false,
-                                        emailError = R.string.error_empty
-                                    )
-                                }
-                            }
-
-                            EmailError.EMAIL_ERROR -> {
-                                _state.update {
-                                    it.copy(
-                                        isEmailValid = false,
-                                        emailError = R.string.error_email
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    else -> {
-                        _state.update {
-                            it.copy(isEmailValid = true, emailError = null)
-                        }
-                    }
-                }
             }
 
             is AccountUpdateDetailsEvents.ValidateMobile -> {
@@ -196,7 +160,6 @@ class AccountUpdateDetailsViewModel @Inject constructor(
                         )
                     }
                     name.value = action.data.name ?: ""
-                    email.value = action.data.email ?: ""
                     mobile.value = action.data.mobile ?: ""
 
                     flag = false
@@ -217,7 +180,7 @@ class AccountUpdateDetailsViewModel @Inject constructor(
 
             AccountUpdateDetailsEvents.OnUpdateDetailsClicked -> {
 
-                if (email.value.isNotEmpty() && name.value.isNotEmpty() && mobile.value.isNotEmpty() && state.value.isEmailValid && state.value.isNameValid && state.value.isMobileValid) {
+                if (name.value.isNotEmpty() && mobile.value.isNotEmpty() && state.value.isNameValid && state.value.isMobileValid) {
 
                     val updates = hashMapOf<String,Any>(
                         "state" to state.value.state!!,
@@ -226,7 +189,6 @@ class AccountUpdateDetailsViewModel @Inject constructor(
                         "lat" to state.value.lat!!,
                         "lng" to state.value.lng!!,
                         "name" to name.value,
-                        "email" to email.value,
                         "mobile" to mobile.value
                     )
 Timber.d(updates.toString())

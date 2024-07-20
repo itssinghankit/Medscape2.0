@@ -65,13 +65,11 @@ class AccountViewModel @Inject constructor(
             is AccountEvents.OnDetailsUpdation -> {
                 val updatedDetails = state.value.userDetails?.copy(
                     name = action.data.name,
-                    email = action.data.email
                 )
                 _state.update {
                     it.copy(
                         userDetails = updatedDetails,
                         name = action.data.name,
-                        email = action.data.email
                     )
                 }
             }
