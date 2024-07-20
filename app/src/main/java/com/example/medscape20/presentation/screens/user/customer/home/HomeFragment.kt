@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.medscape20.databinding.FragmentHomeBinding
+import com.example.medscape20.presentation.screens.user.customer.account.AccountEvents
+import com.example.medscape20.presentation.screens.user.customer.account.change_avatar.UpdateAvatarEnum
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,6 +44,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFragmentResultListener(UpdateAvatarEnum.UPDATE_AVATAR_REQUEST_KEY.name){ _, bundle->
+            val avatar = bundle.getString(UpdateAvatarEnum.UPDATE_AVATAR_AVATAR_URL.name)
+            avatar?.let{
+                viewModel.event(HomeEvents.OnAvatarUpdation(it))
+            }
+        }
 
         //setting up articles recyclerview
         setupHomeRecyclerView()

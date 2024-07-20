@@ -148,7 +148,7 @@ class UserRepositoryImplementation @Inject constructor(
 
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun updateTrashDump(
+    override suspend fun updateDatabase(
         uid: String,
         updates: HashMap<String, Any>
     ): Flow<ApiResult<Unit, DataError.Network>> = flow {

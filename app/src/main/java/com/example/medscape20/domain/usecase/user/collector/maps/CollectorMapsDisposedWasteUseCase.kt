@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class CollectorMapsDisposedWasteUseCase @Inject constructor(private val userRepository: UserRepository) {
     suspend operator fun invoke(uid: String, updates: HashMap<String, Any>) =
-        userRepository.updateTrashDump(uid, updates)
+        userRepository.updateDatabase(uid, updates)
 }

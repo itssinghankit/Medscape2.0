@@ -87,6 +87,11 @@
         android:id="@+id/accountChangeAvatarFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.change_avatar.AccountChangeAvatarFragment"
         android:label="fragment_account_change_avatar"
-        tools:layout="@layout/fragment_account_change_avatar" />
+        tools:layout="@layout/fragment_account_change_avatar" >
+        <argument
+            android:name="avatar_uri"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

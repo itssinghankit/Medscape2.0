@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAccountBinding
+import com.example.medscape20.presentation.screens.auth.avatar.AvatarEvents
+import com.example.medscape20.presentation.screens.user.customer.account.change_avatar.UpdateAvatarEnum
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,12 +44,23 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setFragmentResultListener(UpdateAvatarEnum.UPDATE_AVATAR_REQUEST_KEY.name){_,bundle->
+            val avatar = bundle.getString(UpdateAvatarEnum.UPDATE_AVATAR_AVATAR_URL.name)
+            avatar?.let{
+                viewModel.event(AccountEvents.OnAvatarUpdation(it))
+            }
+        }
+
         binding.signoutBtn.setOnClickListener {
             viewModel.event(AccountEvents.OnSignOutClicked)
         }
 
         binding.accountDetails.setOnClickListener{
             navigateToShowDetailsFragment()
+        }
+
+        binding.changeAvatar.setOnClickListener{
+            navigateToChangeAvatarFragment()
         }
 
         lifecycleScope.launch {
@@ -65,11 +80,23 @@ class AccountFragment : Fragment() {
                             binding.progressCircular.visibility = View.GONE
                         }
                     }
+
                     state.avatar?.let {
                         Glide.with(requireContext()).load(it).into(binding.avatar)
                     }
+
+                    state.errMessage?.let {
+                        showError(it)
+                    }
                 }
             }
+        }
+    }
+
+    private fun navigateToChangeAvatarFragment() {
+        viewModel.state.value.userDetails?.let {
+            val action=AccountFragmentDirections.actionAccountFragmentToAccountChangeAvatarFragment(it.avatar)
+            findNavController().navigate(action)
         }
     }
 
@@ -86,6 +113,14 @@ class AccountFragment : Fragment() {
             null,
             NavOptions.Builder().setPopUpTo(R.id.accountFragment, true).build()
         )
+    }
+
+    private fun showError(errorMessage: Int?) {
+
+        errorMessage?.let {
+            Snackbar.make(requireView(), getString(errorMessage), Snackbar.LENGTH_SHORT).show()
+            viewModel.event(AccountEvents.ResetErrorMessage)
+        }
     }
 
     override fun onDestroy() {

@@ -79,7 +79,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             MobileError.EMPTY -> {
                                 _state.update {
                                     it.copy(
-                                        mobileError = R.string.empty_error,
+                                        mobileError = R.string.error_empty,
                                         isMobileValid = false
                                     )
                                 }
@@ -88,7 +88,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             MobileError.TOO_SHORT -> {
                                 _state.update {
                                     it.copy(
-                                        mobileError = R.string.mobile_short_error,
+                                        mobileError = R.string.error_mobile_short,
                                         isMobileValid = false
                                     )
                                 }
@@ -97,7 +97,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             MobileError.INVALID -> {
                                 _state.update {
                                     it.copy(
-                                        mobileError = R.string.mobile_error,
+                                        mobileError = R.string.error_mobile,
                                         isMobileValid = false
                                     )
                                 }
@@ -121,7 +121,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             NameError.EMPTY -> {
                                 _state.update {
                                     it.copy(
-                                        nameError = R.string.empty_error,
+                                        nameError = R.string.error_empty,
                                         isNameValid = false
                                     )
                                 }
@@ -130,7 +130,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             NameError.TOO_SHORT -> {
                                 _state.update {
                                     it.copy(
-                                        nameError = R.string.name_short_error,
+                                        nameError = R.string.error_name_short,
                                         isNameValid = false
                                     )
                                 }
@@ -139,7 +139,7 @@ class SignupDetailsViewmodel @Inject constructor(
                             NameError.ONLY_ALPHABETS -> {
                                 _state.update {
                                     it.copy(
-                                        nameError = R.string.name_error,
+                                        nameError = R.string.error_name,
                                         isNameValid = false
                                     )
                                 }
@@ -165,7 +165,7 @@ class SignupDetailsViewmodel @Inject constructor(
             SignupDetailsEvents.OnNextClick -> {
                 if (address.value.isEmpty()) {
                     _state.update {
-                        it.copy(isAddressValid = false, addressError = R.string.empty_error)
+                        it.copy(isAddressValid = false, addressError = R.string.error_empty)
                     }
                 }
                 if (_state.value.isNameValid && _state.value.isMobileValid && _state.value.isAddressValid && mobile.value.isNotEmpty() && name.value.isNotEmpty() && address.value.isNotEmpty()) {

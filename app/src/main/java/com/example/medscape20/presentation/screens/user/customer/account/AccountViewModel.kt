@@ -21,7 +21,6 @@ import javax.inject.Inject
 
 data class AccountStates(
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
     @StringRes val errMessage: Int? = null,
     val navigateToAuth: Boolean = false,
     val userDetails: HomeGetUserDataResDto? = null,
@@ -55,6 +54,19 @@ class AccountViewModel @Inject constructor(
                     )
                 }
             }
+
+            is AccountEvents.OnAvatarUpdation ->{
+                val updatedDetails= state.value.userDetails?.copy( avatar = action.url)
+                _state.update {
+                    it.copy(userDetails = updatedDetails, avatar = action.url)
+                }
+            }
+
+            AccountEvents.ResetErrorMessage -> {
+                _state.update {
+                    it.copy(errMessage = null)
+                }
+            }
         }
     }
 
@@ -71,7 +83,6 @@ class AccountViewModel @Inject constructor(
                                 _state.update {
                                     withContext(Dispatchers.Main) {
                                         it.copy(
-                                            isError = true,
                                             errMessage = R.string.error_internal_server,
                                             isLoading = false
                                         )
@@ -84,7 +95,6 @@ class AccountViewModel @Inject constructor(
                                 _state.update {
                                     withContext(Dispatchers.Main) {
                                         it.copy(
-                                            isError = true,
                                             errMessage = R.string.error_unknown,
                                             isLoading = false
                                         )

@@ -45,7 +45,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         getDataFromDatastore()
-
         firebaseAuth.addAuthStateListener { auth ->
             if (auth.currentUser != null) {
                 getUserData()
@@ -54,7 +53,6 @@ class HomeViewModel @Inject constructor(
 //        getNewsArticles()
     }
 
-    //TODO: NULLPOINTER EXCEPTION IN 97 and 248
     private val _state = MutableStateFlow(HomeStates())
     val state: StateFlow<HomeStates> = _state.asStateFlow()
 
@@ -90,6 +88,13 @@ class HomeViewModel @Inject constructor(
                     getNewsArticles()
                 }
 
+            }
+
+            //TODO: use another method for updation
+            is HomeEvents.OnAvatarUpdation -> {
+                _state.update {
+                    it.copy(avatar = action.url)
+                }
             }
         }
     }

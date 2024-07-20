@@ -54,13 +54,13 @@ class SignupViewModel @Inject constructor(
                         when (result.error) {
                             EmailError.EMAIL_ERROR -> {
                                 _state.update {
-                                    it.copy(isEmailValid = false, emailError = R.string.email_error)
+                                    it.copy(isEmailValid = false, emailError = R.string.error_email)
                                 }
                             }
 
                             EmailError.EMPTY -> {
                                 _state.update {
-                                    it.copy(isEmailValid = false, emailError = R.string.empty_error)
+                                    it.copy(isEmailValid = false, emailError = R.string.error_empty)
                                 }
                             }
                         }
@@ -84,7 +84,7 @@ class SignupViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isPasswordValid = false,
-                                        passError = R.string.empty_error
+                                        passError = R.string.error_empty
                                     )
                                 }
                             }
@@ -93,7 +93,7 @@ class SignupViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isPasswordValid = false,
-                                        passError = R.string.pass_error
+                                        passError = R.string.error_pass
                                     )
                                 }
                             }

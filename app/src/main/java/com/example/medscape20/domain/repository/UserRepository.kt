@@ -22,7 +22,7 @@ interface UserRepository {
     suspend fun getStatsIncomeWaste(): Flow<ApiResult<StatisticsIncomeWasteDto, DataError.Network>>
     suspend fun getStatsWasteComposition(): Flow<ApiResult<StatisticsWasteCompositionDto, DataError.Network>>
     suspend fun getStatsIndiaWasteTreatment(): Flow<ApiResult<StatisticsIndiaWasteTreatmentDto, DataError.Network>>
-    suspend fun updateTrashDump(uid: String, updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
+    suspend fun updateDatabase(uid: String, updates:  HashMap<String, Any>): Flow<ApiResult<Unit, DataError.Network>>
     suspend fun isDumped(uid: String): Flow<ApiResult<TrashIsDumpedModel, DataError.Network>>
     suspend fun getDumpingPeopleCount(city:String,state:String):Flow<ApiResult<CustomerHomePeopleCountModel,DataError.Network>>
     suspend fun getDumpingPeoples():Flow<ApiResult<ArrayList<CustomersResDto>,DataError.Network>>

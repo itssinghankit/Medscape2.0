@@ -62,7 +62,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isEmailValid = false,
-                                        emailError = R.string.empty_error
+                                        emailError = R.string.error_empty
                                     )
                                 }
                             }
@@ -71,7 +71,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isEmailValid = false,
-                                        emailError = R.string.email_error
+                                        emailError = R.string.error_email
                                     )
                                 }
                             }
@@ -94,7 +94,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isPassValid = false,
-                                        passError = R.string.empty_error
+                                        passError = R.string.error_empty
                                     )
                                 }
                             }
@@ -103,7 +103,7 @@ class LoginViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         isPassValid = false,
-                                        passError = R.string.pass_error
+                                        passError = R.string.error_pass
                                     )
                                 }
                             }
