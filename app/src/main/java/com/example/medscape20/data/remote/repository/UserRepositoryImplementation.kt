@@ -19,7 +19,9 @@ import com.example.medscape20.domain.models.TrashIsDumpedModel
 import com.example.medscape20.domain.repository.UserRepository
 import com.example.medscape20.util.ApiResult
 import com.example.medscape20.util.DataError
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -213,17 +215,28 @@ class UserRepositoryImplementation @Inject constructor(
             }
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun updatePasswordLoggedIn(password: String): Flow<ApiResult<Unit, DataError.Network>> =
+    override suspend fun updatePasswordLoggedIn(
+        newPassword: String,
+        oldPassword: String,
+        email: String
+    ): Flow<ApiResult<Unit, DataError.Network>> =
         flow {
             try {
                 emit(ApiResult.Loading)
                 val user = firebaseAuth.currentUser
-                if (user != null && password.isNotEmpty()) {
-                    user.updatePassword(password).await()
+                if (user != null && newPassword.isNotEmpty()) {
+                    // Reauthenticate the user - security purpose
+                    val credential = EmailAuthProvider.getCredential(email, oldPassword)
+                    user.reauthenticate(credential).await()
+
+                    user.updatePassword(newPassword).await()
                 }
 
                 emit(ApiResult.Success(Unit))
+            } catch (e: FirebaseAuthInvalidCredentialsException) {
+                emit(ApiResult.Error(DataError.Network.BAD_REQUEST))
             } catch (e: Exception) {
+                Timber.e(e)
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
             }
         }.flowOn(Dispatchers.IO)

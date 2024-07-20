@@ -14,7 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.medscape20.R
+import androidx.navigation.fragment.navArgs
 import com.example.medscape20.databinding.FragmentAccountChangePasswordBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +27,7 @@ class AccountChangePasswordFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: AccountChangePasswordViewModel by viewModels()
     private lateinit var container: ViewGroup
+    private val args:AccountChangePasswordFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +43,15 @@ class AccountChangePasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.password.doOnTextChanged { text, _, _, _ ->
-            viewModel.event(AccountChangePasswordEvents.ValidatePassword(text.toString()))
+
+        //saving the email from account screen
+        viewModel.event(AccountChangePasswordEvents.SaveEmail(args.email))
+
+        binding.newPassword.doOnTextChanged { text, _, _, _ ->
+            viewModel.event(AccountChangePasswordEvents.ValidateNewPassword(text.toString()))
+        }
+        binding.currPassword.doOnTextChanged { text, _, _, _ ->
+            viewModel.event(AccountChangePasswordEvents.ValidateCurrPassword(text.toString()))
         }
 
         binding.backBtn.setOnClickListener {
@@ -59,14 +67,20 @@ class AccountChangePasswordFragment : Fragment() {
 
                 viewModel.states.collect { state ->
 
-                    //password validation
-                    if (!state.isPassValid) {
-                        binding.passCont.error = getString(state.passError!!)
-                        binding.changePassBtn.isEnabled = false
+                    //curr password validation
+                    if (!state.isCurrPassValid) {
+                        binding.currPassCont.error = getString(state.currPassError!!)
+                    } else {
+                        binding.currPassCont.error = null
+                        binding.currPassCont.isErrorEnabled = false
+                    }
+
+                    //new password validation
+                    if (!state.isNewPassValid) {
+                        binding.passCont.error = getString(state.newPassError!!)
                     } else {
                         binding.passCont.error = null
                         binding.passCont.isErrorEnabled = false
-                        binding.changePassBtn.isEnabled = true
                     }
 
                     //to show progress circular

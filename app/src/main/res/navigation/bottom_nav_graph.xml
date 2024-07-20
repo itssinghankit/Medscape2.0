@@ -99,6 +99,10 @@
     <fragment
         android:id="@+id/accountChangePasswordFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.change_password.AccountChangePasswordFragment"
-        android:label="AccountChangePasswordFragment" />
+        android:label="AccountChangePasswordFragment" >
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

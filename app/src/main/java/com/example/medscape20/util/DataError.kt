@@ -8,7 +8,8 @@ sealed interface DataError: Error {
         UNAUTHORIZED,
         TIMEOUT,
         UNKNOWN,
-        ALREADY_CREATED
+        ALREADY_CREATED,
+        BAD_REQUEST
     }
     enum class Local:DataError{
         DISK_FULL,

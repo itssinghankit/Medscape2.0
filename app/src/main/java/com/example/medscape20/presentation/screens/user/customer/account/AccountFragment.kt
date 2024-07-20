@@ -98,7 +98,8 @@ class AccountFragment : Fragment() {
     }
 
     private fun navigateToChangePasswordFragment() {
-        findNavController().navigate(R.id.action_accountFragment_to_accountChangePasswordFragment)
+        val action=AccountFragmentDirections.actionAccountFragmentToAccountChangePasswordFragment(viewModel.state.value.email)
+        findNavController().navigate(action)
     }
 
     private fun navigateToChangeAvatarFragment() {

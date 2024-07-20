@@ -56,6 +56,8 @@
     <string name="error_login_invalid_credential_error">Incorrect email or password</string>
     <string name="error_could_not_get_address">Could not get address</string>
     <string name="error_address_not_found">Address not found</string>
+    <string name="error_incorrect_current_password">Incorrect current password</string>
+
     <string name="click_on_the_dump_button_below_nto_dump_your_waste">Click on the Dump button below \nto dump your waste</string>
     <string name="contribute_in_making_our_nation_more_cleaner">Contribute in making our nation more cleaner</string>
     <string name="dump">Dump</string>
@@ -81,4 +83,5 @@
     <string name="update">Update</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="password_updated_successfully">Password Updated Successfully</string>
+    <string name="enter_current_password">Enter current password</string>
 </resources>
