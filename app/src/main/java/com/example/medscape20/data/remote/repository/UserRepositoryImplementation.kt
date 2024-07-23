@@ -6,8 +6,9 @@ import com.example.medscape20.data.mapper.toTrashIsDumpedModel
 import com.example.medscape20.data.remote.MedscapeNewsApi
 import com.example.medscape20.data.remote.dto.user.collector.customers.CustomersResDto
 import com.example.medscape20.data.remote.dto.user.collector.home.CustomerHomePeopleCountResDto
-import com.example.medscape20.data.remote.dto.user.customer.category.CategoryResDto
+import com.example.medscape20.data.remote.dto.user.customer.home.category.CategoryResDto
 import com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto
+import com.example.medscape20.data.remote.dto.user.customer.home.sources.SourcesDto
 import com.example.medscape20.data.remote.dto.user.customer.statistics.income_waste.StatisticsIncomeWasteDto
 import com.example.medscape20.data.remote.dto.user.customer.statistics.india_waste_treatment.StatisticsIndiaWasteTreatmentDto
 import com.example.medscape20.data.remote.dto.user.customer.statistics.region_waste.StatisticsRegionWasteDto
@@ -71,6 +72,19 @@ class UserRepositoryImplementation @Inject constructor(
             }
 
         }.flowOn(Dispatchers.IO)
+
+    override suspend fun getSourcesData(): Flow<ApiResult<ArrayList<SourcesDto>, DataError.Network>> = flow {
+        try {
+            emit(ApiResult.Loading)
+            val dataRef = firebaseDatabase.getReference("/sources")
+            val data = dataRef.get().await()
+            val ourList =
+                data.children.mapNotNull { it.getValue(SourcesDto::class.java) } as ArrayList
+            emit(ApiResult.Success(ourList))
+        } catch (e: Exception) {
+            emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getNewsArticles(params: Pair<String, Map<String, String>>): Flow<ApiResult<List<ArticleModel>, DataError.Network>> =
         flow {
@@ -162,7 +176,6 @@ class UserRepositoryImplementation @Inject constructor(
             emit(ApiResult.Success(Unit))
 
         } catch (e: Exception) {
-            Timber.e(e)
             emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
         }
     }.flowOn(Dispatchers.IO)
@@ -194,7 +207,6 @@ class UserRepositoryImplementation @Inject constructor(
                     .toPeopleCountModel(city = city, state = state)
             emit(ApiResult.Success(response))
         } catch (e: Exception) {
-            Timber.e(e)
             emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
         }
     }.flowOn(Dispatchers.IO)
@@ -237,7 +249,6 @@ class UserRepositoryImplementation @Inject constructor(
             } catch (e: FirebaseAuthInvalidCredentialsException) {
                 emit(ApiResult.Error(DataError.Network.BAD_REQUEST))
             } catch (e: Exception) {
-                Timber.e(e)
                 emit(ApiResult.Error(DataError.Network.INTERNAL_SERVER_ERROR))
             }
         }.flowOn(Dispatchers.IO)

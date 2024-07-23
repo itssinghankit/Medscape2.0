@@ -87,4 +87,6 @@
     <string name="enter_current_password">Enter current password</string>
     <string name="update_avatar">Update Avatar</string>
     <string name="update_password">Update Password</string>
+    <string name="sources">Sources</string>
+    <string name="sources_image">sources image</string>
 </resources>

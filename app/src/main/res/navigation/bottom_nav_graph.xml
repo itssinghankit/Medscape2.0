@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_nav_graph"
     app:startDestination="@id/homeFragment">
-
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.home.HomeFragment"
@@ -16,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment_to_webViewArticleFragment"
             app:destination="@id/webViewArticleFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_sourcesFragment"
+            app:destination="@id/sourcesFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -66,10 +68,12 @@
             android:name="category"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.medscape20.presentation.screens.auth.login.LoginFragment"
         android:label="LoginFragment" />
+
     <fragment
         android:id="@+id/webViewArticleFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.webview_article.WebViewArticleFragment"
@@ -83,7 +87,7 @@
         android:id="@+id/accountDetailsFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.account_details.AccountDetailsFragment"
         android:label="fragment_account_details"
-        tools:layout="@layout/fragment_account_details" >
+        tools:layout="@layout/fragment_account_details">
         <argument
             android:name="details"
             app:argType="com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto" />
@@ -93,7 +97,7 @@
         android:id="@+id/accountChangeAvatarFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.update_avatar.AccountChangeAvatarFragment"
         android:label="fragment_account_change_avatar"
-        tools:layout="@layout/fragment_account_change_avatar" >
+        tools:layout="@layout/fragment_account_change_avatar">
         <argument
             android:name="avatar_uri"
             app:argType="string"
@@ -102,7 +106,7 @@
     <fragment
         android:id="@+id/accountChangePasswordFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.update_password.AccountChangePasswordFragment"
-        android:label="AccountChangePasswordFragment" >
+        android:label="AccountChangePasswordFragment">
         <argument
             android:name="email"
             app:argType="string" />
@@ -110,7 +114,7 @@
     <fragment
         android:id="@+id/accountUpdateDetailsFragment"
         android:name="com.example.medscape20.presentation.screens.user.customer.account.update_details.AccountUpdateDetailsFragment"
-        android:label="AccountUpdateDetailsFragment" >
+        android:label="AccountUpdateDetailsFragment">
         <argument
             android:name="details"
             app:argType="com.example.medscape20.data.remote.dto.user.customer.home.HomeGetUserDataResDto" />
@@ -123,5 +127,23 @@
         android:name="com.example.medscape20.presentation.screens.auth.maps.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/sourcesFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.home.sources.SourcesFragment"
+        android:label="fragment_sources"
+        tools:layout="@layout/fragment_sources">
+        <action
+            android:id="@+id/action_sourcesFragment_to_sourcesDescFragment"
+            app:destination="@id/sourcesDescFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/sourcesDescFragment"
+        android:name="com.example.medscape20.presentation.screens.user.customer.home.sources.sources_desc.SourcesDescFragment"
+        android:label="SourcesDescFragment" >
+        <argument
+            android:name="data"
+            app:argType="com.example.medscape20.data.remote.dto.user.customer.home.sources.SourcesDto"/>
+    </fragment>
 
 </navigation>

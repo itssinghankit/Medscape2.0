@@ -47,7 +47,7 @@ class AccountViewModel @Inject constructor(
     fun event(action: AccountEvents) {
         when (action) {
             AccountEvents.OnSignOutClicked -> {
-                firebaseAuth.signOut()
+//                firebaseAuth.signOut()
                 _state.update {
                     it.copy(
                         navigateToAuth = true

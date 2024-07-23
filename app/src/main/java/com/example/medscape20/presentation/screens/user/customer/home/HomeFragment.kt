@@ -81,6 +81,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        //for sources screen
+        binding.dashboardBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_sourcesFragment)
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
