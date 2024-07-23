@@ -1,10 +1,12 @@
 package com.example.medscape20.presentation.screens.user.customer.articles
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.doOnTextChanged
@@ -66,6 +68,15 @@ class ArticlesFragment : Fragment(){
             }
         }
 
+        binding.searchTxt.setOnEditorActionListener { v, actionId, event->
+            if(actionId== EditorInfo.IME_ACTION_SEARCH){
+                hideKeyboard()
+                true
+            }else{
+                false
+            }
+        }
+
         //setting the filter listener
         binding.searchBar.setEndIconOnClickListener {
 
@@ -117,6 +128,16 @@ class ArticlesFragment : Fragment(){
             layoutManager = LinearLayoutManager(context)
             adapter = articlesAdapter
         }
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Activity.hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroy() {

@@ -1,10 +1,16 @@
 package com.example.medscape20.presentation.screens.auth.login
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,9 +20,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentLoginBinding
+import com.example.medscape20.util.UserPreferences
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,10 +55,12 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.sgnUpBtn.setOnClickListener {
+            hideKeyboard()
             findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
         }
 
         binding.lgnBtn.setOnClickListener {
+            hideKeyboard()
             viewModel.event(LoginEvents.OnLoginClicked)
 
         }
@@ -113,40 +125,53 @@ class LoginFragment : Fragment() {
 
     private fun navigateToUserScreen() {
         viewModel.event(LoginEvents.OnNavigationDone)
-        if(binding.collectorCheckBox.isChecked){
-            findNavController().navigate(R.id.action_loginFragment_to_collectorHomeFragment)
-            return
+        lifecycleScope.launch {
+
+            if (binding.collectorCheckBox.isChecked) {
+                setUserData(true)
+                findNavController().navigate(R.id.action_loginFragment_to_collectorHomeFragment)
+            } else {
+                setUserData(false)
+                findNavController().navigate(
+                    R.id.action_loginFragment_to_userFragment,
+                    null,
+                    NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+                )
+            }
         }
-        findNavController().navigate(
-            R.id.action_loginFragment_to_userFragment,
-            null,
-            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-        )
+
+
+    }
+
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Activity.hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private suspend fun setUserData(isCollector: Boolean) {
+        UserPreferences.getDataStore(requireContext()).edit { datastore ->
+            datastore[IS_COLLECTOR] = isCollector
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
 
-            findNavController().navigate(
-//                R.id.action_loginFragment_to_userFragment,
-                R.id.action_loginFragment_to_userFragment,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-            )
+    }
 
-        }
+    companion object {
+        val IS_COLLECTOR = booleanPreferencesKey("is_collector")
     }
 
 }
 //TODO : locality is not showing on firebase
 //TODO: change dispatchers for viewmodelscope
 //TODO: save data in avatar screen
-//TODO:datastore not working
-//TODO: radio button color of aritcles bottom sheet
+//TODO: datastore
 //TODO: material alert dialog
 //TODO: app:behavior_peekHeight="1000dp"
-//TODO: article keyboard disable
-//TODO: login logic for collector waste

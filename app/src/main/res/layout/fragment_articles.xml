@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-    <variable
-        name="viewModel"
-        type="com.example.medscape20.presentation.screens.user.customer.articles.ArticlesViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.example.medscape20.presentation.screens.user.customer.articles.ArticlesViewModel" />
     </data>
-<!--    android:fitsSystemWindows="true"-->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
         android:background="@color/bg_colors"
+        android:fitsSystemWindows="true"
         android:orientation="vertical"
         tools:context=".presentation.screens.user.customer.articles.ArticlesFragment">
 
@@ -23,27 +24,28 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/montserrat_regular"
             android:paddingStart="16dp"
-            app:endIconMode="custom"
             android:textSize="11sp"
             app:endIconDrawable="@drawable/ic_filters"
+            app:endIconMode="custom"
             app:endIconTint="@color/white"
-            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textCapSentences"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:padding="6dp"
                 android:hint="Search..."
-                android:textColor="@color/grey_txt"
-                android:id="@+id/search_txt"
-                android:text="@={viewModel.searchTxt}"/>
+                android:imeOptions="actionSearch"
+                android:inputType="textCapSentences"
+                android:padding="6dp"
+                android:text="@={viewModel.searchTxt}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_txt" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <View
@@ -74,36 +76,36 @@
             app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
             app:layout_constraintTop_toTopOf="@id/articles_recyler_view" />
 
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:id="@+id/emptyResult"
-           android:layout_marginBottom="24dp"
-           app:layout_constraintBottom_toBottomOf="parent"
-           app:layout_constraintEnd_toEndOf="@id/articles_recyler_view"
-           app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
-           app:layout_constraintTop_toTopOf="@id/articles_recyler_view"
-           android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/emptyResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/articles_recyler_view"
+            app:layout_constraintStart_toStartOf="@id/articles_recyler_view"
+            app:layout_constraintTop_toTopOf="@id/articles_recyler_view">
 
-           <ImageView
-               android:layout_width="250dp"
-               android:layout_height="250dp"
-               android:src="@drawable/vector_no_article_found"/>
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:src="@drawable/vector_no_article_found" />
 
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:id="@+id/article_title"
-               android:text="Opps, no articles found!!"
-               android:textSize="20dp"
-               android:layout_gravity="center"
-               android:maxLines="2"
-               android:layout_marginBottom="16dp"
-               android:ellipsize="end"
-               android:fontFamily="@font/lato_regular"
-               android:textColor="@color/grey_txt"/>
+            <TextView
+                android:id="@+id/article_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:maxLines="2"
+                android:text="Opps, no articles found!!"
+                android:textColor="@color/grey_txt"
+                android:textSize="20dp" />
 
-       </LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

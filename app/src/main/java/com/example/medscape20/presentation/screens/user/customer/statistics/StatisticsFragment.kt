@@ -83,12 +83,10 @@ class StatisticsFragment : Fragment() {
 
                     //Indian data bar graph
                     state.indiaWasteTreatmentData?.let {
-//                       setupIndianBarData(it)
 
                         if(flag){
 //                            set(it)
                             createGroupedBarChart(it)
-//                            binding.barGraph.setChart(cartesian)
                             flag=false
                         }
 
@@ -115,8 +113,8 @@ class StatisticsFragment : Fragment() {
 
             for (item in data.data) {
                 collectedData.add(ValueDataEntry(item.state, item.collected))
-                landfilledData.add(ValueDataEntry(item.state, item.landfilled))
-                generatedData.add(ValueDataEntry(item.state, item.solid_waste_generated))
+//                    landfilledData.add(ValueDataEntry(item.state, item.landfilled))
+//                    generatedData.add(ValueDataEntry(item.state, item.solid_waste_generated))
                 treatedData.add(ValueDataEntry(item.state, item.treated))
 
             }
@@ -141,22 +139,22 @@ class StatisticsFragment : Fragment() {
                 .offsetX(0.0)
                 .offsetY(5.0)
                 .format("\${%Value}{groupsSeparator: }")
-
-            landfilledSeries.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0.0)
-                .offsetY(5.0)
-                .format("\${%Value}{groupsSeparator: }")
-
-            generatedSeries.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0.0)
-                .offsetY(5.0)
-                .format("\${%Value}{groupsSeparator: }")
+//
+//            landfilledSeries.tooltip()
+//                .titleFormat("{%X}")
+//                .position(Position.CENTER_BOTTOM)
+//                .anchor(Anchor.CENTER_BOTTOM)
+//                .offsetX(0.0)
+//                .offsetY(5.0)
+//                .format("\${%Value}{groupsSeparator: }")
+////
+//            generatedSeries.tooltip()
+//                .titleFormat("{%X}")
+//                .position(Position.CENTER_BOTTOM)
+//                .anchor(Anchor.CENTER_BOTTOM)
+//                .offsetX(0.0)
+//                .offsetY(5.0)
+//                .format("\${%Value}{groupsSeparator: }")
 
             treatedSeries.tooltip()
                 .titleFormat("{%X}")
@@ -186,33 +184,6 @@ class StatisticsFragment : Fragment() {
                 binding.barGraph.setChart(cartesian)
             }
         }
-    }
-
-    private fun setupIndianBarData(data: StatisticsIndiaWasteTreatmentDto) {
-        val cartesian = AnyChart.column()
-
-        val myList=data.data.map{ item->
-            listOf(
-                ValueDataEntry("Collected",item.collected),
-                ValueDataEntry("Treated",item.treated),
-                ValueDataEntry("Generated",item.solid_waste_generated),
-                ValueDataEntry("LandFilled",item.landfilled),
-            )
-        }
-
-        myList.forEachIndexed { index, valueDataEntry ->
-            if(index<4){
-                val series = cartesian.column(valueDataEntry)
-                series.name(data.data[index].state)
-            }
-
-        }
-
-        cartesian.title(data.title)
-        cartesian.xAxis(0).title("States")
-        cartesian.yAxis(0).title("Values (TPD)")
-
-        binding.barGraph.setChart(cartesian)
     }
 
     private fun createGroupedBarChart(data: StatisticsIndiaWasteTreatmentDto){

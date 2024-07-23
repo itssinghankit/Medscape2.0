@@ -121,9 +121,7 @@ class CustomersFragment : Fragment() {
                         binding.mainContent.visibility = View.VISIBLE
                     }
 
-                    if (state.newFilteredList.isNotEmpty()) {
-                        adapter.submitList(state.newFilteredList)
-                    }
+                    adapter.submitList(state.newFilteredList)
 
                 }
             }

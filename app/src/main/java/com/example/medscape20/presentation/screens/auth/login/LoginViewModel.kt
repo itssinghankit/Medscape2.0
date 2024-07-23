@@ -41,8 +41,7 @@ class LoginViewModel @Inject constructor(
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val loginUseCase: LoginUseCase,
     private val loginGetUserDataUseCase: LoginGetUserDataUseCase,
-    private val firebaseAuth: FirebaseAuth,
-    private val loginSaveDataUseCase: LoginSaveDataUseCase
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginStates())
@@ -209,7 +208,6 @@ class LoginViewModel @Inject constructor(
 
                     is ApiResult.Success -> {
                         //save data using datastore
-                        saveUserData(result.data)
                         _state.update {
                             it.copy(
                                 isLoading = false,
@@ -219,12 +217,6 @@ class LoginViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private fun saveUserData(data: LoginGetUserDataResDto) {
-        viewModelScope.launch {
-            loginSaveDataUseCase(data)
         }
     }
 

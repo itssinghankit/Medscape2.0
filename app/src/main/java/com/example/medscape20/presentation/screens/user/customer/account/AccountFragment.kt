@@ -1,5 +1,6 @@
 package com.example.medscape20.presentation.screens.user.customer.account
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.medscape20.R
 import com.example.medscape20.databinding.FragmentAccountBinding
+import com.example.medscape20.presentation.screens.auth.login.LoginFragment
 import com.example.medscape20.presentation.screens.user.customer.account.update_avatar.UpdateAvatarEnum
 import com.example.medscape20.presentation.screens.user.customer.account.update_details.AccountUpdatedDetails
 import com.example.medscape20.presentation.screens.user.customer.account.update_details.UpdateAccountDetailsEnum
@@ -29,7 +32,7 @@ class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var container: ViewGroup
     private val viewModel: AccountViewModel by viewModels()
 
     override fun onCreateView(
@@ -42,6 +45,7 @@ class AccountFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         container!!.rootView.findViewById<View>(R.id.bottotmAppBar).visibility = View.VISIBLE
         container.rootView.findViewById<View>(R.id.trash_fab).visibility = View.VISIBLE
+        this.container = container
 
         return binding.root
     }
@@ -49,6 +53,8 @@ class AccountFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         setFragmentResultListener(UpdateAvatarEnum.UPDATE_AVATAR_REQUEST_KEY.name) { _, bundle ->
             val avatar = bundle.getString(UpdateAvatarEnum.UPDATE_AVATAR_AVATAR_URL.name)
@@ -145,11 +151,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun navigateToAuth() {
-        findNavController().navigate(
-            R.id.action_accountFragment_to_loginFragment,
-            null,
-            NavOptions.Builder().setPopUpTo(R.id.accountFragment, true).build()
-        )
+        container.rootView.findViewById<View>(R.id.bottotmAppBar).findNavController().navigate(R.id.action_userFragment_to_loginFragment)
     }
 
     private fun showError(errorMessage: Int?) {
