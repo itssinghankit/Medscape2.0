@@ -93,4 +93,9 @@
         <item name="strokeColor">@color/grey_surface</item>
     </style>
 
+    <style name="TextAppearance.CollapseToolbar.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
