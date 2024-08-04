@@ -120,7 +120,7 @@ Repeat this for each screenshot you want to include
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/itssinghankit/Medscape-2.0.git
+git clone https://github.com/itssinghankit/Medscape2.0.git
 ```
 
 2. Install necessary dependencies.
