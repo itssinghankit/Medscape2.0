@@ -12,6 +12,7 @@ India.
 
 > The `2.0` in the app name refers to `version-2` of this Application.
 
+---
 ## Features
 
 ### Educational Content
@@ -54,6 +55,7 @@ India.
   options.
 - **Live Location**: Get the `live location` of collector and nearby waste dumpers on map.
 
+---
 ## Architecture and Design
 
 Medscape 2.0 is built with modern Android development best practices in mind:
