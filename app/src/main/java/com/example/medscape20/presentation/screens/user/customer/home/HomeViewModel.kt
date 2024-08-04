@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
                 getUserData()
             }
         }
-//        getNewsArticles()
+        getNewsArticles()
     }
 
     private val _state = MutableStateFlow(HomeStates())
