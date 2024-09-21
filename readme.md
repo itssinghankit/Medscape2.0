@@ -108,15 +108,6 @@ Medscape 2.0 leverages a variety of modern libraries and tools:
 7. **Logging**:
     - **Timber**: A logger with a small, extensible API.
 
-## Screenshots
-
-[Insert screenshots of your app here]
-
-<!-- You can add screenshots using the following format:
-![Screen Name](path/to/screenshot.png)
-Repeat this for each screenshot you want to include
--->
-
 ## Installation
 
 1. Clone the repository:
